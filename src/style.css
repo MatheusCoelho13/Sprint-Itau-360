@@ -1,0 +1,286 @@
+/* Itaú 360° — identidade "dossiê de pesquisa"
+   Papel quente + tinta azul-Itaú. Laranja só como sinal (réguas, marcadores, 360°), nunca em texto pequeno.
+   Sem sombras, cantos quase retos, números e rótulos em mono. */
+:root{
+  --paper:#f4f0e8; --card:#fdfbf7; --ink:#161d2e; --muted:#586174;
+  --blue:#0a2a6e; --blue-2:#1d4690; --orange:#ec7000; --orange-ink:#a64a00;
+  --line:#d8d1c3; --rule:#161d2e;
+  --red:#9d3328; --green:#2c6a4c; --gold:#8f6310;
+  --serif:'Newsreader',Georgia,'Times New Roman',serif;
+  --sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+  --r:3px; --rb:10px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.6 var(--sans)}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
+:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+.hide{display:none!important}.muted{color:var(--muted)}.small{font-size:12px}
+
+/* ---------- estrutura ---------- */
+.app{display:grid;grid-template-columns:272px 1fr;min-height:100vh}
+.main{min-width:0}
+.content{max-width:1360px;margin:0 auto;padding:40px 48px 80px}
+.view{display:none}.view.active{display:block}
+
+/* ---------- barra lateral: índice do dossiê ---------- */
+.sidebar{background:var(--blue);color:#e8ecf6;padding:30px 0 22px;display:flex;flex-direction:column;gap:30px;position:sticky;top:0;height:100vh;overflow:auto;counter-reset:nav}
+.brand{padding:0 26px}
+.brand-mark{font:700 25px/1 var(--sans);letter-spacing:-.5px;display:flex;align-items:center;gap:10px}
+.logo-dial{width:44px;height:44px;color:#fff;flex:none}
+.brand-sub{font:500 10.5px/1.5 var(--mono);letter-spacing:1.4px;color:#a9b6d6;margin-top:12px}
+.nav-wrap{display:flex;flex-direction:column;gap:22px}
+.nav-label{padding:0 26px 8px;font:500 10.5px/1 var(--mono);letter-spacing:1.6px;text-transform:uppercase;color:#8d9cc3}
+.nav-btn{display:flex;align-items:baseline;gap:14px;width:100%;padding:9px 26px;border:0;border-left:3px solid transparent;background:transparent;color:#d6ddee;text-align:left;font-size:14px}
+.nav-btn::before{counter-increment:nav;content:counter(nav,decimal-leading-zero);font:500 11px var(--mono);color:#8d9cc3;width:18px;flex:none}
+.nav-btn .ico{display:none}
+.nav-btn:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav-btn.active{border-left-color:var(--orange);background:rgba(255,255,255,.09);color:#fff;font-weight:600}
+.nav-btn.active::before{color:#ffb878}
+.side-bottom{margin-top:auto;border-top:1px solid rgba(255,255,255,.16);margin:auto 26px 0;padding-top:16px;font-size:11.5px;line-height:1.55;color:#a9b6d6}
+.user-email{font:500 12px var(--mono);color:#fff;margin-bottom:10px;word-break:break-all}
+.side-bottom .btn.secondary{background:transparent;color:#fff;border-color:rgba(255,255,255,.4)}.side-bottom .btn.secondary:hover{background:rgba(255,255,255,.1);border-color:#fff}
+
+/* ---------- topo ---------- */
+.topbar{height:64px;background:var(--paper);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 48px;position:sticky;top:0;z-index:10}
+.crumb{font:500 12px var(--mono);letter-spacing:.4px;color:var(--muted);text-transform:uppercase}.crumb strong{color:var(--ink)}
+.top-actions{display:flex;align-items:center;gap:14px}
+.search{width:min(380px,34vw);position:relative}
+.search input{width:100%;padding:9px 12px 9px 36px;border:1px solid var(--line);border-radius:var(--rb);background:var(--card);outline:none}
+.search input:focus{border-color:var(--blue)}
+.search:before{content:'⌕';position:absolute;left:12px;top:5px;font-size:20px;color:var(--muted)}
+.date-pill{font:500 11.5px var(--mono);color:var(--muted);white-space:nowrap}
+
+/* ---------- tipografia de página ---------- */
+.eyebrow{font:500 11px/1 var(--mono);letter-spacing:1.6px;color:var(--blue);text-transform:uppercase;display:flex;align-items:center;gap:9px}
+.eyebrow::before{content:'';width:9px;height:9px;background:var(--orange);flex:none}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin-bottom:34px;padding-bottom:22px;border-bottom:2px solid var(--rule)}
+.page-head h1{font:500 clamp(32px,3.4vw,46px)/1.08 var(--serif);letter-spacing:-.8px;margin:14px 0 12px;color:var(--ink)}
+.page-head p{margin:0;color:var(--muted);max-width:720px;font-size:15.5px}
+.page-head .badge{margin-bottom:6px}
+.section-title{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:48px 0 16px}
+.section-title h2{font:500 26px/1.2 var(--serif);letter-spacing:-.3px;margin:0}
+.section-title p{font-size:13px;color:var(--muted);margin:3px 0 0}
+.link{color:var(--blue-2);font-weight:600;text-decoration:none}.link:hover{text-decoration:underline}
+
+/* ---------- capa (home) ---------- */
+.hero{border-top:4px solid var(--orange);background:var(--blue);color:#fff;padding:40px 44px 38px;display:grid;grid-template-columns:1.02fr .98fr;gap:20px;align-items:center;margin-bottom:0;overflow:hidden}
+.hero .eyebrow{color:#ffc999}.hero .eyebrow::before{background:var(--orange)}
+.hero h1{font:500 clamp(34px,3.7vw,52px)/1.06 var(--serif);letter-spacing:-1.2px;margin:18px 0 18px;max-width:760px}
+.hero p{color:#cfd8ee;max-width:700px;margin:0;font-size:16px}
+.hero .badge{color:#e8ecf6;margin:0 18px 6px 0}
+.hero .eyebrow+h1+p+div{display:flex;flex-wrap:wrap;margin-top:22px}
+.hero .badge::before{background:var(--orange)}
+
+/* ---------- grade e painéis ---------- */
+.grid{display:grid;gap:0}
+.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.panel,.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin:0 -1px -1px 0}
+.panel{padding:24px}
+.grid.grid-4:first-of-type{margin-bottom:0}
+.metric{padding:20px 24px;background:var(--card);border-top:0}
+.metric .label{font:500 11px var(--mono);letter-spacing:.8px;text-transform:uppercase;color:var(--muted)}
+.metric strong{display:block;font:400 44px/1 var(--serif);margin:10px 0 8px;color:var(--blue)}
+.metric small{color:var(--muted);font-size:12.5px}
+
+/* ---------- fontes e selos ---------- */
+.source-line{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);color:var(--muted);font-size:12px}
+.source-line a,.source-tag{color:var(--blue-2);text-decoration:none;border-bottom:1px solid rgba(29,70,144,.3)}
+.source-line a:hover{border-bottom-color:var(--blue-2)}
+.badge{--c:var(--muted);display:inline-flex;align-items:center;gap:7px;align-self:start;font:500 10.5px/1.2 var(--mono);letter-spacing:.7px;text-transform:uppercase;color:var(--c);white-space:nowrap}
+.badge::before{content:'';width:7px;height:7px;background:var(--c);flex:none}
+.badge.orange,.badge.gold{--c:var(--gold)}.badge.green{--c:var(--green)}.badge.red{--c:var(--red)}.badge.blue{--c:var(--blue-2)}
+.badge.status{font-size:10px;white-space:normal}
+
+/* ---------- listas ---------- */
+.item-list{display:flex;flex-direction:column}
+.item-row{display:grid;grid-template-columns:1fr auto;gap:24px;padding:18px 0;border-bottom:1px solid var(--line);align-items:start}
+.item-row:first-child{padding-top:0}.item-row:last-child{border-bottom:0;padding-bottom:0}
+.item-row h3{font:500 19px/1.3 var(--serif);margin:0 0 5px}
+.item-row p{margin:0;color:var(--muted);font-size:14px}
+.axis-card{padding:24px;display:flex;flex-direction:column;gap:10px;min-height:190px}
+.axis-card h3{font:500 22px/1.2 var(--serif);margin:0;letter-spacing:-.2px}
+.axis-card p{font-size:14px;color:var(--muted);margin:0}
+.axis-num{font:500 11px var(--mono);color:var(--orange-ink);letter-spacing:1.2px}
+.axis-card button,.card-action{border:0;background:transparent;color:var(--blue-2);font-weight:600;text-align:left;padding:0;font-size:13px;margin-top:auto}
+.axis-card button:hover,.card-action:hover{text-decoration:underline;text-underline-offset:3px}
+.scenario-card{padding:26px;display:flex;flex-direction:column;gap:12px;min-height:250px}
+.scenario-card h3{font:500 24px/1.2 var(--serif);margin:0}
+.scenario-card p{font-size:14px;color:var(--muted);margin:0}
+.scenario-foot{margin-top:auto;padding-top:14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+
+/* ---------- atores ---------- */
+.actor-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0}
+.actor-card{padding:18px;display:grid;grid-template-columns:76px 1fr;gap:16px;cursor:pointer;align-items:start}
+.actor-card:hover{background:#fff;border-color:var(--blue);position:relative;z-index:1}
+.actor-card img,.actor-hero img{object-fit:cover;background:#e7e1d4;filter:grayscale(1) contrast(1.06);border-radius:2px;transition:filter .2s}
+.actor-card:hover img{filter:none}
+.actor-card img{width:76px;height:94px}
+.actor-card h3{font:500 18px/1.2 var(--serif);margin:9px 0 3px}
+.actor-card p{font-size:12.5px;color:var(--muted);margin:0 0 8px;line-height:1.4}
+.actor-hero{display:grid;grid-template-columns:170px 1fr;gap:30px;align-items:start}
+.actor-hero img{width:170px;height:206px}
+
+/* ---------- filtros ---------- */
+.filterbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:20px}
+.filterbar input{min-width:300px}
+.filterbar input,.filterbar select{border:1px solid var(--line);background:var(--card);border-radius:var(--rb);padding:9px 12px}
+.pill-btn{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px;color:var(--ink);font-size:12.5px;font-weight:500;transition:border-color .15s,background .15s}
+.pill-btn:hover{border-color:var(--blue);background:#fff}.pill-btn.active{border-color:var(--blue);background:var(--blue);color:#fff}
+
+/* ---------- dossiê / detalhe ---------- */
+.detail{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--blue);border-radius:var(--r);padding:34px 36px;margin-top:28px}
+.detail h2{font:500 34px/1.12 var(--serif);margin:12px 0 10px;letter-spacing:-.5px}
+.detail h3{font:500 20px var(--serif);margin:28px 0 8px}
+.detail p{color:#2f384a;margin:8px 0;font-size:15px}
+.detail ul{padding-left:18px;color:#2f384a;font-size:14.5px}.detail li{margin:6px 0}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.detail-block{border:1px solid var(--line);margin:0 -1px -1px 0;padding:18px 20px}
+.detail-block h4{font:500 11px var(--mono);letter-spacing:1px;text-transform:uppercase;color:var(--blue);margin:0 0 10px}
+.detail-block p,.detail-block li{font-size:14px}
+
+/* ---------- método ---------- */
+.method-step{display:grid;grid-template-columns:52px 1fr;gap:18px;padding:20px 0;border-bottom:1px solid var(--line)}.method-step:last-child{border:0}
+.step-number{font:400 38px/1 var(--serif);color:var(--orange-ink)}
+.method-step h3{margin:0 0 5px;font:500 20px var(--serif)}
+.method-step p{margin:0;color:var(--muted);font-size:14.5px}
+.chain{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin:14px 0}
+.chain span{background:var(--paper);border:1px solid var(--line);padding:12px 14px;font:500 12.5px var(--mono);color:var(--blue);flex:1;min-width:130px;text-align:center}
+.chain b{align-self:center;color:var(--orange);padding:0 8px;font-size:18px}
+.timeline{border-left:2px solid var(--rule);margin:12px 0 0 6px;padding-left:24px}
+.timeline-item{position:relative;padding:0 0 22px}
+.timeline-item:before{content:'';position:absolute;left:-31px;top:6px;width:10px;height:10px;background:var(--orange);outline:3px solid var(--card)}
+.timeline-item strong{font:500 12px var(--mono);letter-spacing:.5px;text-transform:uppercase;color:var(--blue)}
+.timeline-item p{margin:4px 0 0;color:var(--muted);font-size:14px}
+
+/* ---------- tabela ---------- */
+.table-wrap{overflow:auto;padding:0}
+.data-table{width:100%;border-collapse:collapse;font-size:14px}
+.data-table th{text-align:left;font:500 10.5px var(--mono);text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:14px 16px;border-bottom:2px solid var(--rule)}
+.data-table td{padding:16px;border-bottom:1px solid var(--line);vertical-align:top}
+.data-table td b{font:500 16px/1.3 var(--serif)}
+.data-table tr:last-child td{border-bottom:0}
+.data-table td a{color:var(--blue-2);text-decoration:none;border-bottom:1px solid rgba(29,70,144,.3);font-size:12.5px;line-height:1.7}
+.data-table .source-line{margin:0;padding:0;border:0}
+
+/* ---------- avisos ---------- */
+.notice{border-left:3px solid var(--orange);background:var(--card);padding:14px 18px;color:#3b4254;font-size:14px;margin:22px 0}
+.notice.blue{border-color:var(--blue)}.notice.red{border-color:var(--red)}
+
+/* ---------- editor / formulários ---------- */
+.editor-tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:20px}
+.editor-tab{border:0;background:transparent;padding:11px 16px;color:var(--muted);font-weight:600;border-bottom:3px solid transparent;margin-bottom:-1px}
+.editor-tab.active{color:var(--blue);border-color:var(--orange)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}
+.field label{font:500 11px var(--mono);letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
+.field input,.field select,.field textarea{border:1px solid var(--line);border-radius:var(--rb);padding:10px 12px;background:#fff;outline:none}
+.field textarea{min-height:92px;resize:vertical}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(10,42,110,.12)}
+/* Hierarquia de botões
+   1 primário  .btn.orange     laranja cheio, texto escuro, maior   -> ação principal da tela (Entrar, Salvar)
+   2 padrão    .btn            azul cheio                            -> ação relevante (Criar dossiê, Exportar)
+   3 secundário .btn.secondary contorno azul, fundo transparente     -> alternativa (Limpar, Consultar método)
+   4 terciário .card-action    texto + seta, sem caixa               -> navegação em cards
+   perigo      .btn.danger     contorno vermelho                     -> exclusão */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1.5px solid var(--blue);border-radius:var(--rb);background:var(--blue);color:#fff;padding:10px 18px;font-size:13.5px;font-weight:600;line-height:1.2;transition:background .15s,border-color .15s,transform .05s}
+.btn:hover{background:var(--blue-2);border-color:var(--blue-2)}
+.btn:active{transform:translateY(1px)}
+.btn.orange{background:var(--orange);border-color:var(--orange);color:#1a0d00;font-weight:700;padding:12px 24px;font-size:14.5px}
+.btn.orange:hover{background:#ff8420;border-color:#ff8420}
+.btn.secondary{background:transparent;color:var(--blue)}
+.btn.secondary:hover{background:rgba(10,42,110,.07);border-color:var(--blue)}
+.btn.danger{background:transparent;border-color:var(--red);color:var(--red);font-weight:500}
+.btn.danger:hover{background:rgba(157,51,40,.08)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.editor-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:36px}
+.editor-record{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.editor-record:last-child{border:0}
+.editor-record strong{font:500 16px var(--serif)}
+.editor-record small{display:block;color:var(--muted);font-size:12px}
+.empty{padding:28px;text-align:center;color:var(--muted);font-size:14px}
+.footer-note{margin-top:24px;color:var(--muted);font-size:12px}
+
+/* ---------- modal ---------- */
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(10,22,52,.55);z-index:50;align-items:center;justify-content:center;padding:18px}.modal-backdrop.open{display:flex}
+.modal{width:min(860px,100%);max-height:90vh;overflow:auto;background:var(--card);border-top:4px solid var(--orange);border-radius:var(--r)}
+.modal-head{padding:14px 26px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font:500 12px var(--mono);letter-spacing:1px;text-transform:uppercase}
+.modal-head button{border:1px solid var(--line);background:transparent;width:32px;height:32px;border-radius:var(--rb)}
+.modal-body{padding:30px 34px}
+.modal-body h2{margin:12px 0;font:500 30px/1.15 var(--serif)}.modal-body h3{font:500 19px var(--serif);margin:22px 0 6px}
+.modal-body p{font-size:14.5px;color:#2f384a}
+
+/* ---------- login ---------- */
+.login-screen{position:fixed;inset:0;z-index:60;overflow:auto;display:grid;grid-template-columns:1.1fr 1fr;background:var(--paper)}
+.login-screen::before{content:'Da decisão política ao impacto sobre o negócio.';background:repeating-radial-gradient(circle at 72% 34%,transparent 0 78px,rgba(255,255,255,.08) 78px 79px),var(--blue);border-top:4px solid var(--orange);color:#fff;font:500 clamp(34px,4vw,56px)/1.06 var(--serif);letter-spacing:-1px;padding:56px;display:flex;align-items:flex-end}
+.login-card{align-self:center;justify-self:center;width:min(380px,calc(100% - 36px));display:flex;flex-direction:column;gap:16px}
+.login-card .brand-mark,.login-card .logo-dial{color:var(--blue)}.login-card .brand-sub{color:var(--muted);margin:-4px 0 14px}
+.login-hint{margin:0;color:var(--muted);font-size:14px}
+.login-error{color:var(--red);font-size:13px;min-height:18px}
+
+/* ---------- responsivo ---------- */
+@media(max-width:1100px){
+  .app{grid-template-columns:230px 1fr}.content{padding:32px 28px 60px}.topbar{padding:0 28px}
+  .actor-grid{grid-template-columns:repeat(2,1fr)}.grid-4{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:760px){
+  .app{display:block}
+  .hero-dial{max-width:420px;margin:0 auto}
+  .sidebar{position:relative;height:auto;padding:16px 0;gap:12px}.brand{padding:0 16px}.brand-sub{display:none}
+  .nav-wrap{flex-direction:row;overflow:auto;gap:0;padding:0 8px}
+  .nav-group{display:flex;align-items:center;white-space:nowrap}.nav-label{display:none}
+  .nav-btn{width:auto;padding:9px 12px;border-left:0;border-bottom:3px solid transparent}.nav-btn.active{border-bottom-color:var(--orange)}.nav-btn::before{display:none}
+  .side-bottom{display:none}
+  .topbar{padding:0 16px;position:relative}.content{padding:24px 16px 48px}
+  .hero{grid-template-columns:1fr;padding:28px 22px;gap:24px}
+      .grid-3,.grid-2,.actor-grid,.detail-grid,.editor-layout,.form-grid{grid-template-columns:1fr}
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+  .page-head{display:block}.page-head .badge{margin-top:12px}
+  .search{width:48vw}.date-pill{display:none}
+  .actor-hero{grid-template-columns:100px 1fr}.actor-hero img{width:100px;height:125px}
+  .field.full{grid-column:auto}.detail{padding:22px 18px}
+  .login-screen{grid-template-columns:1fr}.login-screen::before{padding:28px 22px;font-size:30px;min-height:160px}.login-card{padding:28px 0}
+}
+
+/* ---------- Uly (guia) ---------- */
+.mascot{position:fixed;right:22px;bottom:10px;z-index:30;display:flex;flex-direction:column;align-items:flex-end;pointer-events:none}
+.mascot-btn{pointer-events:auto;border:0;background:transparent;padding:0;line-height:0;transform-origin:50% 100%;animation:uly-bob 3.4s ease-in-out infinite}
+.mascot-btn:hover{animation-duration:1.4s}
+.mascot-btn img{display:block;height:150px;width:auto;max-width:210px;filter:drop-shadow(0 6px 6px rgba(22,29,46,.18))}
+.mascot-btn img.pop{animation:uly-pop .45s cubic-bezier(.3,1.6,.5,1)}
+.mascot[data-mood=dormindo] .mascot-btn,.mascot[data-mood=entediada] .mascot-btn{animation-duration:6s}
+.mascot-bubble{pointer-events:auto;position:relative;max-width:240px;margin:0 8px 12px 0;padding:11px 15px 12px;background:var(--card);border:2px solid var(--blue);border-radius:16px;font-size:14px;line-height:1.4;opacity:0;transform:translateY(6px) scale(.92);transform-origin:90% 100%;visibility:hidden;transition:opacity .2s,visibility .2s}
+.mascot-bubble::after{content:'';position:absolute;right:34px;bottom:-10px;width:16px;height:16px;background:var(--card);border:solid var(--blue);border-width:0 2px 2px 0;transform:rotate(45deg);border-bottom-right-radius:4px}
+.mascot-bubble.show{opacity:1;visibility:visible;animation:bubble-pop .35s cubic-bezier(.3,1.6,.5,1) forwards}
+.mascot-name{display:block;font:600 10.5px var(--mono);letter-spacing:1.2px;text-transform:uppercase;color:var(--orange-ink);margin-bottom:2px}
+@keyframes uly-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes uly-pop{0%{transform:scale(.86) rotate(-3deg)}60%{transform:scale(1.05) rotate(1deg)}100%{transform:none}}
+@keyframes bubble-pop{from{transform:translateY(6px) scale(.92)}to{transform:none}}
+@media(prefers-reduced-motion:reduce){.mascot-btn,.mascot-btn img.pop,.mascot-bubble.show{animation:none}}
+@media(max-width:760px){.mascot{right:8px;bottom:6px}.mascot-btn img{height:104px;max-width:150px}.mascot-bubble{max-width:190px;font-size:13px}}
+
+/* ---------- radar dos 5 eixos (assinatura visual) ---------- */
+.hero-dial{width:100%}
+.dial{display:block;width:100%;height:auto;overflow:visible}
+.dial .ring{stroke:rgba(255,255,255,.16);stroke-width:1}
+.dial .ticks{stroke:rgba(255,255,255,.4);stroke-width:1}
+.dial .shape{fill:rgba(236,112,0,.14);stroke:var(--orange);stroke-width:1.5;stroke-linejoin:round}
+.dial .sweep path{fill:rgba(236,112,0,.13);stroke:var(--orange);stroke-width:1.5;stroke-opacity:.7}
+.dial-center{font:300 34px var(--serif);fill:#fff;letter-spacing:-.5px}
+.axis{cursor:pointer;outline:none}
+.axis-halo{fill:rgba(236,112,0,.001);pointer-events:all;stroke:rgba(255,255,255,.0);stroke-width:1.5;transition:stroke .15s,r .15s}
+.axis-dot{fill:var(--orange);transition:fill .15s}
+.axis-n{font:600 13px var(--mono);fill:#1a1000;pointer-events:none}
+.axis-name{font:600 15.5px var(--mono);letter-spacing:.2px;fill:#d6dff3;text-transform:uppercase;transition:fill .15s}
+.axis:hover .axis-halo,.axis:focus-visible .axis-halo{stroke:#fff;r:22}
+.axis:hover .axis-name,.axis:focus-visible .axis-name{fill:#fff}
+.axis:hover .axis-dot{fill:#ff8a24}
+
+/* régua de graduação sob os títulos (ecoa os graus do radar) */
+.page-head{position:relative;margin-bottom:44px}
+.page-head::after{content:'';position:absolute;left:0;right:0;bottom:-11px;height:9px;background:repeating-linear-gradient(90deg,var(--rule) 0 1px,transparent 1px 10px),repeating-linear-gradient(90deg,var(--rule) 0 1px,transparent 1px 50px);background-size:100% 5px,100% 9px;background-repeat:no-repeat;background-position:0 0,0 0;opacity:.55}
+
+/* letra do cenário */
+.scn-letter{font:300 92px/.8 var(--serif);margin-bottom:4px;opacity:.28}
+.scn-A{color:var(--green)}.scn-B{color:var(--red)}.scn-C{color:var(--gold)}
+@media(prefers-reduced-motion:reduce){.dial .sweep{display:none}}

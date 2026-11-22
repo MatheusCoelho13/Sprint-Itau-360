@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Itaú 360 – Risco político 2027</title>
+<style>
+:root{--navy:#0A1B3D;--navy2:#13294F;--or:#FF6A00;--bg:#F4F6FA;--card:#fff;--tx:#0A1B3D;--mut:#4A5873;--bd:#DDE3EE;--chip:#E9EDF5;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#071326;--card:#0F2447;--tx:#F2F5FB;--mut:#A9B7D3;--bd:#22396A;--chip:#17305C}}
+:root[data-theme="dark"]{--bg:#071326;--card:#0F2447;--tx:#F2F5FB;--mut:#A9B7D3;--bd:#22396A;--chip:#17305C}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.4}
+button{font:inherit;cursor:pointer}
+.w{max-width:960px;margin:0 auto;padding:0 14px}
+header{background:var(--navy);color:#fff;padding:22px 0 0;border-bottom:5px solid var(--or)}
+header small{color:var(--or);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:11px}
+h1{font-size:24px;margin:6px 0 4px;line-height:1.1}h1 b{color:var(--or)}
+header p{margin:0 0 12px;color:#C9D4EC;font-size:13px}
+nav{display:flex;gap:4px;overflow-x:auto}
+nav button{background:transparent;border:0;color:#C9D4EC;padding:10px 14px;font-weight:700;font-size:14px;border-bottom:4px solid transparent;white-space:nowrap}
+nav button.on{color:#fff;border-bottom-color:var(--or)}
+.view{display:none;padding:16px 0 40px}.view.on{display:block}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+input[type=search],select,textarea{font:inherit;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;padding:10px 12px}
+input[type=search]{flex:1;min-width:180px}
+.fg{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 12px;margin-bottom:10px}
+.fg summary{font-weight:800;font-size:13px;cursor:pointer;list-style:none;display:flex;justify-content:space-between}
+.fg summary::after{content:"＋";color:var(--or)}
+.fg[open] summary::after{content:"－"}
+.fgrp{margin:8px 0 0}
+.fgrp h4{margin:8px 0 5px;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--mut)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--chip);color:var(--tx);border:1px solid var(--bd);border-radius:99px;padding:6px 11px;font-size:12px;font-weight:600}
+.chip.on{background:var(--or);border-color:var(--or);color:#fff}
+.res{display:flex;justify-content:space-between;align-items:center;margin:4px 0 10px;font-size:13px;color:var(--mut)}
+.res button{background:none;border:0;color:var(--or);font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;text-align:left;color:var(--tx);border-top:5px solid var(--navy2);width:100%}
+.card h3{margin:8px 0 4px;font-size:16px}
+.card p{margin:0 0 8px;font-size:13px;color:var(--mut)}
+.tag{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;padding:3px 8px;border-radius:99px;color:#fff;display:inline-block}
+.t-Favorável{background:#1E8E5A}.t-Desfavorável{background:#D62F2F}.t-Misto{background:#7A5AF8}.t-Oportunidade{background:var(--or)}.t-Risco{background:var(--navy2)}
+.k-Favorável{border-top-color:#1E8E5A}.k-Desfavorável{border-top-color:#D62F2F}.k-Misto{border-top-color:#7A5AF8}.k-Oportunidade{border-top-color:var(--or)}
+.meters{display:flex;gap:10px;font-size:11px;color:var(--mut);margin-top:8px}
+.m{flex:1}.m span{display:block;margin-bottom:3px;font-weight:700}
+.dots{display:flex;gap:3px}.dots i{height:7px;flex:1;border-radius:4px;background:var(--chip)}.dots i.f{background:var(--or)}
+.mini{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.mini em{font-style:normal;font-size:11px;background:var(--chip);border-radius:6px;padding:2px 6px;color:var(--mut)}
+.empty{text-align:center;color:var(--mut);padding:30px 10px}
+.ov{position:fixed;inset:0;background:rgba(5,12,28,.65);display:none;z-index:20;align-items:flex-end;justify-content:center}
+.ov.on{display:flex}
+.sheet{background:var(--bg);width:100%;max-width:760px;max-height:92%;overflow:auto;border-radius:20px 20px 0 0;padding:0 0 calc(24px + env(safe-area-inset-bottom,0px))}
+.sh-h{background:var(--navy);color:#fff;padding:16px;position:sticky;top:0;border-bottom:4px solid var(--or)}
+.sh-h button{position:absolute;right:12px;top:12px;background:var(--or);color:#fff;border:0;border-radius:50%;width:32px;height:32px;font-weight:800}
+.sh-h h2{margin:6px 40px 4px 0;font-size:19px}
+.sh-h p{margin:0;color:#C9D4EC;font-size:13px}
+.sh-b{padding:14px 16px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.facts div{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:8px;text-align:center;font-size:11px;color:var(--mut)}
+.facts b{display:block;color:var(--tx);font-size:14px}
+.blk{background:var(--card);border:1px solid var(--bd);border-left:5px solid var(--or);border-radius:10px;padding:10px 12px;margin-bottom:10px}
+.blk.r{border-left-color:#D62F2F}.blk.n{border-left-color:var(--navy2)}
+.blk h4{margin:0 0 5px;font-size:12px;text-transform:uppercase;letter-spacing:.07em}
+.blk ul{margin:0;padding-left:18px;font-size:13px}
+.blk li{margin:2px 0}
+.link{color:var(--or);font-weight:700;background:none;border:0;padding:0;font-size:inherit;text-decoration:underline}
+.scroll{overflow-x:auto;border:1px solid var(--bd);border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:560px;background:var(--card);font-size:13px}
+th{background:var(--navy);color:#fff;text-align:left;padding:9px;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+th:last-child{color:var(--or)}
+td{padding:9px;border-top:1px solid var(--bd);vertical-align:top}td:first-child{font-weight:700}
+.sig{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-bottom:14px}
+.sig div{border-radius:12px;padding:11px;color:#fff;font-size:13px}.sig b{display:block;margin:4px 0}.sig small{font-weight:800;font-size:10px;text-transform:uppercase;letter-spacing:.07em}
+.sg-h{background:#B42323}.sg-a{background:var(--or)}.sg-g{background:#1E8E5A}
+.fic{display:grid;gap:10px}
+.fic label{display:block;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 12px;font-size:13px;color:var(--mut)}
+.fic b{display:block;color:var(--tx);font-size:14px}
+.fic textarea{width:100%;margin-top:6px;min-height:54px;resize:vertical}
+.btn{background:var(--or);color:#fff;border:0;border-radius:10px;padding:11px 16px;font-weight:800;margin-top:12px}
+.btn.s{background:var(--navy2);margin-left:6px}
+.note{font-size:12px;color:var(--mut);margin-top:12px}
+.hero{display:flex;gap:16px;align-items:center;background:var(--navy);color:#fff;border-radius:14px;padding:16px;border-left:6px solid var(--or)}
+.hero h2{margin:0 0 6px;font-size:19px}.hero p{margin:0;font-size:13px;color:#C9D4EC}
+.ring{flex:none;width:96px;height:96px;border-radius:50%;background:conic-gradient(var(--or) 0 51.79%,#294155 0);display:grid;place-items:center}
+.ring span{width:70px;height:70px;border-radius:50%;background:var(--navy);display:grid;place-items:center;font-weight:800;font-size:16px}
+.kp{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
+.kp button{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 4px;color:var(--mut);font-size:11px;font-weight:700}
+.kp b{display:block;font-size:22px;color:var(--or)}
+.sec{margin:16px 0 8px;font-size:15px}
+.card a,.card .link{font-size:12px}
+.pers{font-weight:700;color:var(--tx);font-size:14px}
+.org{background:var(--chip);color:var(--mut)}
+@media(max-width:480px){.hero{flex-direction:column;text-align:center}}
+</style>
+</head>
+<body>
+<header><div class="w">
+<small>Governo Lula IV · primeiros 100 dias · retrato de 11 nov 2026</small>
+<h1>Itaú <b>360</b> — Radar de risco político</h1>
+<p>Cenários, atores, frentes de monitoramento e fontes em um só lugar.</p>
+<nav id="nav">
+<button class="on" data-v="ini">Visão geral</button><button data-v="cen">Cenários</button><button data-v="ato">Atores</button><button data-v="dec">Decisões</button><button data-v="fre">Frentes</button><button data-v="pai">Painel de sinais</button><button data-v="mat">Matriz</button><button data-v="fic">Ficha de análise</button><button data-v="fon">Fontes</button>
+</nav></div></header>
+
+<div class="w">
+<div class="view" id="v-cen">
+<div class="bar"><input type="search" id="q" placeholder="Buscar: juros, fraude, hedge, energia…"><select id="ord"><option value="a">Ordem: A–H</option><option value="p">Maior probabilidade</option><option value="c">Maior complexidade</option><option value="h">Mais próximo (horizonte)</option></select></div>
+<details class="fg" open><summary>Filtros</summary><div id="filters"></div></details>
+<div class="res"><span id="cnt"></span><button id="clr">Limpar filtros</button></div>
+<div class="grid" id="grid"></div>
+</div>
+
+<div class="view on" id="v-ini">
+<div class="hero"><div class="ring"><span>51,79%</span></div><div><h2>Reeleição não elimina a negociação</h2><p>Lula foi reeleito em 25 de outubro com 51,79% dos votos válidos no segundo turno. A formação do governo e a articulação com o Congresso são os próximos testes para a agenda econômica e regulatória.</p></div></div>
+<div class="kp"><button data-go="cen"><b id="n1"></b>cenários</button><button data-go="ato"><b id="n2"></b>atores</button><button data-go="fre"><b id="n3"></b>frentes</button><button data-go="fon"><b id="n4"></b>fontes</button></div>
+<h3 class="sec">Três caminhos para a governabilidade</h3>
+<div class="chips" id="gvt"></div><div class="blk n" id="gvp" style="margin-top:10px"></div>
+<div class="note">Possibilidades analíticas, não previsões. Probabilidade e gravidade são avaliações qualitativas preliminares.</div>
+</div>
+<div class="view" id="v-ato">
+<div class="bar"><input type="search" id="q3" placeholder="Buscar: Fazenda, STF, Senado, Boulos…"></div>
+<div class="chips" id="ofl" style="margin-bottom:10px"></div>
+<div class="note" style="margin:0 0 10px">Nomes mencionados nas negociações, não indicações anunciadas. O desenho final pode mudar.</div>
+<div class="grid" id="ag"></div>
+</div>
+<div class="view" id="v-dec"><div class="note" style="margin:0 0 10px">Decisões a acompanhar nos primeiros 100 dias. Probabilidade: chance de o risco descrito se materializar. Gravidade: impacto no Itaú, direto ou via clientes.</div><div class="grid" id="dg"></div></div>
+<div class="view" id="v-fre">
+<div class="chips" id="efl" style="margin-bottom:10px"></div>
+<div class="grid" id="fg2"></div>
+<div class="note">Temas de acompanhamento estratégico: prioridades e instrumentos dependem das escolhas do novo governo e do Congresso.</div>
+</div>
+<div class="view" id="v-fon">
+<div class="grid" id="sl"></div>
+<div class="note">Retrato informativo de 11 de novembro de 2026. Candidaturas a cargos são especulações reportadas, não nomeações confirmadas. Áreas temáticas indicam questões a monitorar, não políticas já aprovadas.</div>
+</div>
+<div class="view" id="v-pai">
+<div class="sig">
+<div class="sg-h"><small>Alerta alto</small><b>Piora fiscal + piora do crédito</b>Pode indicar juros altos, menos atividade e mais inadimplência.</div>
+<div class="sg-h"><small>Alerta alto</small><b>Aumento de fraudes digitais</b>Exige resposta rápida e revisão de controles.</div>
+<div class="sg-a"><small>Atenção</small><b>Grandes anúncios sem execução</b>Só é oportunidade com licença, financiamento e cronograma.</div>
+<div class="sg-g"><small>Oportunidade</small><b>Queda da incerteza</b>Abre espaço para financiamento, câmbio e serviços corporativos.</div>
+</div>
+<div class="bar"><input type="search" id="q2" placeholder="Filtrar painel: Selic, câmbio, fraudes…"></div>
+<div class="scroll"><table id="tp"><thead><tr><th>Eixo</th><th>Indicadores</th><th>Antecipa</th></tr></thead><tbody></tbody></table></div>
+</div>
+
+<div class="view" id="v-mat">
+<p class="note" style="margin-top:0">Cada ponto é um cenário, caminho de governabilidade, decisão ou ator. Filtre por tipo e toque para abrir a análise de probabilidade.</p>
+<div class="chips" id="mkf" style="margin-bottom:10px"></div><div id="matrix"></div>
+<div class="note">Probabilidade, gravidade, complexidade e horizonte são avaliações qualitativas preliminares deste radar, não previsões. Ajuste-as com a visão da equipe.</div>
+</div>
+
+<div class="view" id="v-fic">
+<div class="fic" id="fic"></div>
+<button class="btn" id="cp">Copiar resumo</button><button class="btn s" id="rs">Limpar</button>
+<div class="note" id="cpm"></div>
+</div>
+</div>
+
+<div class="ov" id="ov"><div class="sheet" id="sheet"></div></div>
+
+<script>
+var S=[
+{id:"A",t:"Recuperação da confiança e ajuste fiscal",tp:"Favorável",tm:["Fiscal","Investimento"],pb:["Baixa renda","Classe média","Alta renda","PMEs","Grandes empresas","Estrangeiros"],at:["Governo","Congresso","Investidores externos"],p:2,c:2,g:1,h:2,hz:"Médio prazo",r:"Governo estabiliza a relação com o Congresso e sinaliza compromisso fiscal.",ch:["Menor prêmio de risco e câmbio mais previsível","Possível queda dos juros futuros","Famílias retomam financiamentos","Empresas retomam projetos adiados","Estrangeiros ampliam exposição ao Brasil"],op:["Financiamento empresarial e imobiliário","Gestão de patrimônio e investimentos","Câmbio e proteção financeira","Infraestrutura e projetos produtivos"],ri:["Euforia sem execução fiscal real"],mo:["Resultado fiscal","Dívida pública","Expectativas de inflação","Curva de juros","Fluxo de capital estrangeiro","Articulação do governo"]},
+{id:"B",t:"Deterioração fiscal, juros altos e baixo crescimento",tp:"Desfavorável",tm:["Fiscal","Crédito"],pb:["Baixa renda","Classe média","PMEs","Grandes empresas"],at:["Governo","Congresso","Banco Central"],p:2,c:3,g:3,h:2,hz:"Médio prazo",r:"Despesas fora de controle, conflitos políticos e falta de medidas fiscais críveis elevam o risco percebido.",ch:["Crédito mais caro para famílias e empresas","Consumo e investimento em queda","Mais renegociações","Dificuldade de pagar dívidas","Clientes priorizam liquidez"],op:["Aplicações conservadoras","Renegociação estruturada"],ri:["Alta da inadimplência","Menor demanda por crédito","Deterioração de carteiras empresariais","Volatilidade cambial e financeira"],mo:["Atrasos por faixa","Concentração setorial","Clientes expostos a juros","Testes de estresse"]},
+{id:"C",t:"Mudanças na renda, no trabalho e no consumo",tp:"Misto",tm:["Consumo","Trabalho"],pb:["Baixa renda","Classe média","PMEs"],at:["Governo","Congresso","Sindicatos e empresas"],p:2,c:2,g:2,h:2,hz:"Médio prazo",r:"Políticas salariais, transferências e mudança de jornada alteram renda e consumo.",ch:["Renda maior: mais cartões, pagamentos, turismo e serviços","Custos maiores sem produtividade: preços altos e menos contratação","Consumo pode beneficiar pequenos negócios locais"],op:["Adquirência e soluções de pagamento","Capital de giro para pequenos negócios","Financiamento de automação"],ri:["Margens apertadas","Menor contratação","Dificuldade financeira em setores intensivos em mão de obra"],mo:["Renda real","Emprego por setor","Inflação de serviços","Custos trabalhistas","Produtividade"]},
+{id:"D",t:"Endividamento elevado e crédito mais seletivo",tp:"Misto",tm:["Crédito","Consumo"],pb:["Baixa renda","Classe média","PMEs"],at:["Governo","Banco Central","Reguladores","Bancos"],p:3,c:2,g:2,h:1,hz:"Curto prazo",r:"Renda comprometida segue alta e reguladores ou governo reorganizam o mercado de crédito.",ch:["Menos compras parceladas","Mais renegociação e portabilidade","Bancos mais criteriosos","Setores dependentes de consumo financiado perdem demanda"],op:["Renegociação responsável","Educação e organização financeira","Investimentos de baixo risco","Serviços de gestão de orçamento"],ri:["Perda de relacionamento para concorrentes ou plataformas digitais se faltar solução adequada"],mo:["Endividamento e atrasos","Portabilidade","Concessões","Medidas regulatórias"]},
+{id:"E",t:"Investimento estrangeiro em setores estratégicos",tp:"Oportunidade",tm:["Investimento","Externo"],pb:["Grandes empresas","Estrangeiros","PMEs"],at:["Governo","Investidores externos","Órgãos de licenciamento"],p:2,c:3,g:1,h:3,hz:"Longo prazo",r:"Energia, minerais críticos, data centers e infraestrutura atraem capital.",ch:["Grandes projetos exigem financiamento","Fornecedores nacionais entram em novas cadeias","Maior fluxo cambial"],op:["Financiamento de projetos de grande porte","Câmbio e comércio exterior","Gestão de caixa para estrangeiras","Emissões e mercado de capitais","Atendimento a fornecedores"],ri:["Projeto anunciado não sai por falta de licença, energia, infraestrutura, segurança jurídica ou financiamento","Crescimento concentrado em poucas regiões"],mo:["Execução, não anúncios","Licenciamento","Cronograma","IED"]},
+{id:"F",t:"Choque externo e geopolítico",tp:"Risco",tm:["Externo"],pb:["Baixa renda","Classe média","Grandes empresas","PMEs"],at:["Governos estrangeiros","Investidores externos","Mercados de commodities"],p:2,c:3,g:3,h:2,hz:"Imprevisível",r:"Conflitos, sanções, disputas comerciais e interrupções logísticas afetam o Brasil mesmo sem participação direta.",ch:["Famílias: combustíveis, alimentos e importados mais caros","Agro: fertilizantes e insumos oscilam","Indústria: custos e interrupções","Exportadores: novos mercados com mais volatilidade","Importadores: mais proteção cambial e capital de giro"],op:["Hedge e gestão cambial","Financiamento ao comércio exterior","Apoio à reorganização de cadeias"],ri:["Inflação importada","Volatilidade cambial"],mo:["Câmbio","Commodities","Fretes","Sanções"]},
+{id:"G",t:"IA e digitalização transformam o banco",tp:"Misto",tm:["Tecnologia"],pb:["Classe média","Alta renda","PMEs","Baixa renda"],at:["Big techs","Reguladores","Fraudadores","Bancos"],p:3,c:3,g:2,h:1,hz:"Curto prazo",r:"Assistentes de IA podem comparar taxas e escolher produtos, reduzindo a dependência do app do banco.",ch:["Pressão sobre tarifas e spreads","Menor fidelidade de alguns clientes","Mais deepfakes, golpes e fraude de identidade"],op:["Personalização de produtos","Banco como infraestrutura financeira integrada à vida digital","Segurança e autenticação como diferencial"],ri:["Fraudes","Competição digital","Perda de relacionamento"],mo:["Fraudes e ataques","Regulação de dados","Adoção de assistentes de IA"]},
+{id:"H",t:"Expansão do crédito direcionado pelo governo",tp:"Misto",tm:["Crédito","Fiscal"],pb:["PMEs","Grandes empresas","Baixa renda"],at:["Governo","Bancos públicos","Congresso"],p:3,c:2,g:2,h:1,hz:"Curto prazo",r:"Programas públicos ampliam linhas subsidiadas e garantias para certos setores.",ch:["Empresas obtêm condições melhores","Bancos públicos ganham participação","Parte da demanda por crédito privado é deslocada"],op:["Pagamentos, distribuição e garantias","Serviços complementares","Parcerias com programas"],ri:["Concorrência direta com crédito subsidiado"],mo:["Novos programas","Volumes dos bancos públicos","Garantias oferecidas"]}
+];
+var L3=["","Baixa","Média","Alta"],H3=["","Curto prazo","Médio prazo","Longo prazo"];
+var FG=[
+["Tipo","tp",["Favorável","Desfavorável","Misto","Oportunidade","Risco"]],
+["Tema","tm",["Fiscal","Crédito","Consumo","Trabalho","Investimento","Externo","Tecnologia"]],
+["Público afetado","pb",["Baixa renda","Classe média","Alta renda","PMEs","Grandes empresas","Estrangeiros"]],
+["Ator","at",["Governo","Congresso","Banco Central","Reguladores","Bancos públicos","Investidores externos","Big techs"]],
+["Probabilidade","p",[[1,"Baixa"],[2,"Média"],[3,"Alta"]]],
+["Complexidade","c",[[1,"Baixa"],[2,"Média"],[3,"Alta"]]],
+["Gravidade","g",[[1,"Baixa"],[2,"Média"],[3,"Alta"]]]
+];
+var sel={},$=function(i){return document.getElementById(i)};
+function esc(s){return String(s).replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
+function buildFilters(){var h="";FG.forEach(function(g){h+='<div class="fgrp"><h4>'+g[0]+'</h4><div class="chips">';g[2].forEach(function(o){var v=Array.isArray(o)?o[0]:o,l=Array.isArray(o)?o[1]:o;h+='<button class="chip" data-k="'+g[1]+'" data-v="'+v+'">'+l+'</button>'});h+="</div></div>"});$("filters").innerHTML=h}
+function has(s,k,v){var x=s[k];if(Array.isArray(x))return x.indexOf(v)>-1;return String(x)===String(v)}
+function match(s){for(var k in sel){var a=sel[k];if(!a.length)continue;if(!a.some(function(v){return has(s,k,v)}))return false}
+var q=$("q").value.trim().toLowerCase();if(q){var blob=JSON.stringify(s).toLowerCase();if(blob.indexOf(q)<0)return false}return true}
+function dots(n){var h='<div class="dots">';for(var i=1;i<=3;i++)h+='<i class="'+(i<=n?"f":"")+'"></i>';return h+"</div>"}
+function render(){var o=$("ord").value,list=S.filter(match).slice();
+if(o==="p")list.sort(function(a,b){return b.p-a.p});if(o==="c")list.sort(function(a,b){return b.c-a.c});if(o==="h")list.sort(function(a,b){return a.h-b.h});
+$("cnt").textContent=list.length+" de "+S.length+" cenários";
+$("grid").innerHTML=list.length?list.map(function(s){return '<button class="card k-'+s.tp+'" data-id="'+s.id+'"><span class="tag t-'+s.tp+'">'+s.tp+'</span><h3>'+s.id+'. '+esc(s.t)+'</h3><p>'+esc(s.r)+'</p><div class="meters"><div class="m"><span>Probabilidade</span>'+dots(s.p)+'</div><div class="m"><span>Complexidade</span>'+dots(s.c)+'</div><div class="m"><span>Gravidade</span>'+dots(s.g)+'</div></div><div class="mini">'+s.tm.map(function(x){return"<em>"+x+"</em>"}).join("")+'</div></button>'}).join(""):'<div class="empty">Nenhum cenário com esses filtros. Tente limpar alguns.</div>'}
+function ul(a){return"<ul>"+a.map(function(x){return"<li>"+esc(x)+"</li>"}).join("")+"</ul>"}
+function open(id){var s=S.filter(function(x){return x.id===id})[0];
+$("sheet").innerHTML='<div class="sh-h"><button id="x" aria-label="Fechar">✕</button><span class="tag t-'+s.tp+'">'+s.tp+'</span><h2>'+s.id+'. '+esc(s.t)+'</h2><p>'+esc(s.r)+'</p></div><div class="sh-b"><div class="facts"><div>Probabilidade<b>'+L3[s.p]+'</b></div><div>Complexidade<b>'+L3[s.c]+'</b></div><div>Gravidade<b>'+L3[s.g]+'</b></div></div><div class="blk"><h4>Por que essa probabilidade</h4><div style="font-size:13px">'+RS[s.id]+'</div></div><div class="blk n"><h4>Horizonte e atores</h4><div style="font-size:13px"><b>'+H3[s.h]+'</b> · '+esc(s.at.join(", "))+'</div></div><div class="blk n"><h4>Como chega ao Itaú</h4>'+ul(s.ch)+'</div><div class="blk"><h4>Oportunidades</h4>'+ul(s.op)+'</div><div class="blk r"><h4>Riscos</h4>'+ul(s.ri)+'</div><div class="blk n"><h4>O que monitorar</h4>'+ul(s.mo)+'</div><div class="note">Públicos: '+esc(s.pb.join(", "))+'. Avaliações de probabilidade, gravidade e complexidade são qualitativas e preliminares.</div></div>';
+$("ov").classList.add("on");$("x").onclick=close}
+function close(){$("ov").classList.remove("on")}
+var PAI=[["Político","Votações, base parlamentar, conflitos entre Poderes","Capacidade de implementação"],["Fiscal","Dívida, resultado primário, arrecadação","Risco soberano e juros"],["Monetário","Inflação, expectativas, Selic, curva de juros","Custo do crédito"],["Famílias","Emprego, renda, endividamento, atrasos","Consumo e inadimplência"],["Empresas","Margens, investimento, confiança, emprego setorial","Necessidade de financiamento"],["Bancário","Spreads, depósitos, concessões, inadimplência","Rentabilidade e qualidade da carteira"],["Internacional","Câmbio, IED, commodities, fretes","Risco externo e oportunidades"],["Tecnologia","Fraudes, ataques, IA, regulação de dados","Risco operacional e competição"]];
+function renderP(){var q=$("q2").value.trim().toLowerCase();$("tp").tBodies[0].innerHTML=PAI.filter(function(r){return !q||r.join(" ").toLowerCase().indexOf(q)>-1}).map(function(r){return"<tr><td>"+r[0]+"</td><td>"+r[1]+"</td><td>"+r[2]+"</td></tr>"}).join("")}
+function renderM(){var h='<div class="scroll"><table style="min-width:420px"><thead><tr><th>Prob. ↓ / Gravidade →</th><th>Baixa</th><th>Média</th><th>Alta</th></tr></thead><tbody>';
+[3,2,1].forEach(function(p){h+="<tr><td>"+L3[p]+"</td>";[1,2,3].forEach(function(g){var c=S.filter(function(s){return s.p===p&&s.g===g});var bg=(p+g)>=5?"#FF6A00":(p+g)>=4?"#FFB27A":"transparent";h+='<td style="background:'+bg+'">'+c.map(function(s){return'<button class="chip on" style="background:#0A1B3D;border-color:#0A1B3D;margin:2px" data-id="'+s.id+'">'+s.id+'</button>'}).join("")+"</td>"});h+="</tr>"});
+$("matrix").innerHTML=h+"</tbody></table></div>"}
+var FIC=[["Evento","Qual decisão, proposta ou votação ocorreu?"],["Status","Vigente, pendente de regulamentação, em tramitação, anunciada ou só discutida?"],["Atores","Quem decide, quem pode bloquear, quem influencia?"],["Transmissão","Como altera impostos, juros, renda, custos, investimento ou confiança?"],["Públicos afetados","Quais famílias, empresas, setores e investidores?"],["Exposição do Itaú","Quais produtos, carteiras, receitas, custos ou operações?"],["Sinais de confirmação","Quais indicadores mostram que o cenário acontece?"],["Resposta","Proteger, adaptar, apoiar ou aproveitar?"]];
+function buildF(){$("fic").innerHTML=FIC.map(function(f,i){return'<label><b>'+(i+1)+". "+f[0]+'</b>'+f[1]+'<textarea data-i="'+i+'"></textarea></label>'}).join("")}
+document.addEventListener("click",function(e){var t=e.target;
+var chip=t.closest(".chip[data-k]");if(chip){var k=chip.dataset.k,v=chip.dataset.v;sel[k]=sel[k]||[];var i=sel[k].indexOf(v);if(i>-1)sel[k].splice(i,1);else sel[k].push(v);chip.classList.toggle("on");render();return}
+var c=t.closest("[data-id]");if(c){close();open(c.dataset.id);return}
+if(t===$("ov"))close();
+var n=t.closest("#nav button");if(n){document.querySelectorAll("#nav button").forEach(function(b){b.classList.toggle("on",b===n)});document.querySelectorAll(".view").forEach(function(v){v.classList.toggle("on",v.id==="v-"+n.dataset.v)})}});
+$("q").oninput=render;$("ord").onchange=render;$("q2").oninput=renderP;
+$("clr").onclick=function(){sel={};$("q").value="";document.querySelectorAll(".chip.on[data-k]").forEach(function(c){c.classList.remove("on")});render()};
+$("cp").onclick=function(){var t="FICHA DE ANÁLISE DE RISCO POLÍTICO\n";document.querySelectorAll("#fic textarea").forEach(function(a){t+="\n"+FIC[a.dataset.i][0]+": "+a.value});try{navigator.clipboard.writeText(t).then(function(){$("cpm").textContent="Resumo copiado."},function(){$("cpm").textContent="Não foi possível copiar automaticamente."})}catch(x){$("cpm").textContent="Não foi possível copiar automaticamente."}};
+$("rs").onclick=function(){document.querySelectorAll("#fic textarea").forEach(function(a){a.value=""});$("cpm").textContent=""};
+buildFilters();render();renderP();buildF();
+var GV=[["Acordo amplo com o centro","Coalizão com espaço para avançar",["Atores e incentivos","Planalto, PT e partidos de centro podem convergir em torno de ministérios e prioridades legislativas; divergências sobre concessões e gastos permanecem."],["Implicação para empresas","Maior capacidade de tramitação pode dar previsibilidade a projetos, concessões e regras tributárias, com contrapartidas negociadas no Congresso."],["Sinais a acompanhar","Distribuição das pastas, liderança da equipe econômica e compromissos públicos de apoio parlamentar."]],
+["Negociação fragmentada","Apoio construído votação a votação",["Atores e incentivos","Bancadas e partidos de centro podem apoiar pautas específicas sem aderir integralmente à agenda do governo; setores organizados ganham influência."],["Implicação para empresas","Cronogramas menos previsíveis exigem planejamento por etapas para investimentos, adequação tributária e decisões regulatórias."],["Sinais a acompanhar","Mudanças nos relatórios legislativos, negociação de emendas e ritmo de confirmação das nomeações."]],
+["Confronto institucional","Impasse em indicações e projetos",["Atores e incentivos","Planalto e Senado podem divergir sobre nomes e prioridades; oposição e lideranças parlamentares teriam maior poder de bloqueio."],["Implicação para empresas","Possíveis atrasos em indicações, deliberações regulatórias e projetos elevam o risco de execução e de revisão de prazos."],["Sinais a acompanhar","Audiências e votações no Senado, vacâncias em órgãos-chave e capacidade de aprovar a agenda fiscal."]]];
+var SRC=[["Câmara · resultado eleitoral","https://www.camara.leg.br/noticias/1313705-lula-e-reeleito-presidente-com-quase-52-dos-votos-validos-no-2o-turno"],["Folha · formação do governo","https://www1.folha.uol.com.br/poder/2026/11/pt-pede-a-partidos-planos-para-ministerios-e-estimativa-de-votos-para-desenhar-governo-lula-4.shtml"],["InfoMoney · Fazenda","https://www.infomoney.com.br/politica/cotado-para-fazenda-de-lula-rafael-fonteles-sinaliza-permanencia-no-piaui/"],["Senado · vaga no STF","https://www12.senado.leg.br/noticias/materias/2026/04/30/presidente-da-republica-pode-enviar-nova-indicacao-a-vaga-do-stf"],["Folha · vagas em órgãos","https://www1.folha.uol.com.br/poder/2026/10/futuro-presidente-tera-45-vagas-em-orgaos-reguladores-e-12-no-judiciario-ate-o-fim-de-2027.shtml"]];
+var AT=[["Presidência da República","Lula · reeleito","Eleito","Executivo","Reeleito em 25 de outubro com 51,79% dos votos válidos no segundo turno.",0,"Governo"],
+["Ministério da Fazenda","Rafael Fonteles","Nome cotado","Executivo","A escolha permanece aberta. Fonteles sinalizou em 9 de novembro intenção de continuar no governo do Piauí.",2,"Governo"],
+["Casa Civil","Camilo Santana · Fernando Haddad","Em discussão","Executivo","Ambos aparecem nas conversas sobre a composição da Esplanada; não há definição anunciada.",1,"Governo"],
+["Desenvolvimento Social","Guilherme Boulos","Nome mencionado","Executivo","Sua eventual participação integra as negociações políticas, ainda sem confirmação oficial.",1,"Governo"],
+["PT e partidos da base","Partidos de centro e bancadas","Em negociação","Legislativo","O PT pediu aos partidos planos para ministérios e estimativa de votos para desenhar o governo. Bancadas podem apoiar pautas específicas sem aderir à agenda inteira.",1,"Congresso"],
+["Senado Federal","Liderança do Senado","Em acompanhamento","Legislativo","Aprova indicações para tribunais e agências. A relação entre governo e Senado condiciona prazos e a agenda fiscal.",3,"Congresso"],
+["Supremo Tribunal Federal","Jorge Messias · Rodrigo Pacheco","Em debate","Judiciário","Após a rejeição de Messias pelo Senado em abril, ambos figuram no debate sobre a vaga deixada por Barroso. Nenhuma escolha está consolidada.",3,""],
+["Agências e órgãos reguladores","45 vagas até o fim de 2027","Vagas abertas","Reguladores","Levantamento jornalístico identificou 45 vagas existentes ou previstas em órgãos reguladores e outras instituições. Parte das indicações enfrenta entraves entre governo e Senado. Observar quórum, prioridades das diretorias e prazos setoriais.",4,"Reguladores"]];
+var FR=[["Política fiscal e econômica","Fiscal e orçamentária","Responsabilidade fiscal, trajetória da dívida, arcabouço, gastos públicos, política monetária e juros. Monitorar o espaço para investimentos diante das despesas obrigatórias.","Fiscal"],
+["Política tributária","Tributária","Reforma tributária, tributação da renda, benefícios fiscais, arrecadação e eventual mudança na carga. Em 2026, IBS e CBS estão em fase de teste: a transição exige preparação operacional.",""],
+["Desenvolvimento produtivo","Produtivo e reindustrialização","Reindustrialização, produtos de maior valor agregado, competitividade e política industrial. Avaliar instrumentos de incentivo, critérios e efeitos nas cadeias produtivas.","Investimento"],
+["Transformação tecnológica","Tecnologia e inovação","Inteligência artificial, transformação digital, inovação e soberania tecnológica. Acompanhar regras, financiamento e requisitos aplicáveis a dados e tecnologia.","Tecnologia"],
+["Saúde e biotecnologia","Tecnologia e inovação","Biotecnologia, fármacos avançados, produção nacional e autonomia tecnológica. Atenção às compras públicas, capacidade produtiva e regulação.",""],
+["Transição energética","Infraestrutura e transição","Renováveis, descarbonização, biocombustíveis e minerais críticos. Observar licenciamento, incentivos e efeitos sobre custos e investimentos.","Investimento"],
+["Infraestrutura e investimentos","Infraestrutura e transição","Novo PAC, concessões, parcerias público-privadas, financiamento e participação do capital privado. Avaliar cronogramas, modelagem dos projetos e condições de execução.","Investimento"]];
+var go=function(v){document.querySelector('#nav button[data-v="'+v+'"]').click();window.scrollTo(0,0)};
+function setF(k,v){sel={};sel[k]=[v];$("q").value="";document.querySelectorAll(".chip[data-k]").forEach(function(c){c.classList.toggle("on",c.dataset.k===k&&c.dataset.v===v)});render();go("cen")}
+var og="",eg="",gi=0;
+function fl(id,arr,cur,key){$(id).innerHTML=["Todos"].concat(arr).map(function(o){return'<button class="chip'+((o==="Todos"?"":o)===cur?" on":"")+'" data-g="'+key+'" data-o="'+(o==="Todos"?"":o)+'">'+o+'</button>'}).join("")}
+function lk(i){return'<a class="link" href="'+SRC[i][1]+'" target="_blank" rel="noopener noreferrer">'+SRC[i][0]+' ↗</a>'}
+function renderA(){var q=$("q3").value.trim().toLowerCase();fl("ofl",["Executivo","Legislativo","Judiciário","Reguladores"],og,"o");
+var l=AT.filter(function(a){return(!og||a[3]===og)&&(!q||a.join(" ").toLowerCase().indexOf(q)>-1)});
+$("ag").innerHTML=l.length?l.map(function(a){var n=a[6]?S.filter(function(s){return s.at.indexOf(a[6])>-1}).length:0;return'<div class="card"><span class="tag org">'+a[3]+' · '+a[2]+'</span><h3>'+a[0]+'</h3><div class="pers">'+a[1]+'</div><p style="margin-top:6px">'+a[4]+'</p>'+mt("T"+(AT.indexOf(a)+1))+lk(a[5])+(n?'<div style="margin-top:8px"><button class="chip" data-at="'+a[6]+'">Ver '+n+' cenários com este ator</button></div>':"")+'</div>'}).join(""):'<div class="empty">Nenhum ator encontrado.</div>'}
+function renderFr(){fl("efl",["Fiscal e orçamentária","Tributária","Produtivo e reindustrialização","Tecnologia e inovação","Infraestrutura e transição"],eg,"e");
+$("fg2").innerHTML=FR.filter(function(f){return!eg||f[1]===eg}).map(function(f,i){return'<div class="card"><span class="tag t-Risco">'+f[1]+'</span><h3>'+f[0]+'</h3><p>'+f[2]+'</p>'+(f[3]?'<button class="chip" data-tm="'+f[3]+'">Ver cenários de '+f[3]+'</button>':"")+'</div>'}).join("")}
+function renderG(){$("gvt").innerHTML=GV.map(function(g,i){return'<button class="chip'+(i===gi?" on":"")+'" data-gv="'+i+'">'+g[0]+'</button>'}).join("");var g=GV[gi];$("gvp").innerHTML='<h4>'+g[1]+'</h4>'+mt("GV"+(gi+1))+g.slice(2).map(function(x){return'<p style="margin:6px 0;font-size:13px"><b>'+x[0]+'.</b> '+x[1]+'</p>'}).join("")}
+document.addEventListener("click",function(e){var t=e.target,c;
+if(c=t.closest("[data-go]"))go(c.dataset.go);
+else if(c=t.closest("[data-at]"))setF("at",c.dataset.at);
+else if(c=t.closest("[data-tm]"))setF("tm",c.dataset.tm);
+else if(c=t.closest("[data-gv]")){gi=+c.dataset.gv;renderG()}
+else if(c=t.closest(".chip[data-g]")){if(c.dataset.g==="o"){og=c.dataset.o;renderA()}else{eg=c.dataset.o;renderFr()}}});
+$("q3").oninput=renderA;
+$("n1").textContent=S.length;$("n2").textContent=AT.length;$("n3").textContent=FR.length;$("n4").textContent=SRC.length;
+$("sl").innerHTML=SRC.map(function(s,i){return'<div class="card"><h3>'+s[0]+'</h3>'+lk(i)+'</div>'}).join("");
+var RS={A:"A reeleição com 51,79% dá fôlego ao governo, mas o Congresso mais conservador e a falta de medidas fiscais críveis limitam a confiança plena.",B:"Depende de despesas e conflitos sem resposta fiscal. O equilíbrio fiscal é a principal preocupação do estudo, mas não há sinal de ruptura.",C:"Escala 6×1 e política de renda estão em debate, sem regra aprovada; o efeito só aparece após regulamentação.",D:"O endividamento das famílias já é alto hoje; falta apenas a mudança regulatória ou de mercado.",E:"Há anúncios (minerais críticos, energia, data centers), mas dependem de licença, energia e financiamento.",F:"Choques externos independem do governo e são imprevisíveis; não há sinal específico agora.",G:"IA e fraudes digitais já avançam, e a pressão competitiva é de curto prazo.",H:"Linhas subsidiadas são um instrumento rápido do Executivo, embora volumes e garantias ainda não estejam definidos."};
+var RK={GV1:[2,1,"A reeleição com 51,79% dá base para negociar, mas o Congresso mais conservador e as concessões ao centro limitam um acordo amplo."],GV2:[3,2,"Num Congresso mais conservador, o padrão mais provável é apoio pauta a pauta, sem adesão integral à agenda do governo."],GV3:[2,3,"Há precedente: o Senado rejeitou Messias para o STF em abril e parte das indicações a órgãos reguladores enfrenta entraves. Não há ruptura declarada."],
+D1:[2,3,"O nome segue aberto e Fonteles sinalizou permanecer no Piauí; a escolha define a leitura do mercado sobre juros e câmbio."],D2:[3,2,"A formação do governo depende de negociação com o centro; o PT já pediu aos partidos planos para ministérios e estimativa de votos."],D3:[2,2,"A vaga de Barroso segue aberta, com Messias e Pacheco no debate; novo impasse afeta a segurança jurídica, não diretamente o banco."],D4:[3,2,"São 45 vagas até o fim de 2027 e parte das indicações já enfrenta entraves, o que tende a atrasar decisões setoriais."],D5:[3,2,"IBS e CBS estão em fase de teste em 2026 e a transição exige preparação operacional; ajustes de regulamentação são esperados."],D6:[2,2,"A liderança do Senado condiciona indicações e a pauta fiscal; a eleição está em acompanhamento, sem sinal claro de conflito."],D7:[2,2,"O debate sobre o fim da escala 6×1 está aberto, sem regra aprovada; o efeito em custos, emprego e consumo depende de regulamentação."],
+T1:[2,3,"As decisões fiscais e de nomeação passam pela Presidência; o risco é de sinais contraditórios entre gasto e compromisso fiscal."],T2:[2,3,"Pasta com maior efeito sobre juros e câmbio; o nome ainda está aberto."],T3:[2,2,"Coordena a articulação com o Congresso; há dois nomes em discussão e nenhuma definição."],T4:[2,1,"Participação ainda sem confirmação; o efeito sobre o Itaú é indireto, via renda e consumo."],T5:[3,2,"Partidos de centro cobram espaço no governo e podem apoiar só pautas específicas."],T6:[3,2,"O Senado já barrou uma indicação ao STF e define o ritmo das nomeações em agências."],T7:[2,1,"Vaga aberta, sem escolha consolidada; o efeito sobre o banco é indireto."],T8:[3,2,"Vagas pendentes e indicações com entraves podem reduzir quórum e atrasar decisões setoriais."]};
+var DEC=[["Definição da Fazenda e da equipe econômica","Sinal fiscal fraco ou demora na definição","Em negociação",2],["Composição da Esplanada (Casa Civil e Desenvolvimento Social)","Concessões ao centro elevam o custo político e fiscal","Em negociação",1],["Vaga do STF (Messias · Pacheco)","Novo impasse entre Planalto e Senado","Em debate",3],["Preenchimento das 45 vagas em órgãos reguladores","Falta de quórum atrasa decisões setoriais","Indicações pendentes",4],["Regulamentação da reforma tributária (IBS e CBS)","Custos operacionais e mudança de regras para o banco e os clientes","Transição",-1],["Eleição para a presidência do Senado","Liderança em conflito com o Planalto","Em acompanhamento",-1],["Fim da escala 6×1","Custos para empresas, emprego e consumo","Em debate",-1]];
+var MK="",KC={"Cenário":"#0A1B3D","Governabilidade":"#7A5AF8","Decisão":"#0F7B8A","Ator":"#1E8E5A"};
+function lk2(i){return i<0?"":lk(i)}
+function mt(c){var r=RK[c];return'<div class="meters"><div class="m"><span>Probabilidade: '+L3[r[0]]+'</span>'+dots(r[0])+'</div><div class="m"><span>Gravidade: '+L3[r[1]]+'</span>'+dots(r[1])+'</div></div><p style="font-size:13px;margin:8px 0"><b>Por que:</b> '+r[2]+'</p>'}
+function items(){var o=[];S.forEach(function(s){o.push({c:s.id,k:"Cenário",t:s.t,r:s.r,p:s.p,g:s.g,w:RS[s.id]})});
+GV.forEach(function(g,i){var c="GV"+(i+1),r=RK[c];o.push({c:c,k:"Governabilidade",t:g[0],r:g[1],p:r[0],g:r[1],w:r[2]})});
+DEC.forEach(function(d,i){var c="D"+(i+1),r=RK[c];o.push({c:c,k:"Decisão",t:d[0],r:"Risco: "+d[1],p:r[0],g:r[1],w:r[2]})});
+AT.forEach(function(a,i){var c="T"+(i+1),r=RK[c];o.push({c:c,k:"Ator",t:a[0],r:a[1],p:r[0],g:r[1],w:r[2]})});return o}
+function renderM(){var KS=["Cenário","Governabilidade","Decisão","Ator"];
+$("mkf").innerHTML=["Todos"].concat(KS).map(function(k){var v=k==="Todos"?"":k;return'<button class="chip'+(v===MK?" on":"")+'" data-mk="'+v+'"'+(v?' style="border-left:6px solid '+KC[k]+'"':"")+'>'+k+'</button>'}).join("");
+var I=items().filter(function(x){return!MK||x.k===MK}),h='<div class="scroll"><table style="min-width:420px"><thead><tr><th>Prob. ↓ / Gravidade →</th><th>Baixa</th><th>Média</th><th>Alta</th></tr></thead><tbody>';
+[3,2,1].forEach(function(p){h+="<tr><td>"+L3[p]+"</td>";[1,2,3].forEach(function(g){var bg=(p+g)>=5?"#FF6A00":(p+g)>=4?"#FFB27A":"transparent";h+='<td style="background:'+bg+'">'+I.filter(function(x){return x.p===p&&x.g===g}).map(function(x){return'<button class="chip on" style="background:'+KC[x.k]+';border-color:'+KC[x.k]+';margin:2px;padding:4px 8px" data-ri="'+x.c+'">'+x.c+'</button>'}).join("")+"</td>"});h+="</tr>"});
+$("matrix").innerHTML=h+"</tbody></table></div><div class='note'>"+I.map(function(x){return x.c+" "+x.t}).join(" · ")+"</div>"}
+function openR(c){var it=items().filter(function(x){return x.c===c})[0];if(it.k==="Cenário"){open(c);return}
+$("sheet").innerHTML='<div class="sh-h"><button id="x" aria-label="Fechar">✕</button><span class="tag org">'+it.k+'</span><h2>'+it.c+'. '+it.t+'</h2><p>'+it.r+'</p></div><div class="sh-b"><div class="facts"><div>Probabilidade<b>'+L3[it.p]+'</b></div><div>Gravidade<b>'+L3[it.g]+'</b></div><div>Tipo<b>'+it.k+'</b></div></div><div class="blk"><h4>Por que essa probabilidade</h4><div style="font-size:13px">'+it.w+'</div></div><div class="note">Avaliação qualitativa preliminar. Rever sempre que surgirem novos fatos, registrando fonte e motivo da mudança.</div></div>';$("ov").classList.add("on");$("x").onclick=close}
+function renderD(){$("dg").innerHTML=DEC.map(function(d,i){return'<div class="card"><span class="tag org">'+d[2]+'</span><h3>D'+(i+1)+'. '+d[0]+'</h3><p><b>Risco:</b> '+d[1]+'</p>'+mt("D"+(i+1))+lk2(d[3])+'</div>'}).join("")}
+document.addEventListener("click",function(e){var c=e.target.closest("[data-ri]");if(c){close();openR(c.dataset.ri);return}c=e.target.closest("[data-mk]");if(c){MK=c.dataset.mk;renderM()}});
+renderA();renderFr();renderG();renderM();renderD();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Análise de Risco Político</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<style>
+:root{--navy:#091b2d;--panel:#10283e;--orange:#ff792f;--muted:#a9bbca;--line:#294155;--tx:#f6f7f4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px);background:var(--navy);height:100%}
+body{margin:0;width:100%;font-family:"DM Sans",system-ui,sans-serif;background:var(--navy);color:var(--tx)}
+a,button{-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid #ffad73;outline-offset:4px}
+.display{font-family:"Fraunces",Georgia,serif}
+.eyebrow{text-transform:uppercase;letter-spacing:.19em;font-size:11px;font-weight:700}
+.rule{border-color:var(--line)}
+.k{color:#ffad73}.m{color:var(--muted)}.t{color:#d5e0e8}.w{color:#fff}.c{color:#c7d5df}
+.hero{background:radial-gradient(circle at 15% 10%,#183854 0%,#091b2d 58%)}
+.hero-photo{position:relative;min-height:380px;overflow:hidden;border-radius:4px;background:
+ repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 22px,transparent 22px 64px),
+ linear-gradient(180deg,#1d4466 0%,#10283e 70%)}
+.hero-photo::before{content:"";position:absolute;left:0;right:0;top:14%;height:14px;background:rgba(255,255,255,.18)}
+.hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(9,27,45,.85),transparent 65%);pointer-events:none}
+.scenario-tab{border:1px solid var(--line);color:#c4d2dc;transition:background .2s,color .2s,border-color .2s;background:transparent}
+.scenario-tab[aria-selected="true"]{background:var(--orange);color:#091b2d;border-color:var(--orange)}
+.scenario-tab:hover:not([aria-selected="true"]){border-color:#ff792f}
+.topic-card{background:var(--panel);border:1px solid var(--line);transition:transform .2s,border-color .2s}
+.topic-card:hover{transform:translateY(-3px);border-color:#ff792f}
+.panel{background:var(--panel)}
+.source-link{color:#ffad73;text-decoration:underline;text-underline-offset:3px}
+@media(max-width:767px){.hero-photo{min-height:260px}h1.hero-h{font-size:38px!important}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="w-full border-b rule" style="background:#091b2d">
+ <div class="max-w-7xl mx-auto px-5 md:px-10 py-5 flex flex-wrap items-center justify-between gap-5">
+  <a href="#inicio" class="flex items-center gap-3 no-underline" aria-label="Análise de Risco Político — início" style="color:inherit">
+   <span aria-hidden="true" class="w-9 h-9 flex items-center justify-center font-bold text-xl" style="background:#ff792f;color:#091b2d">↗</span>
+   <span class="font-bold tracking-tight">VETOR / RISCO POLÍTICO</span>
+  </a>
+  <nav aria-label="Navegação principal" class="flex flex-wrap gap-x-7 gap-y-2 items-center c">
+   <a class="hover:underline" href="#cenarios">Cenários</a>
+   <a class="hover:underline" href="#nomeacoes">Nomeações</a>
+   <a class="hover:underline" href="#areas">Áreas de impacto</a>
+  </nav>
+ </div>
+</header>
+
+<main id="inicio">
+ <section class="hero w-full">
+  <div class="max-w-7xl mx-auto px-5 md:px-10 py-12 md:py-20 grid lg:grid-cols-[1.15fr_.85fr] gap-12 lg:gap-16 items-center">
+   <div>
+    <p class="eyebrow k mb-5">Inteligência para decisões de negócio</p>
+    <h1 class="hero-h display leading-[1.08] max-w-3xl mb-6" style="font-size:60px;font-weight:600">O próximo capítulo político. O impacto para o seu negócio.</h1>
+    <p class="t leading-relaxed max-w-2xl mb-8" style="font-size:19px">Lula inicia a articulação de seu quarto governo diante de um Congresso mais conservador. Acompanhe os cenários, as nomeações em disputa e as decisões que podem mudar custos, investimentos e regras setoriais.</p>
+    <a href="#cenarios" class="inline-flex items-center gap-3 rounded-sm px-6 py-4 font-bold hover:brightness-110 transition" style="background:#ff792f;color:#091b2d">Explorar cenários →</a>
+    <div class="mt-12 pt-5 border-t rule flex flex-wrap gap-x-8 gap-y-2">
+     <p class="eyebrow m">Referência · 11 nov 2026</p>
+     <p class="eyebrow m">Estratégia · Regulação · Operações</p>
+    </div>
+   </div>
+   <div class="hero-photo" role="img" aria-label="Ilustração de um edifício institucional com colunas">
+    <div class="absolute z-10 bottom-0 left-0 right-0 p-6 md:p-8">
+     <p class="font-semibold max-w-sm w" style="font-size:20px">Da negociação em Brasília às decisões no conselho.</p>
+    </div>
+   </div>
+  </div>
+ </section>
+
+ <section id="cenarios" class="w-full py-16 md:py-20">
+  <div class="max-w-7xl mx-auto px-5 md:px-10">
+   <div class="flex flex-wrap justify-between items-end gap-5 mb-8">
+    <div>
+     <p class="eyebrow k mb-3">01 / Leitura de cenários</p>
+     <h2 class="display" style="font-size:28px;font-weight:600">Três caminhos para a governabilidade</h2>
+    </div>
+    <p class="m max-w-md leading-relaxed">Possibilidades analíticas, não previsões nem resultados definidos.</p>
+   </div>
+   <div role="tablist" aria-label="Cenários políticos" class="grid sm:grid-cols-3 gap-2 mb-3">
+    <button id="tab-wide" type="button" role="tab" aria-selected="true" aria-controls="panel-wide" class="scenario-tab rounded-sm p-4 text-left font-bold">Acordo amplo com o centro</button>
+    <button id="tab-fragmented" type="button" role="tab" aria-selected="false" aria-controls="panel-fragmented" tabindex="-1" class="scenario-tab rounded-sm p-4 text-left font-bold">Negociação fragmentada</button>
+    <button id="tab-conflict" type="button" role="tab" aria-selected="false" aria-controls="panel-conflict" tabindex="-1" class="scenario-tab rounded-sm p-4 text-left font-bold">Confronto institucional</button>
+   </div>
+
+   <div id="panel-wide" role="tabpanel" aria-labelledby="tab-wide" tabindex="0" class="panel border rule rounded-sm p-6 md:p-9">
+    <h3 class="display mb-4 w" style="font-size:22px">Coalizão com espaço para avançar</h3>
+    <div class="grid md:grid-cols-3 gap-7">
+     <div><p class="eyebrow k mb-2">Atores e incentivos</p><p class="t leading-relaxed">Planalto, PT e partidos de centro podem convergir em torno de ministérios e prioridades legislativas; divergências sobre concessões e gastos permanecem.</p></div>
+     <div><p class="eyebrow k mb-2">Implicação para empresas</p><p class="t leading-relaxed">Maior capacidade de tramitação pode dar previsibilidade a projetos, concessões e regras tributárias, com contrapartidas negociadas no Congresso.</p></div>
+     <div><p class="eyebrow k mb-2">Sinais a acompanhar</p><p class="t leading-relaxed">Distribuição das pastas, liderança da equipe econômica e compromissos públicos de apoio parlamentar.</p></div>
+    </div>
+   </div>
+
+   <div id="panel-fragmented" role="tabpanel" aria-labelledby="tab-fragmented" tabindex="0" hidden class="panel border rule rounded-sm p-6 md:p-9">
+    <h3 class="display mb-4 w" style="font-size:22px">Apoio construído votação a votação</h3>
+    <div class="grid md:grid-cols-3 gap-7">
+     <div><p class="eyebrow k mb-2">Atores e incentivos</p><p class="t leading-relaxed">Bancadas e partidos de centro podem apoiar pautas específicas sem aderir integralmente à agenda do governo; setores organizados ganham influência.</p></div>
+     <div><p class="eyebrow k mb-2">Implicação para empresas</p><p class="t leading-relaxed">Cronogramas menos previsíveis exigem planejamento por etapas para investimentos, adequação tributária e decisões regulatórias.</p></div>
+     <div><p class="eyebrow k mb-2">Sinais a acompanhar</p><p class="t leading-relaxed">Mudanças nos relatórios legislativos, negociação de emendas e ritmo de confirmação das nomeações.</p></div>
+    </div>
+   </div>
+
+   <div id="panel-conflict" role="tabpanel" aria-labelledby="tab-conflict" tabindex="0" hidden class="panel border rule rounded-sm p-6 md:p-9">
+    <h3 class="display mb-4 w" style="font-size:22px">Impasse em indicações e projetos</h3>
+    <div class="grid md:grid-cols-3 gap-7">
+     <div><p class="eyebrow k mb-2">Atores e incentivos</p><p class="t leading-relaxed">Planalto e Senado podem divergir sobre nomes e prioridades; oposição e lideranças parlamentares teriam maior poder de bloqueio.</p></div>
+     <div><p class="eyebrow k mb-2">Implicação para empresas</p><p class="t leading-relaxed">Possíveis atrasos em indicações, deliberações regulatórias e projetos elevam o risco de execução e de revisão de prazos.</p></div>
+     <div><p class="eyebrow k mb-2">Sinais a acompanhar</p><p class="t leading-relaxed">Audiências e votações no Senado, vacâncias em órgãos-chave e capacidade de aprovar a agenda fiscal.</p></div>
+    </div>
+   </div>
+  </div>
+ </section>
+
+ <section id="nomeacoes" class="w-full py-16 md:py-20" style="background:#0c2135">
+  <div class="max-w-7xl mx-auto px-5 md:px-10">
+   <p class="eyebrow k mb-3">02 / Mapa de poder</p>
+   <h2 class="display mb-4" style="font-size:28px;font-weight:600">Quem pode ocupar os postos decisivos</h2>
+   <p class="m max-w-3xl leading-relaxed mb-9">Nomes mencionados nas negociações, não indicações anunciadas. O desenho final dependerá das conversas com o Congresso e poderá mudar.</p>
+   <div class="grid lg:grid-cols-[1.65fr_1fr] gap-5">
+    <div class="grid sm:grid-cols-2 gap-4">
+     <article class="topic-card p-6 rounded-sm"><p class="eyebrow k mb-4">Ministério da Fazenda</p><h3 class="font-bold mb-3 w" style="font-size:20px">Rafael Fonteles · nome cotado</h3><p class="c leading-relaxed">A escolha permanece aberta. Fonteles sinalizou em 9 de novembro intenção de continuar no governo do Piauí.</p></article>
+     <article class="topic-card p-6 rounded-sm"><p class="eyebrow k mb-4">Casa Civil</p><h3 class="font-bold mb-3 w" style="font-size:20px">Camilo Santana · Fernando Haddad</h3><p class="c leading-relaxed">Ambos aparecem nas conversas sobre a composição da Esplanada; não há definição anunciada.</p></article>
+     <article class="topic-card p-6 rounded-sm"><p class="eyebrow k mb-4">Desenvolvimento Social</p><h3 class="font-bold mb-3 w" style="font-size:20px">Guilherme Boulos · nome mencionado</h3><p class="c leading-relaxed">Sua eventual participação integra as negociações políticas, ainda sem confirmação oficial.</p></article>
+     <article class="topic-card p-6 rounded-sm"><p class="eyebrow k mb-4">Supremo Tribunal Federal</p><h3 class="font-bold mb-3 w" style="font-size:20px">Jorge Messias · Rodrigo Pacheco</h3><p class="c leading-relaxed">Após a rejeição de Messias pelo Senado em abril, ambos figuram no debate sobre a vaga deixada por Barroso. Nenhuma escolha está consolidada.</p></article>
+    </div>
+    <aside class="panel border rule p-7 md:p-9 rounded-sm flex flex-col justify-between">
+     <div>
+      <p class="eyebrow k mb-4">Agências e órgãos reguladores</p>
+      <h3 class="display mb-4 w" style="font-size:22px">Nomeações também definem capacidade de execução.</h3>
+      <p class="c leading-relaxed">Levantamento jornalístico identificou 45 vagas existentes ou previstas até o fim de 2027 em órgãos reguladores e outras instituições. Parte das indicações enfrenta entraves na relação entre governo e Senado.</p>
+     </div>
+     <p class="k mt-8 pt-5 border-t rule leading-relaxed">Para empresas: observar quórum, prioridades das diretorias e prazos de decisões setoriais.</p>
+    </aside>
+   </div>
+  </div>
+ </section>
+
+ <section class="w-full py-12" style="background:#17334a">
+  <div class="max-w-7xl mx-auto px-5 md:px-10 grid md:grid-cols-[1fr_auto] gap-8 items-center">
+   <div>
+    <p class="eyebrow k mb-3">Contexto eleitoral</p>
+    <h2 class="display mb-4 w" style="font-size:28px">Reeleição não elimina a negociação.</h2>
+    <p class="t max-w-2xl leading-relaxed">Lula foi reeleito em 25 de outubro com 51,79% dos votos válidos no segundo turno. A formação do governo e a articulação com o Congresso são os próximos testes para a agenda econômica e regulatória.</p>
+   </div>
+   <div class="relative w-44 h-44 mx-auto md:mx-8" role="img" aria-label="Lula recebeu 51,79% dos votos válidos no segundo turno de 2026">
+    <canvas id="election-chart" aria-hidden="true"></canvas>
+    <span class="absolute inset-0 flex items-center justify-center font-bold text-3xl pointer-events-none">51,79%</span>
+   </div>
+  </div>
+ </section>
+
+ <section id="areas" class="w-full py-16 md:py-20">
+  <div class="max-w-7xl mx-auto px-5 md:px-10">
+   <p class="eyebrow k mb-3">03 / Agenda e impactos</p>
+   <h2 class="display mb-4" style="font-size:28px;font-weight:600">Sete frentes para monitorar</h2>
+   <p class="m leading-relaxed mb-9 max-w-3xl">Temas de acompanhamento estratégico: as prioridades, os instrumentos e os efeitos concretos dependerão das escolhas do novo governo e do Congresso.</p>
+   <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+    <article class="topic-card p-7 rounded-sm"><span aria-hidden="true" class="text-2xl" style="color:#ff792f">01 /</span><h3 class="font-bold mt-5 mb-3 w" style="font-size:20px">Política fiscal e econômica</h3><p class="c leading-relaxed">Responsabilidade fiscal, trajetória da dívida, arcabouço, gastos públicos, política monetária e juros. Monitorar o espaço para investimentos diante das despesas obrigatórias.</p></article>
+    <article class="topic-card p-7 rounded-sm"><span aria-hidden="true" class="text-2xl" style="color:#ff792f">02 /</span><h3 class="font-bold mt-5 mb-3 w" style="font-size:20px">Política tributária</h3><p class="c leading-relaxed">Reforma tributária, tributação da renda, benefícios fiscais, arrecadação e eventual mudança na carga. Em 2026, IBS e CBS estão em fase de teste: a transição exige preparação operacional.</p></article>
+    <article class="topic-card p-7 rounded-sm"><span aria-hidden="true" class="text-2xl" style="color:#ff792f">03 /</span><h3 class="font-bold mt-5 mb-3 w" style="font-size:20px">Desenvolvimento produtivo</h3><p class="c leading-relaxed">Reindustrialização, produtos de maior valor agregado, competitividade e política industrial. Avaliar instrumentos de incentivo, critérios e efeitos nas cadeias produtivas.</p></article>
+    <article class="topic-card p-7 rounded-sm"><span aria-hidden="true" class="text-2xl" style="color:#ff792f">04 /</span><h3 class="font-bold mt-5 mb-3 w" style="font-size:20px">Transformação tecnológica</h3><p class="c leading-relaxed">Inteligência artificial, transformação digital, inovação e soberania tecnológica. Acompanhar regras, financiamento e requisitos aplicáveis a dados e tecnologia.</p></article>
+    <article class="topic-card p-7 rounded-sm"><span aria-hidden="true" class="text-2xl" style="color:#ff792f">05 /</span><h3 class="font-bold mt-5 mb-3 w" style="font-size:20px">Transição energética</h3><p class="c leading-relaxed">Renováveis, descarbonização, biocombustíveis e minerais críticos. Observar licenciamento, incentivos e efeitos sobre custos e investimentos.</p></article>
+    <article class="topic-card p-7 rounded-sm"><span aria-hidden="true" class="text-2xl" style="color:#ff792f">06 /</span><h3 class="font-bold mt-5 mb-3 w" style="font-size:20px">Saúde e biotecnologia</h3><p class="c leading-relaxed">Biotecnologia, fármacos avançados, produção nacional e autonomia tecnológica. Atenção às compras públicas, capacidade produtiva e regulação.</p></article>
+    <article class="topic-card p-7 rounded-sm xl:col-span-3"><span aria-hidden="true" class="text-2xl" style="color:#ff792f">07 /</span><h3 class="font-bold mt-5 mb-3 w" style="font-size:20px">Infraestrutura e investimentos</h3><p class="c leading-relaxed max-w-4xl">Novo PAC, concessões, parcerias público-privadas, financiamento e participação do capital privado. Avaliar cronogramas, modelagem dos projetos e condições de execução.</p></article>
+   </div>
+  </div>
+ </section>
+</main>
+
+<footer class="w-full border-t rule py-12">
+ <div class="max-w-7xl mx-auto px-5 md:px-10">
+  <h2 class="display mb-4 w" style="font-size:28px">Fontes e critérios</h2>
+  <p class="m leading-relaxed max-w-4xl mb-6">Retrato informativo de 11 de novembro de 2026. Candidaturas a cargos são especulações reportadas, não nomeações confirmadas. Os três cenários são hipóteses para planejamento empresarial, sem probabilidades atribuídas. Áreas temáticas indicam questões a monitorar, não políticas já aprovadas.</p>
+  <nav aria-label="Fontes" class="flex flex-wrap gap-x-6 gap-y-3">
+   <a class="source-link" href="https://www.camara.leg.br/noticias/1313705-lula-e-reeleito-presidente-com-quase-52-dos-votos-validos-no-2o-turno" target="_blank" rel="noopener noreferrer">Câmara · resultado eleitoral</a>
+   <a class="source-link" href="https://www1.folha.uol.com.br/poder/2026/11/pt-pede-a-partidos-planos-para-ministerios-e-estimativa-de-votos-para-desenhar-governo-lula-4.shtml" target="_blank" rel="noopener noreferrer">Folha · formação do governo</a>
+   <a class="source-link" href="https://www.infomoney.com.br/politica/cotado-para-fazenda-de-lula-rafael-fonteles-sinaliza-permanencia-no-piaui/" target="_blank" rel="noopener noreferrer">InfoMoney · Fazenda</a>
+   <a class="source-link" href="https://www12.senado.leg.br/noticias/materias/2026/04/30/presidente-da-republica-pode-enviar-nova-indicacao-a-vaga-do-stf" target="_blank" rel="noopener noreferrer">Senado · vaga no STF</a>
+   <a class="source-link" href="https://www1.folha.uol.com.br/poder/2026/10/futuro-presidente-tera-45-vagas-em-orgaos-reguladores-e-12-no-judiciario-ate-o-fim-de-2027.shtml" target="_blank" rel="noopener noreferrer">Folha · vagas em órgãos</a>
+  </nav>
+ </div>
+</footer>
+
+<script>
+const tabs=Array.from(document.querySelectorAll('[role="tab"]'));
+function activateTab(next,focus){
+ tabs.forEach(function(tab){
+  var active=tab===next;
+  tab.setAttribute('aria-selected',String(active));
+  tab.tabIndex=active?0:-1;
+  document.getElementById(tab.getAttribute('aria-controls')).hidden=!active;
+ });
+ if(focus)next.focus();
+}
+tabs.forEach(function(tab,index){
+ tab.addEventListener('click',function(){activateTab(tab,false)});
+ tab.addEventListener('keydown',function(e){
+  var n;
+  if(e.key==='ArrowRight')n=(index+1)%tabs.length;
+  else if(e.key==='ArrowLeft')n=(index-1+tabs.length)%tabs.length;
+  else if(e.key==='Home')n=0;
+  else if(e.key==='End')n=tabs.length-1;
+  else return;
+  e.preventDefault();
+  activateTab(tabs[n],true);
+ });
+});
+if(window.Chart){
+ new Chart(document.getElementById('election-chart'),{
+  type:'doughnut',
+  data:{datasets:[{data:[51.79,48.21],backgroundColor:['#ff792f','#294155'],borderWidth:0,hoverOffset:0}]},
+  options:{responsive:true,maintainAspectRatio:false,cutout:'78%',plugins:{legend:{display:false},tooltip:{enabled:false}},animation:{duration:700}}
+ });
+}
+</script>
+</body>
+</html>

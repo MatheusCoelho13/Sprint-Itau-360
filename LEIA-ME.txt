@@ -1,0 +1,27 @@
+ITAÚ 360° — V2 (TypeScript + Vite + Supabase)
+
+SETUP
+1. Supabase: crie um projeto e rode supabase/schema.sql no SQL Editor.
+2. Authentication > Providers > Email: desative "Allow new users to sign up".
+   Crie os usuários em Authentication > Users (e-mail + senha).
+3. cp .env.example .env  e preencha VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY.
+4. npm install
+5. npm run dev      (desenvolvimento)
+   npm run build    (typecheck + build em dist/)
+
+ESTRUTURA
+- index.html        shell do app + painel de login (abre ao clicar em Área editorial/Entrar)
+- src/main.ts       auth (Supabase), navegação, eventos
+- src/ui.ts         renderização das telas
+- src/editor.ts     área editorial (perfis e dossiês)
+- src/store.ts      acesso ao Supabase + cache (tabelas actors, analyses)
+- src/data.ts       conteúdo estático (temas, cenários, atores-base, riscos...)
+- src/types.ts      tipos
+- public/docs/      documentos citados nas páginas
+- legacy/index.html versão original (arquivo único, localStorage)
+
+NOTAS
+- O site abre sem login (somente leitura, só dossiês "Publicado"). A Área editorial exige login;
+  qualquer usuário autenticado edita (RLS). Papéis (leitor/editor) e auditoria ainda não existem.
+- Importar JSON faz upsert; não apaga registros existentes.
+- Fotografias vêm de páginas externas; conferir direitos de reutilização antes de publicar.
