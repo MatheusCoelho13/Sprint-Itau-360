@@ -6,7 +6,7 @@ Trabalho de sprint (faculdade, IDP). Site de inteligência política: o que o go
 - Vite 5 + TypeScript, sem framework. HTML estático em `index.html`, telas montadas por template string em `src/ui.ts`.
 - Supabase (auth + tabelas `actors`, `analyses`, migrations em `supabase/migrations/` (`npx supabase db push --remote`; sem --remote a CLI 3.x usa o banco local)). Variáveis do `.env`: `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` (a anon legada ainda serve de reserva, com aviso). Sem `.env` o site funciona só com o conteúdo base de `src/data.ts` (aviso no console, normal).
 - `npm run dev` (desenvolvimento) · `npm run build` (tsc + vite build) · `npx vite preview`.
-- Leitura é pública (só dossiês "Publicado"). Editar exige login. Qualquer usuário autenticado edita; ainda não há papéis nem auditoria.
+- Leitura é pública (só dossiês "Publicado"). Editar exige login. Com login há dois papéis (tabela `profiles`, RLS no banco): **editor** cria/edita/apaga; **observador** só lê, inclusive rascunhos. Conta nova nasce observador; promover é `update public.profiles set role='editor' where email='...'` no SQL Editor. Sessão persiste no navegador (localStorage). Auditoria não existe.
 
 ## Mapa dos arquivos
 | Arquivo | Papel |
@@ -34,7 +34,7 @@ Sem probabilidade numérica inventada: os cenários usam "plausibilidade qualita
 - **O selo diz o grau de certeza:** quadrado cheio = fato; quadrado vazado = hipótese ou a verificar. Cartões de ator com hipótese têm borda tracejada. É a decisão visual mais específica do produto; não trocar por cor decorativa.
 - **Radar dos 5 eixos** no hero é navegação (cada eixo abre um tema). O polígono é regular de propósito, não representa dado. Sem animação de varredura.
 - **Ritmo variado de propósito:** eixos como índice numerado (`#themeGrid`), indicadores e instrumentos como lista nome | explicação, cenários e atores como cartões. Não voltar tudo para grade de cartões iguais.
-- **Uly:** arte própria do grupo. No desktop mora na barra lateral, com área reservada para o balão (não cobre menu nem conteúdo); no celular flutua no canto e `.content` mantém 170px de folga. Só fala ao trocar de tela ou ao ser clicada; balão some em 7 s ou ao toque.
+- **Uly:** arte própria do grupo, fixa no canto inferior direito (no desktop largo, ao lado da coluna lateral), fora da navegação. Balão de borda reta abre sozinho só na 1ª visita de cada tela; depois só ao clique (próxima dica). Também aparece na Ajuda. `.content` mantém 150px de folga.
 - Cabeçalhos de página sem "eyebrow": o breadcrumb do topo já diz onde o leitor está.
 - **O quadrado do selo é só grau de certeza** (v3: sem cor, só forma; ink cheio/vazado) (cheio = documentado, vazado = hipótese/a verificar). Categoria (risco, oportunidade, misto, área) usa `.tag`: texto mono colorido, sem quadrado. Cenários A/B/C são hipóteses: selo vazado nos três, azul único, só a letra os diferencia. Não voltar a colorir A/B/C.
 - **Régua dos 100 dias** (`dayRule` em `ui.ts`, Sinais e hero): ancorada na posse de 5/1/2027, posições em % calculadas de datas reais, "hoje" calculado. Sólido = fato (só a posse); tracejado/vazado = calendário preliminar. Não é decoração: se mudar a data da posse, mude `POSSE`. Tem `aria-label` com o resumo.
@@ -66,6 +66,6 @@ Terceira rodada (honest-eye, 23/11/2026): badges dos cenários A/B/C viraram hip
 - Dossiê de ator: ainda não há ligação ator → impacto no Itaú (os dados só têm `relevance` em texto livre).
 - Fotografias vêm de páginas externas (Wikimedia, Metrópoles, iG…). Conferir direitos antes de publicar fora da faculdade.
 - Valores tributários (CBS 11,3%, setor financeiro 10,85% em 2027) estão em `pending` como não verificados.
-- Papéis de usuário (leitor/editor) e log de auditoria não existem.
+- Log de auditoria não existe.
 - Importar JSON faz upsert e não apaga registros.
 - O dev server (`npm run dev`) não aplicou o CSS na aba controlada pela automação do Chrome; o build de produção renderiza normal. Se acontecer no seu navegador, testar com `npx vite preview`.

@@ -14,7 +14,9 @@ import type { ViewId } from './types'
 
 // ---------- autenticação (opcional: só a Área editorial exige login) ----------
 let signedIn = false
+let role: 'editor' | 'observador' | null = null // papel vem da tabela profiles; a segurança real é a RLS do banco, aqui só esconde o que não cabe
 let activeView: ViewId = 'home'
+let openEditorAfterLogin = false
 
 const loginError = (t: string) => { $('loginError').textContent = t }
 const showLogin = (on: boolean) => { $('loginScreen').classList.toggle('hide', !on); if (on) $('loginEmail').focus() }
@@ -22,6 +24,9 @@ const showLogin = (on: boolean) => { $('loginScreen').classList.toggle('hide', !
 /** Navega; a Área editorial pede login se ainda não houver sessão. */
 function nav(view: ViewId): void {
   if (view === 'editor' && !signedIn) return showLogin(true)
+  if (view === 'editor' && role !== 'editor') {
+    return openModal('Área editorial', '<p>Seu acesso é de <strong>observador</strong>: você lê tudo, inclusive rascunhos, mas só editores criam e alteram conteúdo.</p><p class="small">Para virar editor, peça a quem administra o projeto.</p>')
+  }
   activeView = view
   go(view)
 }
@@ -35,6 +40,13 @@ function heroClock(): void {
 }
 heroClock()
 
+async function loadRole(): Promise<void> {
+  const { data } = await supabase.from('profiles').select('role').maybeSingle()
+  role = data?.role === 'editor' ? 'editor' : 'observador' // sem linha = trata como observador (o banco bloqueia escrita de qualquer jeito)
+  $('userRole').textContent = role === 'editor' ? 'Editor' : 'Observador'
+  $('userRole').classList.toggle('editor', role === 'editor')
+}
+
 async function refresh(): Promise<void> {
   renderAll() // conteúdo-base já na tela; Supabase só acrescenta (sem .env a chamada leva ~10 s para falhar)
   try { await loadAll() } catch (e) { console.warn('Supabase indisponível; mostrando só o conteúdo base.', e) }
@@ -47,11 +59,16 @@ function applySession(email: string | undefined): void {
   appliedEmail = email
   signedIn = Boolean(email)
   $('userEmail').textContent = email ?? ''
+  role = null; $('userRole').textContent = ''
   $('authBtn').textContent = signedIn ? 'Sair' : 'Entrar'
   showLogin(false)
   if (!signedIn) { clearCache(); $<HTMLFormElement>('loginForm').reset() }
   if (!signedIn && activeView === 'editor') nav('home')
-  void refresh()
+  void (signedIn ? loadRole() : Promise.resolve()).catch(() => {}).then(() => {
+    if (openEditorAfterLogin && role === 'editor') nav('editor')
+    openEditorAfterLogin = false
+    return refresh()
+  })
 }
 
 $('loginForm').addEventListener('submit', async e => {
@@ -63,8 +80,7 @@ $('loginForm').addEventListener('submit', async e => {
     password: $<HTMLInputElement>('loginPassword').value,
   })
   if (error) return loginError('Não foi possível entrar: ' + error.message)
-  // sucesso: onAuthStateChange atualiza a tela; abre a área editorial que o usuário pediu
-  setTimeout(() => nav('editor'), 0)
+  openEditorAfterLogin = true // onAuthStateChange carrega o papel e, se for editor, abre a área editorial
 })
 $('helpBtn').addEventListener('click', () => { const h = helpContent(); openModal(h.title, h.body) })
 $('loginCancel').addEventListener('click', () => showLogin(false))

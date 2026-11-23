@@ -26,6 +26,7 @@ ESTRUTURA
 
 NOTAS
 - O site abre sem login (somente leitura, só dossiês "Publicado"). A Área editorial exige login;
-  qualquer usuário autenticado edita (RLS). Papéis (leitor/editor) e auditoria ainda não existem.
+  com login há dois papéis: editor (escreve) e observador (só lê, vê rascunhos). Conta nova é observador;
+  para promover: update public.profiles set role='editor' where email='...'; (SQL Editor). Auditoria não existe.
 - Importar JSON faz upsert; não apaga registros existentes.
 - Fotografias vêm de páginas externas; conferir direitos de reutilização antes de publicar.

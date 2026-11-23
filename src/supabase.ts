@@ -9,4 +9,7 @@ if (!publishable && key) console.warn('Supabase: VITE_SUPABASE_ANON_KEY está ob
 
 export const configured = Boolean(url && key)
 // placeholder evita crash no import; a tela de login avisa quando faltam as variáveis.
-export const supabase = createClient(url || 'http://localhost', key || 'missing-key')
+export const supabase = createClient(url || 'http://localhost', key || 'missing-key', {
+  // login persistente: sessão fica no localStorage e o token renova sozinho; só "Sair" encerra
+  auth: { persistSession: true, autoRefreshToken: true, storageKey: 'itau360-auth' },
+})
