@@ -36,6 +36,7 @@ function heroClock(): void {
 heroClock()
 
 async function refresh(): Promise<void> {
+  renderAll() // conteúdo-base já na tela; Supabase só acrescenta (sem .env a chamada leva ~10 s para falhar)
   try { await loadAll() } catch (e) { console.warn('Supabase indisponível; mostrando só o conteúdo base.', e) }
   renderAll()
 }
