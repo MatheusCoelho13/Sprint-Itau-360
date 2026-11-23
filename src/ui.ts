@@ -33,13 +33,15 @@ export function go(view: ViewId): void {
   document.querySelectorAll<HTMLElement>('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + view))
   document.querySelectorAll<HTMLElement>('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.view === view))
   $('crumbName').textContent = CRUMBS[view] ?? view
-  window.scrollTo({ top: 0, behavior: 'smooth' })
+  window.scrollTo({ top: 0, behavior: motion() })
   sayView(view)
 }
 
 // hipótese primeiro: "não confirmada" também contém "confirm" e aparecia como fato
 const isHyp = (st: string) => /não confirm|hipótese|cotado/i.test(st)
 const statusTone = (st: string) => isHyp(st) ? 'gold' : /confirm|Cargo oficial|Nomeação/.test(st) ? 'green' : 'blue'
+// respeita prefers-reduced-motion também na rolagem programática
+const motion = (): ScrollBehavior => matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
 const publishedAnalyses = () => getAnalyses().filter(d => d.status === 'Publicado')
 
 // ---------- temas ----------
@@ -54,7 +56,7 @@ export function showTheme(id: string): void {
   const t = themes.find(x => x.id === id)
   if (!t) return
   $('themeDetail').innerHTML = `<div class="detail"><div class="eyebrow">Dossiê temático · eixo ${t.n}</div><h2>${t.title}</h2><p>${t.desc}</p><div class="detail-grid"><div class="detail-block"><h4>Perguntas de investigação</h4><ul>${t.questions.map(q => `<li>${q}</li>`).join('')}</ul></div><div class="detail-block"><h4>Canais de transmissão</h4><ul>${t.channels.map(q => `<li>${q}</li>`).join('')}</ul></div></div><h3>Leitura para o Itaú</h3><p>${t.itau}</p><h3>Como aprofundar</h3><p>O dossiê deve ser atualizado com a evidência documental mais recente, a competência institucional aplicável, os atores que podem influenciar a medida, as hipóteses de implementação e os indicadores que confirmem ou enfraqueçam cada caminho.</p>${sourceLine(t.sources)}<div class="btn-row"><button class="btn secondary" data-go="method">Consultar método de análise</button><button class="btn" data-go="editor">Criar / atualizar dossiê</button></div></div>`
-  $('themeDetail').scrollIntoView({ behavior: 'smooth', block: 'start' })
+  $('themeDetail').scrollIntoView({ behavior: motion(), block: 'start' })
 }
 
 // ---------- cenários ----------
@@ -66,7 +68,7 @@ export function showScenario(id: string): void {
   const s = scenarios.find(x => x.id === id)
   if (!s) return
   $('scenarioDetail').innerHTML = `<div class="detail"><div class="eyebrow">Cenário ${s.id} · dossiê prospectivo</div><h2>${s.title}</h2><p>${s.definition}</p><div class="detail-grid"><div class="detail-block"><h4>Sinais de confirmação</h4><ul>${s.signals.map(x => `<li>${x}</li>`).join('')}</ul></div><div class="detail-block"><h4>Atores e incentivos</h4><p><b>Favoráveis:</b> ${s.support}</p><p><b>Resistências:</b> ${s.resistance}</p></div><div class="detail-block"><h4>Implicações para o Itaú</h4><ul>${s.itau.map(x => `<li>${x}</li>`).join('')}</ul></div><div class="detail-block"><h4>Implicações para clientes</h4><ul>${s.clients.map(x => `<li>${x}</li>`).join('')}</ul></div></div><h3>Como acompanhar</h3><p>Atualizar a leitura quando houver mudança no pacote fiscal, no calendário legislativo, nas nomeações, na regulamentação tributária, nas expectativas de inflação, no prêmio de risco e nos indicadores de crédito. Registrar a evidência e a justificativa de qualquer revisão.</p>${sourceLine(s.sources)}</div>`
-  $('scenarioDetail').scrollIntoView({ behavior: 'smooth', block: 'start' })
+  $('scenarioDetail').scrollIntoView({ behavior: motion(), block: 'start' })
 }
 
 // ---------- atores ----------
@@ -95,7 +97,7 @@ export function showActor(id: string): void {
     : sourceLine(a.sources ?? [])
   const credit = a.photoCredit && SRC[a.photoCredit] ? link(a.photoCredit) : esc(a.photoCredit || 'Crédito não informado')
   $('actorDetail').innerHTML = `<div class="detail"><div class="actor-hero"><img src="${esc(a.photo)}" alt="Retrato de ${esc(a.name)}" onerror="this.style.display='none'"><div><div class="eyebrow">Perfil de ator · ${esc(a.group)}</div><h2>${esc(a.name)}</h2><p><b>${esc(a.role)}</b></p><span class="badge ${statusTone(a.status)} status">${esc(a.status)}</span><p>${esc(a.bio)}</p><p>${esc(a.relevance)}</p><div class="source-line">Foto: ${credit}</div></div></div><h3>Fontes e referências do perfil</h3>${srcHtml}<div class="btn-row"><button class="btn secondary" data-go="editor">Abrir área editorial</button></div></div>`
-  $('actorDetail').scrollIntoView({ behavior: 'smooth', block: 'start' })
+  $('actorDetail').scrollIntoView({ behavior: motion(), block: 'start' })
 }
 
 // ---------- riscos ----------
@@ -104,7 +106,7 @@ export function renderRisks(): void {
   const f = $<HTMLSelectElement>('riskType').value || 'all'
   const base = risks
     .filter(r => (f === 'all' || r.type === f) && (!q || (r.title + ' ' + r.channel + ' ' + r.state).toLowerCase().includes(q)))
-    .map(r => `<tr><td><b>${r.title}</b></td><td><span class="tag ${r.type === 'Risco' ? 'red' : r.type === 'Oportunidade' ? 'green' : 'blue'}">${r.type}</span></td><td>${r.channel}</td><td>${r.state}</td><td>${r.src.map(link).join('<br>')}</td></tr>`)
+    .map(r => `<tr><td data-l="Evento"><b>${r.title}</b></td><td data-l="Tipo"><span class="tag ${r.type === 'Risco' ? 'red' : r.type === 'Oportunidade' ? 'green' : 'blue'}">${r.type}</span></td><td data-l="Canal de impacto">${r.channel}</td><td data-l="Estado da avaliação">${r.state}</td><td data-l="Fonte">${r.src.map(link).join('<br>')}</td></tr>`)
   const custom = publishedAnalyses()
     .filter(d => (f === 'all' || d.type === f) && (!q || (d.title + ' ' + d.theme + ' ' + d.impact).toLowerCase().includes(q)))
     .map(d => `<tr><td><b>${esc(d.title)}</b><br><button class="card-action" data-custom-analysis="${d.id}">Abrir dossiê</button></td><td><span class="tag gold">${esc(d.type)}</span></td><td>${esc(d.transmission || 'Canal a detalhar')}</td><td>Publicado pela equipe · ${esc(d.updated)}</td><td>${extLinks(d.sources).join('<br>')}</td></tr>`)
@@ -127,7 +129,7 @@ const MESES: [string, number][] = [['nov', dia(2026, 10, 1)], ['dez', dia(2026, 
 
 function dayRule(compact: boolean): string {
   const hoje = Math.round((Date.now() - POSSE) / 864e5)
-  const aviso = hoje < R0 ? '' : hoje > R1 ? '' : `<i class="dr-now" style="left:${pos(hoje)}"><b>hoje · D${hoje < 0 ? '−' + -hoje : '+' + hoje}</b></i>`
+  const aviso = hoje < R0 ? '' : hoje > R1 ? '' : `<i class="dr-now" style="left:${pos(hoje)}"><b>hoje D${hoje < 0 ? '−' + -hoje : '+' + hoje}</b></i>`
   const desc = 'Régua do calendário: posse em 5 de janeiro de 2027 (dia 0), balanço dos 100 dias por volta de 15 de abril de 2027. Novembro e dezembro de 2026 antes da posse; fevereiro e março de 2027 com tramitação das medidas.'
   return `<figure class="dayrule${compact ? ' compact' : ''}" role="img" aria-label="${desc}">
     <div class="dr-track">

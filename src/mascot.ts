@@ -71,6 +71,7 @@ export function startMascot(): void {
     text = root.querySelector('.mascot-text')!
     img = root.querySelector('img')!
     root.querySelector('.mascot-btn')!.addEventListener('click', poke)
+    bubble.addEventListener('click', () => bubble.classList.remove('show')) // toque no balão o dispensa
     PRELOAD.forEach(m => { new Image().src = src(m) })
     started = true
   }
