@@ -40,11 +40,14 @@ function heroClock(): void {
 }
 heroClock()
 
+const showEditorNav = () => $('navEditor').classList.toggle('hide', role !== 'editor') // só editor vê a Área editorial
+
 async function loadRole(): Promise<void> {
   const { data } = await supabase.from('profiles').select('role').maybeSingle()
   role = data?.role === 'editor' ? 'editor' : 'observador' // sem linha = trata como observador (o banco bloqueia escrita de qualquer jeito)
   $('userRole').textContent = role === 'editor' ? 'Editor' : 'Observador'
   $('userRole').classList.toggle('editor', role === 'editor')
+  showEditorNav()
 }
 
 async function refresh(): Promise<void> {
@@ -59,7 +62,7 @@ function applySession(email: string | undefined): void {
   appliedEmail = email
   signedIn = Boolean(email)
   $('userEmail').textContent = email ?? ''
-  role = null; $('userRole').textContent = ''
+  role = null; $('userRole').textContent = ''; showEditorNav()
   $('authBtn').textContent = signedIn ? 'Sair' : 'Entrar'
   showLogin(false)
   if (!signedIn) { clearCache(); $<HTMLFormElement>('loginForm').reset() }
