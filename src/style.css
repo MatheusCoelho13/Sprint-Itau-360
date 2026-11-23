@@ -639,3 +639,34 @@ a{color:inherit}
   .item-row.first h3{font-size:30px!important}
   .section-title{flex-wrap:wrap}
 }
+
+/* v3.6: Uly volta ao canto da tela (fora da navegação), com balão no estilo da página: borda reta, tinta, sem sombra */
+.mascot{position:fixed;right:20px;bottom:8px;z-index:30;display:flex;flex-direction:column;align-items:flex-end;pointer-events:none}
+.mascot-btn{pointer-events:auto;border:0;background:transparent;padding:0;line-height:0;cursor:pointer;transform-origin:50% 100%}
+.mascot-btn img{display:block;height:118px;width:auto;max-width:170px}
+.mascot-btn img.pop{animation:uly-pop .2s ease-out}
+.mascot-btn:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.mascot-bubble{pointer-events:auto;position:relative;max-width:250px;margin:0 6px 12px 0;padding:10px 14px 11px;background:#fff;border:2px solid var(--ink);border-radius:var(--rb);font:400 16px/1.35 var(--text);color:var(--ink);opacity:0;visibility:hidden;transform:translateY(6px);transition:opacity .18s,visibility .18s,transform .18s}
+.mascot-bubble.show{opacity:1;visibility:visible;transform:none}
+.mascot-bubble::after{content:'';position:absolute;right:34px;bottom:-9px;width:14px;height:14px;background:#fff;border:solid var(--ink);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.mascot-name{display:block;font:700 13px var(--sans);letter-spacing:.8px;text-transform:uppercase;color:var(--blue);margin-bottom:2px}
+@keyframes uly-pop{from{transform:scale(.94)}to{transform:none}}
+.content{padding-bottom:150px}
+@media(min-width:1560px){.mascot{right:calc(330px + 20px)}}
+@media(max-width:760px){.mascot{right:6px;bottom:4px}.mascot-btn img{height:84px;max-width:120px}.mascot-bubble{max-width:200px;font-size:15px}.content{padding-bottom:110px}}
+
+/* papel do usuário (editor / observador) ao lado do e-mail */
+.role-chip{font:700 12.5px var(--sans);letter-spacing:.6px;text-transform:uppercase;padding:3px 8px;border:1.5px solid var(--blue);color:var(--blue);white-space:nowrap}
+.role-chip.editor{background:var(--blue);color:#fff}
+.role-chip:empty{display:none}
+
+/* v3.7: hero com título em 4 linhas (antes 5) e topo do celular sem corte */
+.hero h1{font-size:clamp(38px,3.7vw,56px);max-width:660px}
+.role-chip{margin-left:-4px}
+@media(max-width:760px){
+  .topbar{height:auto;flex-wrap:wrap;gap:8px 12px;padding:8px 16px}
+  .crumb{flex:1 0 100%;order:-1}.crumb>span,.crumb{font-size:13px}
+  .top-actions{flex:1 0 100%;flex-wrap:wrap;gap:8px}
+  .search{flex:1 0 100%;width:auto}
+  .user-email{max-width:46vw}
+}

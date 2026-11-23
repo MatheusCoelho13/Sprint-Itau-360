@@ -13,7 +13,7 @@
  <form class="login-card" id="loginForm">
   <div class="brand-mark" role="img" aria-label="Itaú 360°">ITAÚ<svg class="logo-dial" aria-hidden="true"><use href="#logo-dial"/></svg></div>
   <div class="brand-sub">INTELIGÊNCIA POLÍTICA · BRASIL</div>
-  <p class="login-hint">Entre para criar e editar perfis e dossiês. Para só ler o conteúdo, não precisa de login.</p>
+  <p class="login-hint">Entre para ver também os rascunhos (observador) ou para criar e editar perfis e dossiês (editor). Para ler o conteúdo publicado, não precisa de login.</p>
   <div class="field"><label for="loginEmail">E-mail</label><input id="loginEmail" type="email" required autocomplete="username"></div>
   <div class="field"><label for="loginPassword">Senha</label><input id="loginPassword" type="password" required autocomplete="current-password"></div>
   <button class="btn orange" type="submit">Entrar</button>
@@ -44,7 +44,7 @@
  <div class="side-bottom">Versão de demonstração · documentos do Sprint IDP e fontes públicas, referência 11/11/2026.</div>
 </aside>
 <main class="main">
- <header class="topbar"><div class="crumb">Itaú 360° <span>/</span> <strong id="crumbName">Visão executiva</strong></div><div class="top-actions"><div class="search"><input id="globalSearch" placeholder="Buscar tema, ator ou análise…" autocomplete="off"></div><button class="btn secondary sm" id="helpBtn" type="button">Ajuda</button><span id="userEmail" class="user-email"></span><button class="btn secondary sm" id="authBtn" type="button">Entrar</button><div class="date-pill">Atualização de referência · 17 nov. 2026</div></div></header>
+ <header class="topbar"><div class="crumb">Itaú 360° <span>/</span> <strong id="crumbName">Visão executiva</strong></div><div class="top-actions"><div class="search"><input id="globalSearch" placeholder="Buscar tema, ator ou análise…" autocomplete="off"></div><button class="btn secondary sm" id="helpBtn" type="button">Ajuda</button><span id="userEmail" class="user-email"></span><span id="userRole" class="role-chip"></span><button class="btn secondary sm" id="authBtn" type="button">Entrar</button><div class="date-pill">Atualização de referência · 17 nov. 2026</div></div></header>
  <div class="content">
   <section class="view active" id="view-home">
    <div class="hero"><div><h1>O que o governo eleito pode mudar em 100 dias, e por onde isso chega ao Itaú.</h1><p>Pacote fiscal, Congresso e regulamentação tributária decidem o que chega ao funding, ao crédito e aos clientes do banco. Cada afirmação traz a fonte e diz se é fato, nome cotado ou hipótese.</p><p class="hero-clock" id="heroClock"></p><div id="heroRule"></div></div><div class="hero-dial"><svg class="dial" viewBox="-90 -34 540 408" role="group" aria-label="Radar dos 5 eixos de análise">
@@ -146,6 +146,7 @@ Relatório interno, p. X | docs/arquivo.pdf"></textarea></div><div class="field"
  </div>
  <aside class="rail" id="rail" aria-label="Sinais a monitorar"></aside>
 </main>
+<div class="mascot" id="mascot"></div>
 </div>
 <div class="modal-backdrop" id="modal"><div class="modal"><div class="modal-head"><strong id="modalLabel">Detalhes</strong><button id="modalClose">✕</button></div><div class="modal-body" id="modalBody"></div></div></div>
 
