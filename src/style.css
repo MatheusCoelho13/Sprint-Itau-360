@@ -219,7 +219,7 @@ button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
 
 /* ---------- login ---------- */
 .login-screen{position:fixed;inset:0;z-index:60;overflow:auto;display:grid;grid-template-columns:1.1fr 1fr;background:var(--paper)}
-.login-screen::before{content:'Da decisão política ao impacto sobre o negócio.';background:repeating-radial-gradient(circle at 72% 34%,transparent 0 78px,rgba(255,255,255,.08) 78px 79px),var(--blue);border-top:4px solid var(--orange);color:#fff;font:500 clamp(34px,4vw,56px)/1.06 var(--serif);letter-spacing:-1px;padding:56px;display:flex;align-items:flex-end}
+.login-screen::before{content:'O que o governo eleito pode mudar em 100 dias, e por onde isso chega ao Itaú.';background:repeating-radial-gradient(circle at 72% 34%,transparent 0 78px,rgba(255,255,255,.08) 78px 79px),var(--blue);border-top:4px solid var(--orange);color:#fff;font:500 clamp(34px,4vw,56px)/1.06 var(--serif);letter-spacing:-1px;padding:56px;display:flex;align-items:flex-end}
 .login-card{align-self:center;justify-self:center;width:min(380px,calc(100% - 36px));display:flex;flex-direction:column;gap:16px}
 .login-card .brand-mark,.login-card .logo-dial{color:var(--blue)}.login-card .brand-sub{color:var(--muted);margin:-4px 0 14px}
 .login-hint{margin:0;color:var(--muted);font-size:14px}
@@ -397,3 +397,4 @@ button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
   .dayrule.compact{--ay:80px;--h:94px}
   .dayrule.compact .dr-d100 b{top:38px;height:calc(var(--ay) - 43px)}
 }
+.mono-n{font:500 12px var(--mono);color:var(--muted);margin-right:12px;letter-spacing:.4px}

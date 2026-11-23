@@ -151,7 +151,10 @@ export function renderMonitor(): void {
   $('variablesList').innerHTML = variables.map(v => `<div class="item-row"><div><h3>${v[0]}</h3><p>${v[1]}</p></div></div>`).join('')
   $('timeline').innerHTML = timeline.map(t => `<div class="timeline-item"><strong>${t[0]}</strong><p>${t[1]}</p></div>`).join('')
   $('indicatorGrid').innerHTML = indicators.map(i => `<div class="panel axis-card"><h3>${i[0]}</h3><p>${i[1]}</p></div>`).join('')
-  $('pendingList').innerHTML = pending.map((p, i) => `<div class="item-row"><div><h3>${String(i + 1).padStart(2, '0')} · Verificação pendente</h3><p>${p}</p></div><span class="badge gold">A verificar</span></div>`).join('')
+  $('pendingList').innerHTML = pending.map((p, i) => {
+    const [t, ...rest] = p.split(': ') // o item diz o que falta; o resto é o que fazer
+    return `<div class="item-row"><div><h3><span class="mono-n">${String(i + 1).padStart(2, '0')}</span>${t}</h3>${rest.length ? `<p>${rest.join(': ')}</p>` : ''}</div><span class="badge gold">A verificar</span></div>`
+  }).join('')
 }
 
 export function renderMethod(): void {
