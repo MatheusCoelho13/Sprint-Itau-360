@@ -75,7 +75,7 @@ function applySession(email: string | undefined, id = ''): void {
   role = null; $('userRole').textContent = ''; showEditorNav()
   $('authBtn').textContent = signedIn ? 'Sair' : 'Entrar'
   showLogin(false)
-  if (!signedIn) { clearCache(); $<HTMLFormElement>('loginForm').reset() }
+  if (!signedIn) { clearCache(); $<HTMLFormElement>('loginForm').reset(); $<HTMLInputElement>('loginPassword').type = 'password' }
   if (!signedIn && (activeView === 'editor' || activeView === 'users')) nav('home')
   void (signedIn ? loadRole() : Promise.resolve()).catch(() => {}).then(() => {
     if (openEditorAfterLogin && canEdit()) nav('editor')
@@ -92,10 +92,15 @@ $('loginForm').addEventListener('submit', async e => {
     email: $<HTMLInputElement>('loginEmail').value.trim(),
     password: $<HTMLInputElement>('loginPassword').value,
   })
-  if (error) return loginError('Não foi possível entrar: ' + error.message)
+  if (error) return loginError(error.message === 'Invalid login credentials'
+    ? 'E-mail ou senha não conferem neste projeto Supabase. As contas de teste do seed.sql só existem no banco local; no remoto, use o usuário criado em Authentication > Users.'
+    : 'Não foi possível entrar: ' + error.message)
   openEditorAfterLogin = true // onAuthStateChange carrega o papel e, se for editor, abre a área editorial
 })
 $('helpBtn').addEventListener('click', () => { const h = helpContent(); openModal(h.title, h.body) })
+$<HTMLInputElement>('showPass').addEventListener('change', e => {
+  $<HTMLInputElement>('loginPassword').type = (e.target as HTMLInputElement).checked ? 'text' : 'password'
+})
 $('loginCancel').addEventListener('click', () => showLogin(false))
 $('authBtn').addEventListener('click', () => (signedIn ? void supabase.auth.signOut() : showLogin(true)))
 
