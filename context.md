@@ -36,6 +36,16 @@ Sem probabilidade numérica inventada: os cenários usam "plausibilidade qualita
 - **Ritmo variado de propósito:** eixos como índice numerado (`#themeGrid`), indicadores e instrumentos como lista nome | explicação, cenários e atores como cartões. Não voltar tudo para grade de cartões iguais.
 - **Uly:** arte própria do grupo. Só fala ao trocar de tela ou ao ser clicada; balão some em 7 s. `.content` tem 190px de folga embaixo para ela não cobrir o fim da página.
 - Cabeçalhos de página sem "eyebrow": o breadcrumb do topo já diz onde o leitor está.
+- **O quadrado do selo é só grau de certeza** (cheio = documentado, vazado = hipótese/a verificar). Categoria (risco, oportunidade, misto, área) usa `.tag`: texto mono colorido, sem quadrado. Cenários A/B/C são hipóteses: selo vazado nos três, azul único, só a letra os diferencia. Não voltar a colorir A/B/C.
+- **Régua dos 100 dias** (`dayRule` em `ui.ts`, Sinais e hero): ancorada na posse de 5/1/2027, posições em % calculadas de datas reais, "hoje" calculado. Sólido = fato (só a posse); tracejado/vazado = calendário preliminar. Não é decoração: se mudar a data da posse, mude `POSSE`. Tem `aria-label` com o resumo.
+- **Faixa de certeza** em Atores (`#certStrip`): um quadrado por perfil, mesma regra do selo (`isHyp` em `ui.ts`, usada no cartão, no detalhe e na faixa).
+- **Sem ornamento sem dado:** a régua de tracinhos dos cabeçalhos e os rótulos de cabeçalho que não diziam grau de certeza foram removidos. Ficam só "Versão preliminar" (Cenários) e "Matriz em atualização" (Riscos).
+- **Ritmo:** escala de espaço irregular em `:root` (`--s-1..--s-6`: 6, 12, 20, 34, 56, 92). Blocos densos usam `.tight`, respiros usam `.breath` em `.section-title`. Temas transversais são lista (tipo | tema | explicação), não grade de 3 cartões.
+- **Forma:** raio único 4px (`--rb`), painéis 3px, sem pílulas, sem sombra (inclui foco de campo e a arte da Uly). Borda de campo `--edge` (3,6:1 sobre o papel).
+- **Foco:** azul `#0a2a6e` sobre papel (11:1), branco sobre sidebar e hero. O laranja dava 2,7:1 e reprovava 3:1; não usar laranja como foco.
+- **Movimento:** troca de tela é fade de 160 ms; nada de quique, overshoot ou loop. Uly sem animação contínua; toque no balão o dispensa. `prefers-reduced-motion` desliga tudo, inclusive a rolagem suave (`motion()` em `ui.ts`).
+- **Celular (≤760px):** alvos de 44px, tabela de riscos vira lista rotulada (`data-l` nas células), `.content` mantém 170px de folga para a Uly, régua escalona rótulos.
+- **Tipografia (avaliada em 23/11/2026):** mantido Newsreader + IBM Plex. Testados Source Serif 4 (mais larga e neutra, soa manual técnico) e Literata (pesada, soa livro digital); nenhuma é mais própria que Newsreader, e trocar de serifada de catálogo seria outro clichê. O que dá identidade é o selo, o radar e a régua, não o par de fontes. Plex Mono a 11,5–12px mantém "0" e "O" distintos (importa em "D0", "D100").
 
 ## Revisão "honest-eye" (23/11/2026)
 Veredicto: **MISTO, com base autoral**. Radar, sistema de selos, fonte em cada afirmação e a mascote não são de template. O que ainda lembrava saída de IA e foi mexido:
@@ -48,9 +58,12 @@ Veredicto: **MISTO, com base autoral**. Radar, sistema de selos, fonte em cada a
 
 Segunda rodada: aberturas das 8 telas reescritas para dizer algo (ex.: cenários "partem de uma pergunta: o pacote fiscal sai cedo ou não?"); "Combinações possíveis" virou lista com a chave A+C / B+C como título; matriz P×I virou lista nome | explicação; métrica "08+" trocada por "06 instrumentos" (confere com `methodTools`); tipo "Misto" passou de dourado para azul, porque o quadrado vazado só pode significar hipótese/a verificar.
 
-Ainda pendente: Newsreader + Plex é combinação muito comum em design "editorial" (não trocado de propósito, para não virar outro clichê); badges dos cenários A/B/C usam cor de tom, embora todos sejam hipóteses.
+Terceira rodada (honest-eye, 23/11/2026): badges dos cenários A/B/C viraram hipótese vazada (resolvido); régua dos 100 dias, faixa de certeza e lista de transversais; foco, alvos de 44px, tabela de riscos no celular e Uly sem loop; abertura da home reescrita; "Verificação pendente" ×7 virou o texto do próprio item. Newsreader + Plex mantidos de propósito (ver Identidade visual).
 
 ## Pendências conhecidas
+- Área editorial: o formulário só foi conferido visualmente (sem login/`.env`); testar com Supabase real depois das mudanças de raio e foco.
+- Sem `.env` o primeiro render do conteúdo-base agora é imediato; antes levava ~10 s (chamada ao Supabase falhando).
+- Dossiê de ator: ainda não há ligação ator → impacto no Itaú (os dados só têm `relevance` em texto livre).
 - Fotografias vêm de páginas externas (Wikimedia, Metrópoles, iG…). Conferir direitos antes de publicar fora da faculdade.
 - Valores tributários (CBS 11,3%, setor financeiro 10,85% em 2027) estão em `pending` como não verificados.
 - Papéis de usuário (leitor/editor) e log de auditoria não existem.
