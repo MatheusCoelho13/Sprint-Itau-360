@@ -20,7 +20,7 @@ button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
 /* ---------- estrutura ---------- */
 .app{display:grid;grid-template-columns:272px 1fr;min-height:100vh}
 .main{min-width:0}
-.content{max-width:1360px;margin:0 auto;padding:40px 48px 80px}
+.content{max-width:1360px;margin:0 auto;padding:40px 48px 190px} /* folga para a Uly não cobrir o fim da página */
 .view{display:none}.view.active{display:block}
 
 /* ---------- barra lateral: índice do dossiê ---------- */
@@ -55,7 +55,7 @@ button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
 .eyebrow{font:500 11px/1 var(--mono);letter-spacing:1.6px;color:var(--blue);text-transform:uppercase;display:flex;align-items:center;gap:9px}
 .eyebrow::before{content:'';width:9px;height:9px;background:var(--orange);flex:none}
 .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin-bottom:34px;padding-bottom:22px;border-bottom:2px solid var(--rule)}
-.page-head h1{font:500 clamp(32px,3.4vw,46px)/1.08 var(--serif);letter-spacing:-.8px;margin:14px 0 12px;color:var(--ink)}
+.page-head h1{font:500 clamp(32px,3.4vw,46px)/1.08 var(--serif);letter-spacing:-.8px;margin:0 0 12px;color:var(--ink)}
 .page-head p{margin:0;color:var(--muted);max-width:720px;font-size:15.5px}
 .page-head .badge{margin-bottom:6px}
 .section-title{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:48px 0 16px}
@@ -265,7 +265,6 @@ button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
 .dial .ring{stroke:rgba(255,255,255,.16);stroke-width:1}
 .dial .ticks{stroke:rgba(255,255,255,.4);stroke-width:1}
 .dial .shape{fill:rgba(236,112,0,.14);stroke:var(--orange);stroke-width:1.5;stroke-linejoin:round}
-.dial .sweep path{fill:rgba(236,112,0,.13);stroke:var(--orange);stroke-width:1.5;stroke-opacity:.7}
 .dial-center{font:300 34px var(--serif);fill:#fff;letter-spacing:-.5px}
 .axis{cursor:pointer;outline:none}
 .axis-halo{fill:rgba(236,112,0,.001);pointer-events:all;stroke:rgba(255,255,255,.0);stroke-width:1.5;transition:stroke .15s,r .15s}
@@ -283,4 +282,47 @@ button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
 /* letra do cenário */
 .scn-letter{font:300 92px/.8 var(--serif);margin-bottom:4px;opacity:.28}
 .scn-A{color:var(--green)}.scn-B{color:var(--red)}.scn-C{color:var(--gold)}
-@media(prefers-reduced-motion:reduce){.dial .sweep{display:none}}
+
+/* ---------- decisões próprias do produto ---------- */
+/* o quadrado do selo é a legenda de certeza: cheio = fato documentado, vazado = hipótese ou a verificar */
+.badge.gold::before,.badge.orange::before{background:transparent;border:1.5px solid var(--c);width:8px;height:8px}
+.actor-card.hyp{border-style:dashed;border-color:#b9ad92;background:transparent}
+.actor-card.hyp img{opacity:.78}
+
+.hero-clock{margin-top:26px!important;font:500 12px/1.5 var(--mono)!important;letter-spacing:.4px;color:#ffc999!important;padding-top:14px;border-top:1px solid rgba(255,255,255,.22);max-width:460px!important}
+
+/* números de apoio viram uma faixa, não quatro cartões */
+.grid-4{border-top:2px solid var(--rule);border-bottom:1px solid var(--line)}
+.grid-4 .metric{background:transparent;border:0;border-right:1px solid var(--line);margin:0;padding:16px 24px 14px}
+.grid-4 .metric:last-child{border-right:0}
+.metric strong{font-size:34px;margin:8px 0 4px}
+
+/* eixos: índice numerado, não grade de cartões */
+#themeGrid{grid-template-columns:1fr}
+#themeGrid .axis-card{display:grid;grid-template-columns:84px minmax(0,1fr) auto;grid-template-areas:"n t b" "n d b";column-gap:22px;row-gap:4px;min-height:0;padding:22px 24px;align-items:baseline}
+#themeGrid .axis-num{grid-area:n;font:300 46px/1 var(--serif);letter-spacing:0;align-self:center}
+#themeGrid h3{grid-area:t}#themeGrid p{grid-area:d;max-width:760px}
+#themeGrid button{grid-area:b;align-self:center;margin:0;white-space:nowrap}
+/* indicadores e instrumentos: nome à esquerda, explicação à direita */
+#indicatorGrid,#methodTools{grid-template-columns:1fr}
+#indicatorGrid .axis-card,#methodTools .axis-card{display:grid;grid-template-columns:240px minmax(0,1fr);gap:24px;min-height:0;padding:16px 24px;align-items:baseline}
+#indicatorGrid h3,#methodTools h3{font-size:19px}
+@media(max-width:760px){
+  #themeGrid .axis-card{grid-template-columns:44px 1fr;grid-template-areas:"n t" "n d" "n b";column-gap:14px}
+  #themeGrid .axis-num{font-size:30px;align-self:start}#themeGrid button{margin-top:8px}
+  #indicatorGrid .axis-card,#methodTools .axis-card{grid-template-columns:1fr;gap:4px}
+  .grid-4 .metric{border-bottom:1px solid var(--line)}
+}
+
+/* combinações de cenários: a chave (A+C) é o título */
+.combos{border-top:2px solid var(--rule)}
+.combo{display:grid;grid-template-columns:120px minmax(0,1fr);gap:28px;padding:22px 24px;background:var(--card);border:1px solid var(--line);border-top:0;margin:0 -1px -1px 0}
+.combo-key{font:300 44px/1 var(--serif);white-space:nowrap}
+.combo-key i{font-style:normal;color:var(--muted);margin:0 .14em;font-size:.6em;vertical-align:.12em}
+.combo h3{font:500 20px/1.3 var(--serif);margin:0 0 6px}.combo p{margin:0;color:var(--muted);font-size:14px;max-width:760px}
+.combo .scn-A,.combo .scn-B,.combo .scn-C{opacity:1}
+/* lista nome | explicação reutilizável */
+.rows{grid-template-columns:1fr}
+.rows .panel{display:grid;grid-template-columns:240px minmax(0,1fr);gap:24px;padding:16px 24px;align-items:baseline}
+.rows h3{font:500 19px var(--serif)!important}.rows p{margin:0!important}
+@media(max-width:760px){.combo{grid-template-columns:1fr;gap:8px}.rows .panel{grid-template-columns:1fr;gap:4px}}

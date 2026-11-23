@@ -41,8 +41,8 @@ const publishedAnalyses = () => getAnalyses().filter(d => d.status === 'Publicad
 
 // ---------- temas ----------
 export function renderThemes(): void {
-  $('themeGrid').innerHTML = themes.map(t => `<div class="panel axis-card"><div class="axis-num">EIXO ${t.n}</div><h3>${t.title}</h3><p>${t.desc}</p><button data-theme="${t.id}">Abrir dossiê temático →</button></div>`).join('')
-  $('crossThemes').innerHTML = cross.map(t => `<div class="panel axis-card"><span class="badge ${t.type.includes('Oportunidade') ? 'green' : t.type === 'Risco' ? 'red' : 'gold'}">${t.type}</span><h3>${t.title}</h3><p>${t.desc}</p>${sourceLine(t.src)}</div>`).join('')
+  $('themeGrid').innerHTML = themes.map(t => `<div class="panel axis-card"><div class="axis-num">${t.n}</div><h3>${t.title}</h3><p>${t.desc}</p><button data-theme="${t.id}">Abrir dossiê temático →</button></div>`).join('')
+  $('crossThemes').innerHTML = cross.map(t => `<div class="panel axis-card"><span class="badge ${t.type.includes('Oportunidade') ? 'green' : t.type === 'Risco' ? 'red' : 'blue'}">${t.type}</span><h3>${t.title}</h3><p>${t.desc}</p>${sourceLine(t.src)}</div>`).join('')
   $('customDossierGrid').innerHTML = publishedAnalyses().map(d => `<div class="panel axis-card"><span class="badge green">Publicado · ${esc(d.theme)}</span><h3>${esc(d.title)}</h3><p>${esc(d.question)}</p><button data-custom-analysis="${d.id}">Abrir dossiê →</button></div>`).join('')
     || '<div class="panel empty">Nenhum dossiê novo publicado pela equipe até o momento.</div>'
 }
@@ -76,9 +76,11 @@ export function renderActors(): void {
   $('actorResults').textContent = `${list.length} perfis`
   $('actorCount').textContent = String(list.length).padStart(2, '0')
   $('actorGrid').innerHTML = list.map(a => {
-    const tone = a.status.includes('confirm') || a.status.includes('Cargo oficial') || a.status.includes('Nomeação') ? 'green'
-      : a.status.includes('não confirmado') || a.status.includes('rejeitada') ? 'gold' : 'blue'
-    return `<div class="panel actor-card clickable" data-actor="${a.id}"><img src="${esc(a.photo)}" alt="Retrato de ${esc(a.name)}" onerror="this.style.display='none'"><div><span class="badge ${tone} status">${esc(a.status)}</span><h3>${esc(a.name)}</h3><p>${esc(a.role)}</p><span class="small muted">${esc(a.group)}</span></div></div>`
+    // hipótese primeiro: "não confirmada" também contém "confirm" e aparecia como fato
+    const hyp = /não confirm|hipótese|cotado/i.test(a.status)
+    const tone = hyp ? 'gold'
+      : a.status.includes('confirm') || a.status.includes('Cargo oficial') || a.status.includes('Nomeação') ? 'green' : 'blue'
+    return `<div class="panel actor-card clickable${hyp ? ' hyp' : ''}" data-actor="${a.id}"><img src="${esc(a.photo)}" alt="Retrato de ${esc(a.name)}" onerror="this.style.display='none'"><div><span class="badge ${tone} status">${esc(a.status)}</span><h3>${esc(a.name)}</h3><p>${esc(a.role)}</p><span class="small muted">${esc(a.group)}</span></div></div>`
   }).join('') || '<div class="empty">Nenhum perfil encontrado.</div>'
 }
 
@@ -99,7 +101,7 @@ export function renderRisks(): void {
   const f = $<HTMLSelectElement>('riskType').value || 'all'
   const base = risks
     .filter(r => (f === 'all' || r.type === f) && (!q || (r.title + ' ' + r.channel + ' ' + r.state).toLowerCase().includes(q)))
-    .map(r => `<tr><td><b>${r.title}</b></td><td><span class="badge ${r.type === 'Risco' ? 'red' : r.type === 'Oportunidade' ? 'green' : 'gold'}">${r.type}</span></td><td>${r.channel}</td><td>${r.state}</td><td>${r.src.map(link).join('<br>')}</td></tr>`)
+    .map(r => `<tr><td><b>${r.title}</b></td><td><span class="badge ${r.type === 'Risco' ? 'red' : r.type === 'Oportunidade' ? 'green' : 'blue'}">${r.type}</span></td><td>${r.channel}</td><td>${r.state}</td><td>${r.src.map(link).join('<br>')}</td></tr>`)
   const custom = publishedAnalyses()
     .filter(d => (f === 'all' || d.type === f) && (!q || (d.title + ' ' + d.theme + ' ' + d.impact).toLowerCase().includes(q)))
     .map(d => `<tr><td><b>${esc(d.title)}</b><br><button class="card-action" data-custom-analysis="${d.id}">Abrir dossiê</button></td><td><span class="badge gold">${esc(d.type)}</span></td><td>${esc(d.transmission || 'Canal a detalhar')}</td><td>Publicado pela equipe · ${esc(d.updated)}</td><td>${extLinks(d.sources).join('<br>')}</td></tr>`)

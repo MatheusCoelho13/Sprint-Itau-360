@@ -26,6 +26,15 @@ function nav(view: ViewId): void {
   go(view)
 }
 
+// dias até a posse (5/1/2027, marco do documento de cenários) ou dia do mandato
+function heroClock(): void {
+  const d = Math.round((Date.UTC(2027, 0, 5) - Date.now()) / 864e5)
+  $('heroClock').textContent = d > 0 ? `Posse em 5 de janeiro de 2027 · faltam ${d} dias`
+    : d > -100 ? `Dia ${1 - d} dos 100 primeiros dias · balanço por volta de 15 de abril`
+    : 'Os 100 primeiros dias terminaram · revisar cenários'
+}
+heroClock()
+
 async function refresh(): Promise<void> {
   try { await loadAll() } catch (e) { console.warn('Supabase indisponível; mostrando só o conteúdo base.', e) }
   renderAll()
