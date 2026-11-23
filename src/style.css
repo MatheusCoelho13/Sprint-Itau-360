@@ -596,3 +596,11 @@ a{color:inherit}
   .sidebar .mascot{align-items:flex-end}
   .crumb{font-size:14px}
 }
+
+/* Uly na barra lateral: o balão tem lugar reservado acima dela, nunca cobre o menu */
+@media(min-width:761px){
+  .sidebar .mascot{padding-top:84px}
+  .sidebar .mascot-bubble{top:0;bottom:auto;height:76px;display:flex;align-items:center;padding:8px 12px;overflow:hidden}
+}
+.actor-card>div{min-width:0}
+.actor-card h3{font-size:23px;overflow-wrap:anywhere}

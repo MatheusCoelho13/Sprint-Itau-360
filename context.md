@@ -29,23 +29,23 @@ Toda afirmação tem fonte e um grau de certeza. Três níveis, nunca misturados
 Sem probabilidade numérica inventada: os cenários usam "plausibilidade qualitativa". Itens sem fonte confiável vão para "Pontos ainda a verificar". Não afirmar posição de ator sem declaração ou voto documentado.
 
 ## Identidade visual (decisões, para não regredir)
-- **Paleta:** papel `#f4f0e8`, azul Itaú `#0a2a6e`, laranja `#ec7000`. As cores são da marca; o papel quente é escolha do projeto. Laranja só como sinal (marcadores, 360°), nunca em texto pequeno.
-- **Tipos:** Newsreader (títulos), IBM Plex Sans (corpo), IBM Plex Mono (rótulos e números). Sem sombras, cantos quase retos.
+- **Paleta (v3, 23/11/2026):** página branca `#fff`, tinta `#0b1220`, azul Itaú `#0a2a6e`, laranja `#ec7000` só como sinal (nº do menu, posse, topo do hero, logo). O papel creme `#f4f0e8` foi abandonado: creme + serifa + mono em caixa-alta é a cara mais comum de interface gerada. Estrutura vem de réguas de tinta (3px nas seções, 8px no topo de cada página), não de caixas de borda fina.
+- **Tipos (v3):** Archivo Narrow nos títulos e na interface (sans estreita, de jornal econômico); Source Serif 4 no texto corrido; IBM Plex Mono só para dado (datas, D0/D100, página citada). Nada de rótulo pequeno em caixa-alta com tracking. Cada título de página leva o folio grande (02–09) igual ao número do menu, via `data-n` em `.page-head`. Sem sombras, cantos retos (2px em botões/campos).
 - **O selo diz o grau de certeza:** quadrado cheio = fato; quadrado vazado = hipótese ou a verificar. Cartões de ator com hipótese têm borda tracejada. É a decisão visual mais específica do produto; não trocar por cor decorativa.
 - **Radar dos 5 eixos** no hero é navegação (cada eixo abre um tema). O polígono é regular de propósito, não representa dado. Sem animação de varredura.
 - **Ritmo variado de propósito:** eixos como índice numerado (`#themeGrid`), indicadores e instrumentos como lista nome | explicação, cenários e atores como cartões. Não voltar tudo para grade de cartões iguais.
-- **Uly:** arte própria do grupo. Só fala ao trocar de tela ou ao ser clicada; balão some em 7 s. `.content` tem 190px de folga embaixo para ela não cobrir o fim da página.
+- **Uly:** arte própria do grupo. No desktop mora na barra lateral, com área reservada para o balão (não cobre menu nem conteúdo); no celular flutua no canto e `.content` mantém 170px de folga. Só fala ao trocar de tela ou ao ser clicada; balão some em 7 s ou ao toque.
 - Cabeçalhos de página sem "eyebrow": o breadcrumb do topo já diz onde o leitor está.
-- **O quadrado do selo é só grau de certeza** (cheio = documentado, vazado = hipótese/a verificar). Categoria (risco, oportunidade, misto, área) usa `.tag`: texto mono colorido, sem quadrado. Cenários A/B/C são hipóteses: selo vazado nos três, azul único, só a letra os diferencia. Não voltar a colorir A/B/C.
+- **O quadrado do selo é só grau de certeza** (v3: sem cor, só forma; ink cheio/vazado) (cheio = documentado, vazado = hipótese/a verificar). Categoria (risco, oportunidade, misto, área) usa `.tag`: texto mono colorido, sem quadrado. Cenários A/B/C são hipóteses: selo vazado nos três, azul único, só a letra os diferencia. Não voltar a colorir A/B/C.
 - **Régua dos 100 dias** (`dayRule` em `ui.ts`, Sinais e hero): ancorada na posse de 5/1/2027, posições em % calculadas de datas reais, "hoje" calculado. Sólido = fato (só a posse); tracejado/vazado = calendário preliminar. Não é decoração: se mudar a data da posse, mude `POSSE`. Tem `aria-label` com o resumo.
 - **Faixa de certeza** em Atores (`#certStrip`): um quadrado por perfil, mesma regra do selo (`isHyp` em `ui.ts`, usada no cartão, no detalhe e na faixa).
 - **Sem ornamento sem dado:** a régua de tracinhos dos cabeçalhos e os rótulos de cabeçalho que não diziam grau de certeza foram removidos. Ficam só "Versão preliminar" (Cenários) e "Matriz em atualização" (Riscos).
 - **Ritmo:** escala de espaço irregular em `:root` (`--s-1..--s-6`: 6, 12, 20, 34, 56, 92). Blocos densos usam `.tight`, respiros usam `.breath` em `.section-title`. Temas transversais são lista (tipo | tema | explicação), não grade de 3 cartões.
-- **Forma:** raio único 4px (`--rb`), painéis 3px, sem pílulas, sem sombra (inclui foco de campo e a arte da Uly). Borda de campo `--edge` (3,6:1 sobre o papel).
+- **Forma:** sem sombra e sem gradiente decorativo. A única textura é a hachura (`--hatch`), que significa incerteza: cenários e perfis não confirmados ficam em caixa tracejada hachurada; letras A/B/C são vazadas. Caixa cheia de 2px = documentado. Borda de campo `--edge`.
 - **Foco:** azul `#0a2a6e` sobre papel (11:1), branco sobre sidebar e hero. O laranja dava 2,7:1 e reprovava 3:1; não usar laranja como foco.
 - **Movimento:** troca de tela é fade de 160 ms; nada de quique, overshoot ou loop. Uly sem animação contínua; toque no balão o dispensa. `prefers-reduced-motion` desliga tudo, inclusive a rolagem suave (`motion()` em `ui.ts`).
 - **Celular (≤760px):** alvos de 44px, tabela de riscos vira lista rotulada (`data-l` nas células), `.content` mantém 170px de folga para a Uly, régua escalona rótulos.
-- **Tipografia (avaliada em 23/11/2026):** mantido Newsreader + IBM Plex. Testados Source Serif 4 (mais larga e neutra, soa manual técnico) e Literata (pesada, soa livro digital); nenhuma é mais própria que Newsreader, e trocar de serifada de catálogo seria outro clichê. O que dá identidade é o selo, o radar e a régua, não o par de fontes. Plex Mono a 11,5–12px mantém "0" e "O" distintos (importa em "D0", "D100").
+- **Tipografia:** o par Newsreader + Plex foi trocado na v3 (ver acima). Ao mexer, testar numerais e a legibilidade de Archivo Narrow em 14px (rótulos) e 15px (menu).
 
 ## Revisão "honest-eye" (23/11/2026)
 Veredicto: **MISTO, com base autoral**. Radar, sistema de selos, fonte em cada afirmação e a mascote não são de template. O que ainda lembrava saída de IA e foi mexido:
