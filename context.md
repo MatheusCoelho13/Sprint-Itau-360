@@ -4,7 +4,7 @@ Trabalho de sprint (faculdade, IDP). Site de inteligência política: o que o go
 
 ## Stack e como rodar
 - Vite 5 + TypeScript, sem framework. HTML estático em `index.html`, telas montadas por template string em `src/ui.ts`.
-- Supabase (auth + tabelas `actors`, `analyses`, schema em `supabase/schema.sql`). Variáveis do `.env`: `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` (a anon legada ainda serve de reserva, com aviso). Sem `.env` o site funciona só com o conteúdo base de `src/data.ts` (aviso no console, normal).
+- Supabase (auth + tabelas `actors`, `analyses`, migrations em `supabase/migrations/` (`npx supabase db push`)). Variáveis do `.env`: `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` (a anon legada ainda serve de reserva, com aviso). Sem `.env` o site funciona só com o conteúdo base de `src/data.ts` (aviso no console, normal).
 - `npm run dev` (desenvolvimento) · `npm run build` (tsc + vite build) · `npx vite preview`.
 - Leitura é pública (só dossiês "Publicado"). Editar exige login. Qualquer usuário autenticado edita; ainda não há papéis nem auditoria.
 

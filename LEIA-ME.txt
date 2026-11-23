@@ -1,7 +1,8 @@
 ITAÚ 360° — V2 (TypeScript + Vite + Supabase)
 
 SETUP
-1. Supabase: crie um projeto e rode supabase/schema.sql no SQL Editor.
+1. Supabase: crie um projeto e aplique as migrations: npx supabase login; npx supabase link --project-ref SEU-REF; npx supabase db push
+   (SQL em supabase/migrations/; sem CLI, cole o arquivo no SQL Editor).
 2. Authentication > Providers > Email: desative "Allow new users to sign up".
    Crie os usuários em Authentication > Users (e-mail + senha).
 3. cp .env.example .env  e preencha VITE_SUPABASE_URL e VITE_SUPABASE_PUBLISHABLE_KEY
