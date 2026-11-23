@@ -9,12 +9,13 @@ import {
   editorTab, initEditor, loadActorToForm, loadAnalysisToForm, deleteRecord, resetActorOverride,
 } from './editor'
 import { startMascot, helpContent } from './mascot'
+import { initUsers, renderUsers, ROLE_LABEL, type Role } from './users'
 import { themes } from './data'
 import type { ViewId } from './types'
 
 // ---------- autenticação (opcional: só a Área editorial exige login) ----------
 let signedIn = false
-let role: 'editor' | 'observador' | null = null // papel vem da tabela profiles; a segurança real é a RLS do banco, aqui só esconde o que não cabe
+let role: Role | null = null; let myId = '' // papel vem da tabela profiles; a segurança real é a RLS do banco, aqui só esconde o que não cabe
 let activeView: ViewId = 'home'
 let openEditorAfterLogin = false
 
@@ -24,11 +25,15 @@ const showLogin = (on: boolean) => { $('loginScreen').classList.toggle('hide', !
 /** Navega; a Área editorial pede login se ainda não houver sessão. */
 function nav(view: ViewId): void {
   if (view === 'editor' && !signedIn) return showLogin(true)
-  if (view === 'editor' && role !== 'editor') {
+  if (view === 'editor' && !canEdit()) {
     return openModal('Área editorial', '<p>Seu acesso é de <strong>observador</strong>: você lê tudo, inclusive rascunhos, mas só editores criam e alteram conteúdo.</p><p class="small">Para virar editor, peça a quem administra o projeto.</p>')
+  }
+  if (view === 'users' && role !== 'admin') {
+    return openModal('Usuários e acesso', '<p>Só <strong>admin</strong> gerencia usuários e papéis.</p>')
   }
   activeView = view
   go(view)
+  if (view === 'users') void renderUsers(myId)
 }
 
 // dias até a posse (5/1/2027, marco do documento de cenários) ou dia do mandato
@@ -40,13 +45,17 @@ function heroClock(): void {
 }
 heroClock()
 
-const showEditorNav = () => $('navEditor').classList.toggle('hide', role !== 'editor') // só editor vê a Área editorial
+const canEdit = () => role === 'admin' || role === 'editor'
+// só quem pode editar vê a Área editorial; só admin vê Usuários
+const showEditorNav = () => { $('navEditor').classList.toggle('hide', !canEdit()); $('navUsers').classList.toggle('hide', role !== 'admin') }
 
 async function loadRole(): Promise<void> {
-  const { data } = await supabase.from('profiles').select('role').maybeSingle()
-  role = data?.role === 'editor' ? 'editor' : 'observador' // sem linha = trata como observador (o banco bloqueia escrita de qualquer jeito)
-  $('userRole').textContent = role === 'editor' ? 'Editor' : 'Observador'
-  $('userRole').classList.toggle('editor', role === 'editor')
+  const { data } = await supabase.from('profiles').select('user_id,role,active').eq('user_id', myId).maybeSingle()
+  // sem linha ou inativo = trata como observador (o banco bloqueia a escrita de qualquer jeito)
+  const r: Role = data?.active !== false && (data?.role === 'admin' || data?.role === 'editor') ? data.role : 'observador'
+  role = r
+  $('userRole').textContent = data?.active === false ? 'Inativo' : ROLE_LABEL[r]
+  $('userRole').className = 'role-chip ' + r
   showEditorNav()
 }
 
@@ -57,18 +66,19 @@ async function refresh(): Promise<void> {
 }
 
 let appliedEmail: string | undefined | null = null // null = ainda não aplicado
-function applySession(email: string | undefined): void {
+function applySession(email: string | undefined, id = ''): void {
   if (email === appliedEmail) return // evento repetido (ex.: voltar para a aba): nada mudou
   appliedEmail = email
+  myId = id
   signedIn = Boolean(email)
   $('userEmail').textContent = email ?? ''
   role = null; $('userRole').textContent = ''; showEditorNav()
   $('authBtn').textContent = signedIn ? 'Sair' : 'Entrar'
   showLogin(false)
   if (!signedIn) { clearCache(); $<HTMLFormElement>('loginForm').reset() }
-  if (!signedIn && activeView === 'editor') nav('home')
+  if (!signedIn && (activeView === 'editor' || activeView === 'users')) nav('home')
   void (signedIn ? loadRole() : Promise.resolve()).catch(() => {}).then(() => {
-    if (openEditorAfterLogin && role === 'editor') nav('editor')
+    if (openEditorAfterLogin && canEdit()) nav('editor')
     openEditorAfterLogin = false
     return refresh()
   })
@@ -92,7 +102,7 @@ $('authBtn').addEventListener('click', () => (signedIn ? void supabase.auth.sign
 // Dispara no carregamento (INITIAL_SESSION), no login e no logout.
 supabase.auth.onAuthStateChange((_event, session) => {
   // setTimeout: supabase-js pede para não chamar a API dentro deste callback (deadlock).
-  setTimeout(() => applySession(session?.user.email), 0)
+  setTimeout(() => applySession(session?.user.email, session?.user.id), 0)
 })
 
 // ---------- navegação ----------
@@ -143,5 +153,6 @@ $('globalSearch').addEventListener('keydown', e => {
 })
 
 initEditor()
+initUsers()
 startMascot()
 void refresh()

@@ -6,7 +6,7 @@ Trabalho de sprint (faculdade, IDP). Site de inteligência política: o que o go
 - Vite 5 + TypeScript, sem framework. HTML estático em `index.html`, telas montadas por template string em `src/ui.ts`.
 - Supabase (auth + tabelas `actors`, `analyses`, migrations em `supabase/migrations/` (`npx supabase db push --remote`; sem --remote a CLI 3.x usa o banco local)). Variáveis do `.env`: `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` (a anon legada ainda serve de reserva, com aviso). Sem `.env` o site funciona só com o conteúdo base de `src/data.ts` (aviso no console, normal).
 - `npm run dev` (desenvolvimento) · `npm run build` (tsc + vite build) · `npx vite preview`.
-- Leitura é pública (só dossiês "Publicado"). Editar exige login. Com login há dois papéis (tabela `profiles`, RLS no banco): **editor** cria/edita/apaga; **observador** só lê, inclusive rascunhos. Conta nova nasce observador; promover é `update public.profiles set role='editor' where email='...'` no SQL Editor. Sessão persiste no navegador (localStorage). Auditoria não existe.
+- Leitura é pública (só dossiês "Publicado"). Editar exige login. Com login há três papéis (tabela `profiles`, RLS e gatilhos no banco): **admin** (gerencia usuários e conteúdo), **editor** (cria/edita/apaga/importa) e **observador** (só lê, inclusive rascunhos). Conta nova nasce observador. Regras: só admin muda papel/situação; ninguém altera o próprio papel nem se desativa (sempre sobra um admin); desativar não apaga (a pessoa só lê o público); toda mudança vai para `role_audit`. Tela "Usuários e acesso" (`src/users.ts`, só admin). Primeiro admin: `update public.profiles set role='admin' where email='...'` no SQL Editor. Sessão persiste no navegador (localStorage). Auditoria não existe.
 
 ## Mapa dos arquivos
 | Arquivo | Papel |
@@ -17,7 +17,8 @@ Trabalho de sprint (faculdade, IDP). Site de inteligência política: o que o go
 | `src/data.ts` | todo o conteúdo estático: `SRC` (fontes), temas, cenários, atores, riscos |
 | `src/editor.ts` / `store.ts` | área editorial e acesso ao Supabase com cache |
 | `src/importer.ts` | importação por arquivo (.json, .csv, .xml): valida, converte e gera os modelos; a gravação no banco passa por `importData` (store) |
-| `src/mascot.ts` | Uly, a mascote-guia (poses em `public/uly/`) |
+| `src/users.ts` | tela Usuários e acesso (admin): lista, papel, ativo/inativo, matriz de permissões, auditoria |
+| `src/mascot.ts` | Uly, a mascote-guia (poses em `public/uly/`); fala dicas, dados calculados do site e curiosidades verificáveis (com a base legal na frase) |
 | `src/style.css` | todo o CSS, tokens em `:root` |
 | `legacy/index.html` | versão original em arquivo único (localStorage), só referência |
 
@@ -33,7 +34,7 @@ Sem probabilidade numérica inventada: os cenários usam "plausibilidade qualita
 - **Paleta (v3, 23/11/2026):** página branca `#fff`, tinta `#0b1220`, azul Itaú `#0a2a6e`, laranja `#ec7000` só como sinal (nº do menu, posse, topo do hero, logo). O papel creme `#f4f0e8` foi abandonado: creme + serifa + mono em caixa-alta é a cara mais comum de interface gerada. Estrutura vem de réguas de tinta (3px nas seções, 8px no topo de cada página), não de caixas de borda fina.
 - **Tipos (v3):** Archivo Narrow nos títulos e na interface (sans estreita, de jornal econômico); Source Serif 4 no texto corrido; IBM Plex Mono só para dado (datas, D0/D100, página citada). Nada de rótulo pequeno em caixa-alta com tracking. Cada título de página leva o folio grande (02–09) igual ao número do menu, via `data-n` em `.page-head`. Sem sombras, cantos retos (2px em botões/campos).
 - **O selo diz o grau de certeza:** quadrado cheio = fato; quadrado vazado = hipótese ou a verificar. Cartões de ator com hipótese têm borda tracejada. É a decisão visual mais específica do produto; não trocar por cor decorativa.
-- **Forma por tela (v4.2):** sem numeral gigante no título (o menu já numera); número grande só onde há sequência (etapas da Metodologia, "n de 6"). Metodologia = fluxo em 3 colunas; Temas = pergunta central de cada eixo; Fontes = lista compacta (públicas em 2 colunas). Coluna lateral "Sinais a monitorar" só na home (`body[data-view]`).
+- **Forma por tela (v4.2):** sem numeral gigante no título (o menu já numera); número grande só onde há sequência (etapas da Metodologia, "n de 6"). Metodologia = fluxo em 3 colunas; Temas = pergunta central de cada eixo; Fontes = lista compacta (públicas em 2 colunas). Coluna lateral "Sinais a monitorar" só na home (`body[data-tela]`).
 - **Abertura como briefing (v4):** título + índice numerado dos 5 eixos (navegação) + régua dos 100 dias, sobre fundo branco. Saíram o bloco azul, o radar (polígono regular que não representava dado) e a faixa 05/03/09/06 (contava só o próprio site).
 - **Ritmo variado de propósito:** eixos como índice numerado (`#themeGrid`), indicadores e instrumentos como lista nome | explicação, cenários e atores como cartões. Não voltar tudo para grade de cartões iguais.
 - **Uly:** arte própria do grupo, fixa no canto inferior direito (no desktop largo, ao lado da coluna lateral), fora da navegação. Balão de borda reta abre sozinho só na 1ª visita de cada tela; depois só ao clique (próxima dica). Também aparece na Ajuda. `.content` mantém 150px de folga.

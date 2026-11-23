@@ -4,7 +4,7 @@ export interface CustomSource extends Source { section?: string }
 
 export type ViewId =
   | 'home' | 'themes' | 'scenarios' | 'actors' | 'risks'
-  | 'monitor' | 'method' | 'sources' | 'editor'
+  | 'monitor' | 'method' | 'sources' | 'editor' | 'users'
 
 export interface Theme {
   id: string; n: string; title: string; desc: string

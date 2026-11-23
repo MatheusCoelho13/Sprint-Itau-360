@@ -7,7 +7,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' fill='%230a2a6e'/%3E%3Ccircle cx='24' cy='24' r='17' fill='none' stroke='%23fff' stroke-opacity='.4' stroke-width='3'/%3E%3Cpath d='M24 7A17 17 0 1 1 7 24' fill='none' stroke='%23ec7000' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
 <title>Itaú 360° | Inteligência política</title>
 </head>
-<body data-view="home">
+<body data-tela="home">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="logo-dial" viewBox="0 0 48 48"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-opacity=".35" stroke-width="2"/><path d="M24 3A21 21 0 1 1 3 24" fill="none" stroke="#ec7000" stroke-width="3.5" stroke-linecap="round"/><path d="M24 3v4M45 24h-4M24 45v-4M3 24h4" stroke="currentColor" stroke-width="2"/><text x="24" y="28.5" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-weight="600" font-size="12.5" fill="currentColor">360</text></symbol></svg>
 <div class="login-screen hide" id="loginScreen" role="dialog" aria-label="Entrar na área editorial">
  <form class="login-card" id="loginForm">
@@ -39,6 +39,7 @@
   </div>
   <div class="nav-group hide" id="navEditor"><div class="nav-label">Gestão do conteúdo</div>
    <button class="nav-btn" data-view="editor"><span class="ico">✎</span>Área editorial</button>
+   <button class="nav-btn hide" id="navUsers" data-view="users"><span class="ico">☷</span>Usuários e acesso</button>
   </div>
  </div>
  <div class="side-bottom">Versão de demonstração · documentos do Sprint IDP e fontes públicas, referência 11/11/2026.</div>
@@ -118,6 +119,28 @@
    <div class="section-title"><div><h2>Documentos internos do projeto</h2><p>Arquivos incluídos no pacote do site. Abra-os para conferir a página citada.</p></div></div><div class="panel" id="internalSources"></div>
    <div class="section-title breath"><div><h2>Fontes públicas utilizadas na atualização dos perfis</h2><p>Fontes institucionais e notícias de referência com data.</p></div></div><div class="panel" id="publicSources"></div>
    <div class="notice blue">A existência de uma fonte não significa que toda a informação dela esteja automaticamente confirmada. Em cada dossiê, a equipe deve registrar o trecho utilizado, a data de consulta e o limite da evidência.</div>
+  </section>
+
+  <section class="view" id="view-users">
+   <div class="page-head"><div><h1>Usuários e acesso</h1><p>Quem lê, quem edita e quem administra. Só admin vê esta tela; as regras abaixo valem no banco, não só aqui.</p></div></div>
+   <div class="u-summary" id="usersSummary"></div>
+   <div class="notice hide" id="userMsg" role="alert"></div>
+   <div class="filterbar"><input id="userSearch" placeholder="Buscar por e-mail…" autocomplete="off"><select id="userRoleFilter"><option value="all">Todos os papéis</option><option value="admin">Admin</option><option value="editor">Editor</option><option value="observador">Observador</option></select><select id="userStateFilter"><option value="all">Ativos e inativos</option><option value="on">Só ativos</option><option value="off">Só inativos</option></select><span class="small muted" id="userCount"></span></div>
+   <div class="panel table-wrap"><table class="data-table u-table"><thead><tr><th>Usuário</th><th>Papel</th><th>Situação</th><th>Conta criada</th></tr></thead><tbody id="userRows"></tbody></table></div>
+   <div class="u-cols">
+    <div><div class="section-title tight"><div><h2>O que cada papel pode</h2></div></div>
+     <table class="data-table matrix"><thead><tr><th></th><th>Visitante</th><th>Observador</th><th>Editor</th><th>Admin</th></tr></thead><tbody>
+      <tr><td>Ler perfis e dossiês publicados</td><td>Sim</td><td>Sim</td><td>Sim</td><td>Sim</td></tr>
+      <tr><td>Ler rascunhos</td><td class="no">—</td><td>Sim</td><td>Sim</td><td>Sim</td></tr>
+      <tr><td>Criar, editar e apagar conteúdo</td><td class="no">—</td><td class="no">—</td><td>Sim</td><td>Sim</td></tr>
+      <tr><td>Importar JSON, CSV e XML</td><td class="no">—</td><td class="no">—</td><td>Sim</td><td>Sim</td></tr>
+      <tr><td>Gerenciar usuários e papéis</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td>Sim</td></tr>
+     </tbody></table></div>
+    <div><div class="section-title tight"><div><h2>Regras de acesso</h2></div></div>
+     <ol class="u-rules"><li>Conta nova entra como <b>observador</b>.</li><li>Só <b>admin</b> muda papel e situação.</li><li>Ninguém altera o próprio papel nem se desativa; assim sempre sobra um admin.</li><li><b>Desativar não apaga</b>: a pessoa mantém a conta e passa a ver só o conteúdo público.</li><li>Toda mudança de papel ou situação é registrada abaixo.</li><li>Contas novas nascem no Supabase (Authentication &gt; Users); aqui se administra quem já existe.</li></ol></div>
+   </div>
+   <div class="section-title"><div><h2>Últimas alterações</h2><p>As dez mais recentes.</p></div></div>
+   <ul class="u-audit" id="auditList"></ul>
   </section>
 
   <section class="view" id="view-editor">

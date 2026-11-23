@@ -27,14 +27,14 @@ export const closeModal = (): void => $('modal').classList.remove('open')
 const CRUMBS: Record<ViewId, string> = {
   home: 'Visão executiva', themes: 'Temas de análise', scenarios: 'Cenários 100 dias',
   actors: 'Mapa de atores', risks: 'Riscos e oportunidades', monitor: 'Sinais e indicadores',
-  method: 'Metodologia', sources: 'Fontes e documentos', editor: 'Área editorial',
+  method: 'Metodologia', sources: 'Fontes e documentos', editor: 'Área editorial', users: 'Usuários e acesso',
 }
 export function go(view: ViewId): void {
   document.querySelectorAll<HTMLElement>('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + view))
   document.querySelectorAll<HTMLElement>('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.view === view))
   $('crumbName').textContent = CRUMBS[view] ?? view
   window.scrollTo({ top: 0, behavior: motion() })
-  document.body.dataset.view = view // a coluna lateral só aparece na home
+  document.body.dataset.tela = view // a coluna lateral só aparece na home
   sayView(view)
 }
 
