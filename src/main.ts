@@ -2,13 +2,13 @@ import './style.css'
 import { supabase, configured } from './supabase'
 import { loadAll, clearCache } from './store'
 import {
-  $, closeModal, go, renderAll, showActor, showCustomAnalysis, showScenario, showTheme,
+  $, closeModal, openModal, go, renderAll, showActor, showCustomAnalysis, showScenario, showTheme,
   renderActors, renderRisks,
 } from './ui'
 import {
   editorTab, initEditor, loadActorToForm, loadAnalysisToForm, deleteRecord, resetActorOverride,
 } from './editor'
-import { startMascot } from './mascot'
+import { startMascot, helpContent } from './mascot'
 import { themes } from './data'
 import type { ViewId } from './types'
 
@@ -46,7 +46,7 @@ function applySession(email: string | undefined): void {
   if (email === appliedEmail) return // evento repetido (ex.: voltar para a aba): nada mudou
   appliedEmail = email
   signedIn = Boolean(email)
-  $('userEmail').textContent = email ?? 'Visitante · somente leitura'
+  $('userEmail').textContent = email ?? ''
   $('authBtn').textContent = signedIn ? 'Sair' : 'Entrar'
   showLogin(false)
   if (!signedIn) { clearCache(); $<HTMLFormElement>('loginForm').reset() }
@@ -66,6 +66,7 @@ $('loginForm').addEventListener('submit', async e => {
   // sucesso: onAuthStateChange atualiza a tela; abre a área editorial que o usuário pediu
   setTimeout(() => nav('editor'), 0)
 })
+$('helpBtn').addEventListener('click', () => { const h = helpContent(); openModal(h.title, h.body) })
 $('loginCancel').addEventListener('click', () => showLogin(false))
 $('authBtn').addEventListener('click', () => (signedIn ? void supabase.auth.signOut() : showLogin(true)))
 
