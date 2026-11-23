@@ -771,3 +771,19 @@ p.import-errors{border-left:3px solid var(--orange);padding-left:10px}
 .page-head+.section-title,.page-head+.filterbar{margin-top:0}
 @media(max-width:760px){:root{--t1:36px;--t2:26px;--t3:21px}.item-row.first h3{font-size:26px!important}}
 .page-head p.kicker,.hero.front p.kicker{font:700 15px/1.2 var(--sans);letter-spacing:.9px;text-transform:uppercase;color:var(--blue);margin:0 0 14px;max-width:none}
+
+/* v6.1: coluna lateral e topo no mesmo sistema. A lateral é subordinada ao conteúdo: módulos com rótulo (H4),
+   texto de 17px e meta de 14px, como as caixas laterais de um portal. */
+.rail h2,.rail h3{font:700 var(--t4)/1.3 var(--sans)!important;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin:0 0 10px!important;padding:0;border:0}
+.rail h3{border-top:2px solid var(--ink);padding-top:14px;margin-top:28px!important}
+.rail h2{margin-bottom:14px!important}
+.rail li,.rail p{font-size:var(--tb)!important;line-height:1.45}
+.rail .r-d{font:700 var(--t4)/1.3 var(--sans);color:var(--blue);margin-bottom:2px}
+.rail .r-big b{font-size:56px;letter-spacing:-1px}
+.rail .r-big span{font-size:var(--t4)}
+.u-summary b{font-size:48px}
+/* topo */
+.date-pill{font:600 var(--t4) var(--sans);letter-spacing:0}
+.user-email{font:600 var(--t4) var(--sans)}
+.crumb{font-size:var(--t4)}
+.hero.front .hero-clock{font:600 var(--tb) var(--sans)!important}
