@@ -746,3 +746,29 @@ p.import-errors{border-left:3px solid var(--orange);padding-left:10px}
 @media(max-width:900px){.u-cols{grid-template-columns:1fr}.u-summary>div{padding-right:18px;margin-right:18px}}
 @media(max-width:760px){.u-audit li{grid-template-columns:1fr;gap:2px}.u-summary b{font-size:34px}}
 .role-chip.editor{background:var(--blue);color:#fff}
+
+/* v6: hierarquia única em todas as telas (escala de 4 níveis, como numa home de portal: o mesmo degrau
+   tem o mesmo tamanho onde quer que apareça). H1 título da página · H2 seção · H3 item · H4/kicker rótulo.
+   Única exceção: o "destaque" (primeiro item da home). */
+:root{--t1:clamp(38px,3.8vw,54px);--t2:30px;--t3:22px;--t4:14px;--tb:17px}
+.content h1,.page-head h1,.hero.front h1{font:700 var(--t1)/1.03 var(--serif)!important;letter-spacing:-.6px;max-width:none}
+.content h2,.section-title h2,.panel h2,.grid-2 h2,.detail h2,.actor-hero h2{font:700 var(--t2)/1.1 var(--serif)!important;letter-spacing:-.2px}
+.content h3,.item-row h3,.axis-card h3,.combo h3,.method-step h3,.rows h3,.scenario-card h3,.actor-card h3,.detail h3,#indicatorGrid h3,#methodTools h3,#internalSources .item-row h3,#publicSources .item-row h3{font:700 var(--t3)/1.15 var(--serif)!important;letter-spacing:-.1px}
+.item-row.first h3{font-size:28px!important;line-height:1.1!important}
+.content h4,.detail-block h4,.front-axes h2{font:700 var(--t4)/1.3 var(--sans)!important;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)}
+.front-axes h2{margin:0 0 6px!important}
+.transmit b{font:700 var(--t3)/1.15 var(--serif)}
+.axrow span{font:700 var(--t3)/1.15 var(--serif)}
+/* corpo e meta */
+.item-row p,.axis-card p,.method-step p,.combo p,.panel p,.detail p,.scenario-card p,.actor-card p{font-size:var(--tb);line-height:1.5}
+.section-title p{font:italic 400 var(--tb)/1.4 var(--text)}
+.page-head p,.hero.front p.lede{font-size:20px}
+.source-line,.small,.cert,.dayrule figcaption{font-size:var(--t4)}
+/* rótulo acima do título de toda página */
+.kicker{font:700 15px var(--sans);letter-spacing:.9px;text-transform:uppercase;color:var(--blue);margin:0 0 14px}
+.page-head .kicker{grid-column:1}
+/* mesmo respiro entre seções em todas as telas */
+.section-title,.section-title.tight,.section-title.breath{margin:var(--s-5) 0 var(--s-3)}
+.page-head+.section-title,.page-head+.filterbar{margin-top:0}
+@media(max-width:760px){:root{--t1:36px;--t2:26px;--t3:21px}.item-row.first h3{font-size:26px!important}}
+.page-head p.kicker,.hero.front p.kicker{font:700 15px/1.2 var(--sans);letter-spacing:.9px;text-transform:uppercase;color:var(--blue);margin:0 0 14px;max-width:none}
