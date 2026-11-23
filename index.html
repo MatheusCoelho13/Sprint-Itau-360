@@ -77,8 +77,8 @@
   <section class="view" id="view-themes">
    <div class="page-head"><div><h1>Temas de análise</h1><p>Cinco frentes de política pública que podem mexer com o balanço do Itaú. Cada uma diz o que investigar, por onde chega ao banco e o que ainda não se sabe.</p></div></div>
    <div class="grid grid-2" id="themeGrid"></div>
-   <div class="section-title"><div><h2>Dossiês publicados pela equipe</h2><p>Análises adicionais criadas na área editorial e liberadas para consulta.</p></div></div><div class="grid grid-2" id="customDossierGrid"></div>
-   <div class="section-title"><div><h2>Temas transversais</h2><p>Assuntos que atravessam mais de um eixo e aparecem nos materiais e protótipos.</p></div></div>
+   <div class="section-title tight"><div><h2>Dossiês publicados pela equipe</h2><p>Análises adicionais criadas na área editorial e liberadas para consulta.</p></div></div><div class="grid grid-2" id="customDossierGrid"></div>
+   <div class="section-title breath"><div><h2>Temas transversais</h2><p>Assuntos que atravessam mais de um eixo e aparecem nos materiais e protótipos.</p></div></div>
    <div class="grid grid-3" id="crossThemes"></div>
    <div id="themeDetail"></div>
   </section>
@@ -87,14 +87,14 @@
    <div class="page-head"><div><h1>Cenários para os primeiros 100 dias</h1><p>Tudo começa por uma pergunta: o pacote fiscal sai nas primeiras semanas ou não? Os três cenários partem dela e podem se combinar.</p></div><span class="badge orange">Versão preliminar · 11/11/2026</span></div>
    <div class="notice">As fontes de cenário indicam que não devem ser atribuídas probabilidades numéricas sem evidência suficiente. Por isso, esta versão apresenta plausibilidade qualitativa e sinais de confirmação, sem inventar percentuais.</div>
    <div class="grid grid-3" id="scenarioGrid"></div><div id="scenarioDetail"></div>
-   <div class="section-title"><div><h2>Combinações possíveis</h2><p>Os cenários não são mutuamente excludentes.</p></div></div>
+   <div class="section-title tight"><div><h2>Combinações possíveis</h2><p>Os cenários não são mutuamente excludentes.</p></div></div>
    <div class="combos"><div class="combo"><div class="combo-key"><span class="scn-A">A</span><i>+</i><span class="scn-C">C</span></div><div><h3>Ajuste anunciado, tramitação lenta</h3><p>O Executivo apresenta um pacote fiscal crível, mas encontra dificuldades para aprová-lo ou para avançar na regulamentação tributária. O mercado pode reconhecer a intenção, mas manter prêmio de risco elevado enquanto a execução não se materializa.</p><div class="source-line">Fonte: <a href="docs/Cenarios_Itau_100_dias_Lula4.docx">Cenários 100 dias, p. 2</a></div></div></div><div class="combo"><div class="combo-key"><span class="scn-B">B</span><i>+</i><span class="scn-C">C</span></div><div><h3>Sem ajuste, com Congresso travado</h3><p>A ausência de medidas fiscais é agravada por baixa capacidade de coordenação política. O resultado possível é maior incerteza sobre juros, tributação, prazos regulatórios e investimento.</p><div class="source-line">Fonte: <a href="docs/Cenarios_Itau_100_dias_Lula4.docx">Cenários 100 dias, p. 2</a></div></div></div></div>
   </section>
 
   <section class="view" id="view-actors">
    <div class="page-head"><div><h1>Atores e instituições</h1><p>Quem decide, quem indica e quem pode barrar. Cargo confirmado, nome cotado e hipótese aparecem separados: borda tracejada é o que ainda não é fato.</p></div></div>
    <div class="filterbar"><input id="actorSearch" placeholder="Buscar ator ou instituição…"><select id="actorFilter"><option value="all">Todos os grupos</option><option>Executivo</option><option>Legislativo</option><option>Judiciário / controle</option><option>Oposição</option></select><span class="small muted" id="actorResults"></span></div>
-   <div class="actor-grid" id="actorGrid"></div><div id="actorDetail"></div>
+   <div id="certStrip"></div><div class="actor-grid" id="actorGrid"></div><div id="actorDetail"></div>
    <div class="notice blue">Os nomes cotados em documentos de novembro não equivalem a nomeações. Perfis preservam a distinção entre cargo confirmado, nome mencionado pela imprensa e hipótese de composição de governo. Fotografias possuem crédito e link de origem; para publicação comercial ou institucional, conferir as condições de reutilização de cada imagem.</div>
   </section>
 
@@ -114,14 +114,14 @@
    <div class="grid grid-2"><div class="panel"><h2 style="margin:0 0 12px">Variáveis que definem os cenários</h2><div class="item-list" id="variablesList"></div><div class="source-line">Fonte: <a href="docs/Cenarios_Itau_100_dias_Lula4.docx">Cenários 100 dias, p. 1</a></div></div><div class="panel"><h2 style="margin:0 0 12px">Calendário de referência</h2><div class="timeline" id="timeline"></div><div class="source-line">Fonte: <a href="docs/Cenarios_Itau_100_dias_Lula4.docx">Cenários 100 dias, p. 2</a></div></div></div>
    <div class="section-title"><div><h2>Painel de indicadores por dimensão</h2><p>Indicadores propostos nos materiais do grupo; confirmar séries e metodologia antes de atribuir causalidade.</p></div></div>
    <div class="grid grid-3" id="indicatorGrid"></div>
-   <div class="section-title"><div><h2>Pontos ainda a verificar</h2><p>Itens explicitamente registrados como lacunas no documento de cenários.</p></div></div>
+   <div class="section-title breath"><div><h2>Pontos ainda a verificar</h2><p>Itens explicitamente registrados como lacunas no documento de cenários.</p></div></div>
    <div class="panel" id="pendingList"></div>
   </section>
 
   <section class="view" id="view-method">
    <div class="page-head"><div><h1>Metodologia de análise</h1><p>Seis etapas, do histórico político ao monitoramento. A regra do grupo: histórico dá contexto e não previsão, e suposição não vira fato.</p></div></div>
    <div class="panel"><h2 style="margin:0 0 5px">Fluxo analítico em seis etapas</h2><p class="muted" style="margin:0 0 10px">Esta sequência organiza os métodos e os resultados. Cada etapa produz evidências que alimentam a seguinte.</p><div id="methodSteps"></div><div class="source-line">Fonte: <a href="docs/Relatorio_Sprint_Itau_Tom_Academico_Natural.pdf">Relatório Sprint, pp. 3–5</a>.</div></div>
-   <div class="section-title"><div><h2>Instrumentos utilizados</h2><p>Ferramentas que aparecem no relatório e nos roteiros de aplicação.</p></div></div><div class="grid grid-3" id="methodTools"></div>
+   <div class="section-title breath"><div><h2>Instrumentos utilizados</h2><p>Ferramentas que aparecem no relatório e nos roteiros de aplicação.</p></div></div><div class="grid grid-3" id="methodTools"></div>
    <div class="section-title"><div><h2>O que é o dossiê analítico?</h2><p>Substitui a antiga “ficha de análise” como tela de consulta.</p></div></div>
    <div class="panel"><p style="margin-top:0">O dossiê é a página completa de uma análise já realizada. Não é um formulário para o cliente preencher. Ele reúne o raciocínio da equipe e permite que outra pessoa entenda o que está sendo analisado, de onde veio a evidência, quais métodos foram aplicados, como a decisão pode chegar ao Itaú e o que deve ser monitorado.</p><div class="detail-grid"><div class="detail-block"><h4>1 · Identificação e evidência</h4><p>Questão, recorte temporal, fato ou proposta, status, documento, trecho, página, data e fonte.</p></div><div class="detail-block"><h4>2 · Contexto e viabilidade</h4><p>Histórico, tendências, competências institucionais, atores, obstáculos, incentivos e estágio de implementação.</p></div><div class="detail-block"><h4>3 · Mecanismo de transmissão</h4><p>Sequência causal entre decisão política, mudança de regra ou condição econômica, setor/cliente afetado e exposição do Itaú.</p></div><div class="detail-block"><h4>4 · Avaliação e monitoramento</h4><p>Risco/oportunidade, cenários, probabilidade, impacto, confiança, justificativa, indicadores, sinais e próxima revisão.</p></div></div><div class="source-line">Fontes: <a href="docs/Roteiro_de_pesquisa_com_metodos.pdf">Roteiro de métodos, pp. 1–3</a> · <a href="docs/Cenarios.pdf">Construção de cenários, pp. 1–2</a> · <a href="docs/Apresentacao_intermediaria.pdf">Apresentação, p. 4</a>.</div></div>
    <div class="section-title"><div><h2>Perguntas obrigatórias em cada cenário</h2></div></div><div class="grid grid-2"><div class="panel"><ol style="padding-left:18px"><li>O que pode acontecer?</li><li>Por que isso poderia acontecer?</li><li>Qual seria o impacto para o Itaú?</li></ol></div><div class="panel"><ol start="4" style="padding-left:18px"><li>Como esse impacto chegaria ao banco?</li><li>Quais sinais permitiriam identificar o cenário antecipadamente?</li></ol></div></div>
@@ -130,7 +130,7 @@
   <section class="view" id="view-sources">
    <div class="page-head"><div><h1>Fontes e documentos</h1><p>Cada afirmação do site já traz a fonte ao lado. Aqui está o acervo completo. Ter fonte não prova nada sem conferir o trecho citado.</p></div></div>
    <div class="section-title"><div><h2>Documentos internos do projeto</h2><p>Arquivos incluídos no pacote do site. Abra-os para conferir a página citada.</p></div></div><div class="panel" id="internalSources"></div>
-   <div class="section-title"><div><h2>Fontes públicas utilizadas na atualização dos perfis</h2><p>Fontes institucionais e notícias de referência com data.</p></div></div><div class="panel" id="publicSources"></div>
+   <div class="section-title breath"><div><h2>Fontes públicas utilizadas na atualização dos perfis</h2><p>Fontes institucionais e notícias de referência com data.</p></div></div><div class="panel" id="publicSources"></div>
    <div class="notice blue">A existência de uma fonte não significa que toda a informação dela esteja automaticamente confirmada. Em cada dossiê, a equipe deve registrar o trecho utilizado, a data de consulta e o limite da evidência.</div>
   </section>
 

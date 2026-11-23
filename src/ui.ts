@@ -78,6 +78,8 @@ export function renderActors(): void {
   if (!list.length && q && document.activeElement?.id === 'actorSearch') react('triste', 'Não achei ninguém com esse nome.')
   $('actorResults').textContent = `${list.length} perfis`
   $('actorCount').textContent = String(list.length).padStart(2, '0')
+  const hip = list.filter(a => isHyp(a.status)).length
+  $('certStrip').innerHTML = list.length ? `<div class="cert"><span class="cert-sq" role="img" aria-label="${list.length - hip} perfis documentados e ${hip} ainda sem confirmação">${list.map(a => `<i class="${isHyp(a.status) ? 'hyp' : 'fact'}"></i>`).join('')}</span><span><b>${list.length - hip}</b> com cargo ou resultado documentado · <b>${hip}</b> nome cotado ou hipótese, com borda tracejada</span></div>` : ''
   $('actorGrid').innerHTML = list.map(a => {
     const hyp = isHyp(a.status)
     const tone = statusTone(a.status)

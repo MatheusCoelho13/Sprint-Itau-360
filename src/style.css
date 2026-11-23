@@ -10,6 +10,8 @@
   --sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
   --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
   --r:3px; --rb:10px;
+  /* escala de espaço irregular de propósito: blocos densos usam 3–4, respiros usam 6 */
+  --s-1:6px; --s-2:12px; --s-3:20px; --s-4:34px; --s-5:56px; --s-6:92px;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.6 var(--sans)}
@@ -58,7 +60,8 @@ button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
 .page-head h1{font:500 clamp(32px,3.4vw,46px)/1.08 var(--serif);letter-spacing:-.8px;margin:0 0 12px;color:var(--ink)}
 .page-head p{margin:0;color:var(--muted);max-width:720px;font-size:15.5px}
 .page-head .badge{margin-bottom:6px}
-.section-title{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:48px 0 16px}
+.section-title{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:var(--s-5) 0 var(--s-3)}
+.section-title.breath{margin-top:var(--s-6)}.section-title.tight{margin-top:var(--s-4)}
 .section-title h2{font:500 26px/1.2 var(--serif);letter-spacing:-.3px;margin:0}
 .section-title p{font-size:13px;color:var(--muted);margin:3px 0 0}
 .link{color:var(--blue-2);font-weight:600;text-decoration:none}.link:hover{text-decoration:underline}
@@ -351,3 +354,17 @@ button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
 .dayrule.compact .dr-track u{bottom:auto;height:16px}
 .dayrule.compact .dr-months{height:16px}
 @media(max-width:760px){.dr-mark b,.dr-now b{font-size:11px}}
+
+/* temas transversais: lista (tipo | tema | explicação), não grade de três cartões iguais */
+#crossThemes{grid-template-columns:1fr}
+#crossThemes .axis-card{display:grid;grid-template-columns:150px 250px minmax(0,1fr);gap:4px 24px;min-height:0;padding:16px 24px;align-items:baseline}
+#crossThemes .source-line{grid-column:3;margin-top:6px;padding-top:6px}
+@media(max-width:760px){#crossThemes .axis-card{grid-template-columns:1fr}#crossThemes .source-line{grid-column:1}}
+/* faixa de certeza dos perfis */
+.cert{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin:0 0 var(--s-2);font:500 12px/1.5 var(--mono);color:var(--muted)}
+.cert b{color:var(--ink)}
+.cert-sq{display:inline-flex;gap:5px}
+.cert-sq i{width:12px;height:12px;display:block}
+.cert-sq .fact{background:var(--green)}.cert-sq .hyp{border:1.5px solid var(--gold)}
+#customDossierGrid{grid-template-columns:1fr}
+#customDossierGrid .empty{text-align:left;padding:16px 24px;border:1px dashed var(--line);background:transparent}
