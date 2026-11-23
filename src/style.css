@@ -865,3 +865,4 @@ p.import-errors{border-left:3px solid var(--orange);padding-left:10px}
 .section-title .card-action{white-space:nowrap}
 .field label.show-pass{display:flex;align-items:center;gap:8px;font:400 14px var(--sans);margin-top:2px;cursor:pointer}
 .field label.show-pass input{width:auto;padding:0;border:0}
+#loginPassword,#loginEmail{font-family:var(--mono);letter-spacing:.3px}
