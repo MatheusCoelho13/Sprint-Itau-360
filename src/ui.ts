@@ -84,7 +84,7 @@ export function renderActors(): void {
   $('actorGrid').innerHTML = list.map(a => {
     const hyp = isHyp(a.status)
     const tone = statusTone(a.status)
-    return `<div class="panel actor-card clickable${hyp ? ' hyp' : ''}" data-actor="${a.id}"><img src="${esc(a.photo)}" alt="Retrato de ${esc(a.name)}" onerror="this.style.display='none'"><div><span class="badge ${tone} status">${esc(a.status)}</span><h3>${esc(a.name)}</h3><p>${esc(a.role)}</p><span class="small muted">${esc(a.group)}</span></div></div>`
+    return `<div class="panel actor-card clickable${hyp ? ' hyp' : ''}" data-actor="${a.id}"><img src="${esc(a.photo)}" alt="Retrato de ${esc(a.name)}" onerror="this.closest('.actor-card').classList.add('nophoto')"><div><span class="badge ${tone} status">${esc(a.status)}</span><h3>${esc(a.name)}</h3><p>${esc(a.role)}</p><span class="small muted">${esc(a.group)}</span></div></div>`
   }).join('') || '<div class="empty">Nenhum perfil encontrado.</div>'
 }
 
@@ -95,7 +95,7 @@ export function showActor(id: string): void {
     ? `<div class="source-line">Fontes: ${extLinks(a.sourceDetails).join(' · ')}</div>`
     : sourceLine(a.sources ?? [])
   const credit = a.photoCredit && SRC[a.photoCredit] ? link(a.photoCredit) : esc(a.photoCredit || 'Crédito não informado')
-  $('actorDetail').innerHTML = `<div class="detail"><div class="actor-hero"><img src="${esc(a.photo)}" alt="Retrato de ${esc(a.name)}" onerror="this.style.display='none'"><div><div class="eyebrow">Perfil de ator · ${esc(a.group)}</div><h2>${esc(a.name)}</h2><p><b>${esc(a.role)}</b></p><span class="badge ${statusTone(a.status)} status">${esc(a.status)}</span><p>${esc(a.bio)}</p><p>${esc(a.relevance)}</p><div class="source-line">Foto: ${credit}</div></div></div><h3>Fontes e referências do perfil</h3>${srcHtml}<div class="btn-row"><button class="btn secondary" data-go="editor">Abrir área editorial</button></div></div>`
+  $('actorDetail').innerHTML = `<div class="detail"><div class="actor-hero"><img src="${esc(a.photo)}" alt="Retrato de ${esc(a.name)}" onerror="this.closest('.actor-hero').classList.add('nophoto')"><div><div class="eyebrow">Perfil de ator · ${esc(a.group)}</div><h2>${esc(a.name)}</h2><p><b>${esc(a.role)}</b></p><span class="badge ${statusTone(a.status)} status">${esc(a.status)}</span><p>${esc(a.bio)}</p><p>${esc(a.relevance)}</p><div class="source-line">Foto: ${credit}</div></div></div><h3>Fontes e referências do perfil</h3>${srcHtml}<div class="btn-row"><button class="btn secondary" data-go="editor">Abrir área editorial</button></div></div>`
   $('actorDetail').scrollIntoView({ behavior: motion(), block: 'start' })
 }
 

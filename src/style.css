@@ -678,3 +678,7 @@ p.import-errors{border-left:3px solid var(--orange);padding-left:10px}
 .search input{height:38px;padding-top:0;padding-bottom:0}
 @media(max-width:1100px){.hero.front{grid-template-columns:1fr;gap:28px}.front-axes{border-left:0;border-top:2px solid var(--ink);padding:16px 0 0}.front-rule{margin-top:6px}}
 @media(max-width:760px){.hero.front{padding-top:18px}.hero.front p.lede{font-size:18px}.axrow span{font-size:19px}}
+
+/* v4.1: foto que não carrega não deixa coluna vazia (antes o texto caía na coluna de 84px e o nome quebrava letra por letra) */
+.actor-card.nophoto,.actor-hero.nophoto{grid-template-columns:1fr}
+.actor-card.nophoto img,.actor-hero.nophoto img{display:none}
