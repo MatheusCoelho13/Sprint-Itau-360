@@ -591,3 +591,7 @@ a{color:inherit}
 .help{display:grid;grid-template-columns:150px 1fr;gap:26px;align-items:start}.help img{width:150px;height:auto}
 .help h2{margin:0 0 10px}.help ul{padding-left:18px;font:400 17px/1.5 var(--text)}.help li{margin:6px 0}
 @media(max-width:760px){.help{grid-template-columns:1fr}.help img{width:110px}.top-actions .btn.sm{min-height:44px}}
+
+/* v3.3: um tom só nas tags (azul da marca); a diferença vem do rótulo. Texto cinza mais firme. */
+:root{--muted:#374151}
+.tag,.tag.red,.tag.green,.tag.blue,.tag.gold{--c:var(--blue)}
