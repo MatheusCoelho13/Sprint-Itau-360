@@ -596,23 +596,6 @@ a{color:inherit}
   .item-row .rowside{align-items:flex-start;text-align:left}
 }
 
-/* v3.5: em telas largas, coluna lateral com o que olhar agora, em vez de área vazia */
-.rail{display:none}
-@media(min-width:1560px){
-  .main{display:grid;grid-template-columns:minmax(0,1fr) 330px;align-content:start}
-  .topbar{grid-column:1/-1}
-  .content{grid-column:1;max-width:none;margin:0;padding-left:64px;padding-right:56px}
-  .rail{display:block;grid-column:2;position:sticky;top:54px;align-self:start;height:calc(100vh - 54px);overflow:auto;padding:28px 28px 40px 28px;border-left:2px solid var(--ink)}
-  .rail h2{font:700 30px/1.05 var(--serif);margin:0 0 18px}
-  .rail h3{font:700 19px var(--serif);margin:26px 0 8px;border-top:1px solid var(--line);padding-top:14px}
-  .rail ul{list-style:none;margin:0;padding:0}.rail li{font:400 15.5px/1.4 var(--text);margin:0 0 12px}
-  .rail .r-d{display:block;font:500 13px var(--mono);color:var(--blue);margin-bottom:2px}
-  .rail p{font:400 15.5px/1.45 var(--text);color:var(--muted);margin:0 0 10px}
-  .rail .r-note{font-style:italic}
-  .rail .r-big{display:flex;align-items:flex-end;gap:12px;margin-bottom:6px}
-  .rail .r-big b{font:700 84px/.8 var(--serif);color:var(--blue);letter-spacing:-2px}
-  .rail .r-big span{font:600 15px/1.25 var(--sans);padding-bottom:4px}
-}
 @media(max-width:760px){
   .item-row{grid-template-columns:1fr;gap:10px}
   .item-row .rowside{order:-1;flex-direction:row;flex-wrap:wrap;align-items:center;gap:4px 16px}
@@ -705,12 +688,6 @@ p.import-errors{border-left:3px solid var(--orange);padding-left:10px}
 #themeGrid .axis-num{font:700 30px/1 var(--serif);align-self:start;margin-top:4px}
 #themeGrid .axis-card .q{margin:6px 0 0;font:400 16px/1.45 var(--text);color:var(--ink)}
 #themeGrid .axis-card .q b{font:700 14px var(--sans);letter-spacing:.6px;text-transform:uppercase;color:var(--blue);margin-right:6px}
-/* coluna lateral só na home; nas outras telas o texto ganha a largura */
-@media(min-width:1560px){
-  body:not([data-tela=home]) .main{grid-template-columns:minmax(0,1fr)}
-  body:not([data-tela=home]) .rail{display:none}
-  body:not([data-tela=home]) .content{max-width:1280px;margin-inline:auto}
-}
 #themeGrid .axis-card{grid-template-areas:"n t b" "n d b" "n q b"}
 #themeGrid .axis-card .q{grid-area:q}
 @media(max-width:760px){#themeGrid .axis-card{grid-template-areas:"n t" "n d" "n q" "n b"}}
@@ -787,3 +764,103 @@ p.import-errors{border-left:3px solid var(--orange);padding-left:10px}
 .user-email{font:600 var(--t4) var(--sans)}
 .crumb{font-size:var(--t4)}
 .hero.front .hero-clock{font:600 var(--tb) var(--sans)!important}
+
+/* ============ v7: layout de portal ============
+   Estrutura de uma home de portal de notícias: faixa escura de serviços, cabeçalho com marca e busca,
+   barra de seções horizontal, coluna central estreita, manchete com lista de marcadores e módulo lateral,
+   rótulo de editoria (quadrado laranja) antes de cada seção. Marca, cores e textos são os do Itaú 360°. */
+:root{--wrap:1100px}
+.app{display:block!important;min-height:0}
+.main{display:block!important;min-width:0}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 20px}
+.content.wrap{max-width:var(--wrap);margin:0 auto;padding:26px 20px 150px}
+
+/* faixa de serviços */
+.p-util{background:#111;color:#d8dbe2}
+.p-util .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:40px}
+.p-util-note{font:500 13px/1.3 var(--sans);color:#b4bac8}
+.p-util-right{display:flex;align-items:center;gap:14px;flex:none}
+.u-link{background:none;border:0;padding:0;min-height:0;color:#fff;font:700 13px var(--sans);letter-spacing:.5px;text-transform:uppercase;cursor:pointer}
+.u-link:hover{text-decoration:underline}
+.u-cta{background:var(--orange);color:#111;border:0;border-radius:var(--rb);padding:7px 14px;min-height:0;font:800 12.5px var(--sans);letter-spacing:.5px;text-transform:uppercase;cursor:pointer}
+.u-cta:hover{background:#ff8a24}
+.p-util .user-email{color:#d8dbe2;font:600 13px var(--sans);max-width:220px}
+.p-util .role-chip{border-color:#fff;color:#fff;margin:0}
+.p-util .role-chip.admin{background:#fff;color:#111}
+.p-util .role-chip.editor{background:var(--orange);border-color:var(--orange);color:#111}
+.p-util :focus-visible{outline-color:#fff}
+
+/* cabeçalho */
+.p-head{background:#fff}
+.p-head .wrap{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:28px;padding-top:20px;padding-bottom:18px}
+.p-head .brand{padding:0}
+.p-head .brand-mark{color:var(--blue);font:800 40px/1 var(--serif);letter-spacing:-1px}
+.p-head .logo-dial{width:46px;height:46px}
+.p-head .brand-sub{font:700 12.5px/1.2 var(--sans);letter-spacing:1.2px;color:var(--muted);margin-top:8px}
+.p-head .search{width:100%;max-width:400px;justify-self:end}
+.p-head .date-pill{font:600 13px var(--sans);color:var(--muted);text-align:right;max-width:150px;line-height:1.3}
+
+/* barra de seções */
+.p-nav{background:#fff;border-top:2px solid var(--ink);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:25}
+.p-nav .wrap{display:flex;overflow-x:auto;scrollbar-width:none;padding:0 12px}
+.p-nav .wrap::-webkit-scrollbar{display:none}
+.p-nav-admin{display:contents}
+.pnav{flex:none;background:none;border:0;border-bottom:4px solid transparent;padding:14px 13px 10px;min-height:46px;color:var(--ink);font:800 13.5px/1 var(--sans);letter-spacing:.5px;text-transform:uppercase;cursor:pointer;white-space:nowrap}
+.pnav:hover{color:var(--blue)}
+.pnav.active{color:var(--blue);border-bottom-color:var(--orange)}
+
+/* rótulo de editoria: quadrado laranja antes de kicker e de título de seção */
+.page-head{border-top:0!important;border-bottom:1px solid var(--line)!important;padding:0 0 22px!important;margin:0 0 var(--s-3)!important}
+.kicker::before,.section-title h2::before,.front-axes h2::before{content:'';display:inline-block;width:11px;height:11px;background:var(--orange);margin-right:9px;vertical-align:baseline}
+.section-title h2::before{width:14px;height:14px;margin-right:12px;vertical-align:2px}
+.section-title{border-top:1px solid var(--line)!important}
+
+/* manchete da home: título, lista de marcadores e módulo lateral */
+.hero.front{grid-template-columns:minmax(0,1.75fr) minmax(280px,1fr)!important;gap:0 40px!important;border-top:0!important;padding:0!important;margin-bottom:var(--s-4)}
+.front-axes{border:0!important;padding:0!important;margin:26px 0 0!important}
+.front-axes h2{margin:0 0 12px!important}
+.front-axes ul{list-style:none;margin:0;padding:0}
+.axrow{display:block!important;position:relative;width:100%;text-align:left;border:0!important;background:none;padding:0 0 0 20px!important;margin:0 0 10px;cursor:pointer;font:500 18px/1.35 var(--text)!important;color:var(--ink)}
+.axrow::before{content:'';position:absolute;left:0;top:.52em;width:8px;height:8px;background:var(--orange)}
+.axrow:hover,.axrow:focus-visible{color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+.front-axes li:last-child .axrow{margin-bottom:0}
+.hero.front h1{margin:0 0 16px}
+
+/* módulo lateral, como caixa de portal: faixa de título escura e corpo com linhas finas */
+.rail{display:block!important;position:static!important;height:auto!important;overflow:visible!important;padding:0!important;border:1px solid var(--line)!important;align-self:start}
+.rail h2{background:#111;color:#fff!important;margin:0!important;padding:11px 16px!important;font:800 13.5px/1.2 var(--sans)!important;letter-spacing:.8px}
+.rail .rail-body{padding:16px}
+.rail h3{border-top:1px solid var(--line);padding-top:14px;margin:20px 0 8px!important}
+.rail .r-big{margin-bottom:0}
+.rail .card-action{display:inline-block;margin-top:6px}
+.front-rule{grid-column:1/-1}
+
+/* prioridades da home em duas colunas, marco no alto de cada item */
+#view-home .item-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px}
+#view-home .item-row,#view-home .item-row.first{display:flex;flex-direction:column;gap:8px;padding:18px 0;border-bottom:1px solid var(--line);grid-template-columns:none}
+#view-home .item-row .rowside{order:-1;flex-direction:row;flex-wrap:wrap;align-items:center;gap:4px 16px;text-align:left}
+#view-home .item-row.first h3{font-size:var(--t3)!important;line-height:1.15!important}
+
+@media(max-width:900px){
+  .hero.front{grid-template-columns:1fr!important}.rail{margin-top:28px}
+  #view-home .item-list{grid-template-columns:1fr}
+  .p-head .wrap{grid-template-columns:auto minmax(0,1fr)}.p-head .date-pill{display:none}
+}
+@media(max-width:760px){
+  .wrap{padding:0 14px}.content.wrap{padding:20px 14px 110px}
+  .p-util .wrap{flex-direction:column;align-items:flex-start;gap:6px;padding-top:6px;padding-bottom:8px}
+  .p-util-right{width:100%;justify-content:flex-end}
+  .p-head .wrap{grid-template-columns:1fr;gap:12px;padding-top:14px;padding-bottom:12px}
+  .p-head .search{max-width:none;justify-self:stretch}
+  .p-head .brand-mark{font-size:32px}
+}
+/* módulo lateral: conteúdo (estilos que estavam na coluna fixa antiga) */
+.rail ul{list-style:none;margin:0;padding:0}
+.rail li{margin:0 0 12px;color:var(--ink)}
+.rail p{color:var(--muted)!important;margin:0 0 10px!important}
+.rail .r-note{font-style:italic}
+.rail .r-d{display:block}
+.rail .r-big{display:flex;align-items:flex-end;gap:12px;margin:0 0 4px}
+.rail .r-big b{font:700 56px/.85 var(--serif);color:var(--blue);letter-spacing:-1px}
+.rail .r-big span{font:600 14px/1.3 var(--sans);color:var(--ink);padding-bottom:3px}
+.section-title .card-action{white-space:nowrap}

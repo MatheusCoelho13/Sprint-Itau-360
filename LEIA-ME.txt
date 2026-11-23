@@ -16,7 +16,7 @@ SETUP
 ESTRUTURA
 - supabase/seed.sql    usuários de teste (admin, editor e observador) e 2 dossiês de exemplo; só pilha local (db reset), nunca produção
 - src/importer.ts    lê .json/.csv/.xml na Área editorial (Conteúdos cadastrados > Importar); modelos para baixar na própria tela
-- index.html        shell do app + painel de login (abre ao clicar em Área editorial/Entrar)
+- index.html        shell do app (faixa de serviços, cabeçalho, barra de seções), telas e painel de login
 - src/main.ts       auth (Supabase), navegação, eventos
 - src/ui.ts         renderização das telas
 - src/editor.ts     área editorial (perfis e dossiês)

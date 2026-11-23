@@ -22,33 +22,31 @@
  </form>
 </div>
 <div class="app" id="appShell">
-<aside class="sidebar">
+<div class="p-util"><div class="wrap">
+ <span class="p-util-note">Versão de demonstração · documentos do Sprint IDP e fontes públicas, referência 11/11/2026.</span>
+ <div class="p-util-right"><button class="u-link" id="helpBtn" type="button">Ajuda</button><span id="userEmail" class="user-email"></span><span id="userRole" class="role-chip"></span><button class="u-cta" id="authBtn" type="button">Entrar</button></div>
+</div></div>
+<header class="p-head"><div class="wrap">
  <div class="brand"><div class="brand-mark" role="img" aria-label="Itaú 360°">ITAÚ<svg class="logo-dial" aria-hidden="true"><use href="#logo-dial"/></svg></div><div class="brand-sub">INTELIGÊNCIA POLÍTICA · BRASIL</div></div>
- <div class="nav-wrap">
-  <div class="nav-group"><div class="nav-label">Inteligência</div>
-   <button class="nav-btn active" data-view="home"><span class="ico">▦</span>Visão executiva</button>
-   <button class="nav-btn" data-view="themes"><span class="ico">◈</span>Temas de análise</button>
-   <button class="nav-btn" data-view="scenarios"><span class="ico">⌁</span>Cenários 100 dias</button>
-   <button class="nav-btn" data-view="actors"><span class="ico">♙</span>Mapa de atores</button>
-  </div>
-  <div class="nav-group"><div class="nav-label">Análise e monitoramento</div>
-   <button class="nav-btn" data-view="risks"><span class="ico">▤</span>Riscos e oportunidades</button>
-   <button class="nav-btn" data-view="monitor"><span class="ico">◷</span>Sinais e indicadores</button>
-   <button class="nav-btn" data-view="method"><span class="ico">⌘</span>Metodologia</button>
-   <button class="nav-btn" data-view="sources"><span class="ico">↗</span>Fontes e documentos</button>
-  </div>
-  <div class="nav-group hide" id="navEditor"><div class="nav-label">Gestão do conteúdo</div>
-   <button class="nav-btn" data-view="editor"><span class="ico">✎</span>Área editorial</button>
-   <button class="nav-btn hide" id="navUsers" data-view="users"><span class="ico">☷</span>Usuários e acesso</button>
-  </div>
- </div>
- <div class="side-bottom">Versão de demonstração · documentos do Sprint IDP e fontes públicas, referência 11/11/2026.</div>
-</aside>
+ <div class="search"><input id="globalSearch" placeholder="Buscar tema, ator ou análise…" autocomplete="off"></div>
+ <div class="date-pill">Atualização de referência · 17 nov. 2026</div>
+</div></header>
+<nav class="p-nav" aria-label="Seções do site"><div class="wrap">
+ <button class="pnav active" data-view="home">Visão executiva</button>
+ <button class="pnav" data-view="themes">Temas</button>
+ <button class="pnav" data-view="scenarios">Cenários 100 dias</button>
+ <button class="pnav" data-view="actors">Atores</button>
+ <button class="pnav" data-view="risks">Riscos e oportunidades</button>
+ <button class="pnav" data-view="monitor">Sinais</button>
+ <button class="pnav" data-view="method">Metodologia</button>
+ <button class="pnav" data-view="sources">Fontes</button>
+ <span class="p-nav-admin hide" id="navEditor"><button class="pnav" data-view="editor">Área editorial</button><button class="pnav hide" id="navUsers" data-view="users">Usuários</button></span>
+</div></nav>
+<span id="crumbName" hidden>Visão executiva</span>
 <main class="main">
- <header class="topbar"><div class="crumb">Itaú 360° <span>/</span> <strong id="crumbName">Visão executiva</strong></div><div class="top-actions"><div class="search"><input id="globalSearch" placeholder="Buscar tema, ator ou análise…" autocomplete="off"></div><button class="btn secondary sm" id="helpBtn" type="button">Ajuda</button><span id="userEmail" class="user-email"></span><span id="userRole" class="role-chip"></span><button class="btn secondary sm" id="authBtn" type="button">Entrar</button><div class="date-pill">Atualização de referência · 17 nov. 2026</div></div></header>
- <div class="content">
+ <div class="content wrap">
   <section class="view active" id="view-home">
-   <div class="hero front"><div class="front-main"><p class="kicker">Briefing para o Itaú · referência 17 nov. 2026</p><h1>O que o governo eleito pode mudar em 100 dias, e por onde isso chega ao Itaú.</h1><p class="lede">Pacote fiscal, Congresso e regulamentação tributária decidem o que chega ao funding, ao crédito e aos clientes do banco. Cada afirmação traz a fonte e diz se é fato, nome cotado ou hipótese.</p><p class="hero-clock" id="heroClock"></p></div><nav class="front-axes" aria-label="Os 5 eixos de análise"><h2>Cinco eixos de análise</h2><ol id="axisIndex"></ol></nav><div id="heroRule" class="front-rule"></div></div>
+   <div class="hero front"><div class="front-main"><p class="kicker">Briefing para o Itaú · referência 17 nov. 2026</p><h1>O que o governo eleito pode mudar em 100 dias, e por onde isso chega ao Itaú.</h1><p class="lede">Pacote fiscal, Congresso e regulamentação tributária decidem o que chega ao funding, ao crédito e aos clientes do banco. Cada afirmação traz a fonte e diz se é fato, nome cotado ou hipótese.</p><p class="hero-clock" id="heroClock"></p><nav class="front-axes" aria-label="Os 5 eixos de análise"><h2>Cinco eixos de análise</h2><ul id="axisIndex"></ul></nav></div><aside class="rail" id="rail" aria-label="Sinais a monitorar"></aside><div id="heroRule" class="front-rule"></div></div>
    <div class="section-title"><div><h2>Prioridades de acompanhamento</h2><p>Em ordem do marco mais próximo no calendário de referência. Não é ranking de gravidade: sem evidência, o grupo não atribui nota.</p></div><button class="card-action" data-go="themes">Ver todos os temas →</button></div>
    <div class="panel"><div class="item-list">
     <div class="item-row first"><div><h3>Transição da reforma tributária (CBS/IBS)</h3><p>Alíquotas, regulamentação, Split Payment e cronograma de implementação podem exigir adaptação de sistemas e alterar custos para o banco e seus clientes.</p><div class="source-line">Base: <a href="docs/Cenarios_Itau_100_dias_Lula4.docx">Cenários 100 dias, p. 1</a> · <a href="https://www12.senado.leg.br/">Senado Federal</a></div></div><div class="rowside"><span class="badge gold">Jan 2027 · começa a CBS</span><span class="tag blue">Regulatório</span></div></div>
@@ -154,7 +152,6 @@ Relatório interno, p. X | docs/arquivo.pdf"></textarea></div><div class="field"
    <div id="editorContent" class="panel hide"><div class="editor-layout"><div><h3 style="margin-top:0">Registros do editor</h3><div id="editorRecords"></div></div><div><h3 style="margin-top:0">Importar e exportar</h3><p class="muted">Importe perfis e dossiês de um arquivo <strong>JSON</strong>, <strong>CSV</strong> ou <strong>XML</strong>. Os registros são conferidos antes e só então gravados no banco compartilhado. Quem já existe com o mesmo <code>id</code> é atualizado; nada é apagado.</p><div class="btn-row"><label class="btn" for="importFile" style="cursor:pointer">Escolher arquivo</label><input id="importFile" type="file" accept=".json,.csv,.xml,application/json,text/csv,application/xml,text/xml" class="hide"><button class="btn secondary" id="exportJson" type="button">Exportar JSON</button></div><div id="importReport" class="import-report" aria-live="polite"></div><p class="small muted" style="margin-top:14px">Modelos para preencher: <a href="#" data-tpl="csv-actor">CSV de perfis</a> · <a href="#" data-tpl="csv-analysis">CSV de dossiês</a> · <a href="#" data-tpl="xml">XML</a> · <a href="#" data-tpl="json">JSON</a>. Em CSV, várias fontes na mesma célula se separam por <code>;;</code> ou quebra de linha. Sem <code>status</code>, perfil entra como "Em verificação" e dossiê como "Em elaboração".</p><p class="small muted" id="exportMessage"></p></div></div></div>
   </section>
  </div>
- <aside class="rail" id="rail" aria-label="Sinais a monitorar"></aside>
 </main>
 <div class="mascot" id="mascot"></div>
 </div>

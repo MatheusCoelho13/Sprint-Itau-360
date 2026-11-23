@@ -31,7 +31,7 @@ const CRUMBS: Record<ViewId, string> = {
 }
 export function go(view: ViewId): void {
   document.querySelectorAll<HTMLElement>('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + view))
-  document.querySelectorAll<HTMLElement>('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.view === view))
+  document.querySelectorAll<HTMLElement>('.pnav').forEach(b => b.classList.toggle('active', b.dataset.view === view))
   $('crumbName').textContent = CRUMBS[view] ?? view
   window.scrollTo({ top: 0, behavior: motion() })
   document.body.dataset.tela = view // a coluna lateral só aparece na home
@@ -148,7 +148,7 @@ function dayRule(compact: boolean): string {
 export function renderMonitor(): void {
   $('dayRule').innerHTML = dayRule(false)
   $('heroRule').innerHTML = dayRule(true)
-  $('axisIndex').innerHTML = themes.map(t => `<li><button type="button" class="axrow" data-axis="${t.id}"><b>${t.n}</b><span>${t.title}</span></button></li>`).join('')
+  $('axisIndex').innerHTML = themes.map(t => `<li><button type="button" class="axrow" data-axis="${t.id}">${t.title}</button></li>`).join('')
   $('variablesList').innerHTML = variables.map(v => `<div class="item-row"><div><h3>${v[0]}</h3><p>${v[1]}</p></div></div>`).join('')
   $('timeline').innerHTML = timeline.map(t => `<div class="timeline-item"><strong>${t[0]}</strong><p>${t[1]}</p></div>`).join('')
   $('indicatorGrid').innerHTML = indicators.map(i => `<div class="panel axis-card"><h3>${i[0]}</h3><p>${i[1]}</p></div>`).join('')
@@ -184,12 +184,12 @@ export function showCustomAnalysis(id: string): void {
 export function renderRail(): void {
   const d = Math.round((POSSE - Date.now()) / 864e5)
   const prox = timeline.slice(0, 3).map(t => `<li><span class="r-d">${t[0]}</span>${t[1].split(/[;—]/)[0].replace(/\.$/, '')}</li>`).join('')
-  $('rail').innerHTML = `<h2>Sinais a monitorar</h2>
+  $('rail').innerHTML = `<h2>Sinais a monitorar</h2><div class="rail-body">
     ${d > 0 ? `<div class="r-big"><b>${d}</b><span>dias para a posse<br>5 de janeiro de 2027</span></div>` : ''}
     <h3>Próximos marcos</h3><ul>${prox}</ul>
     <p class="r-note">Calendário preliminar, exceto a posse.</p>
     <h3>A verificar</h3><p><b>${pending.length}</b> pontos sem confirmação.</p>
-    <button class="card-action" data-go="monitor">Ver sinais e indicadores →</button>`
+    <button class="card-action" data-go="monitor">Ver sinais e indicadores →</button></div>`
 }
 
 export function renderAll(): void {
