@@ -27,7 +27,7 @@ create trigger analyses_touch before update on public.analyses for each row exec
 alter table public.actors   enable row level security;
 alter table public.analyses enable row level security;
 
--- Leitura pública (anon): perfis e só os dossiês "Publicado". O site abre sem login.
+-- Leitura pública (role `anon`, que a chave publishable também usa): perfis e só os dossiês "Publicado". O site abre sem login.
 create policy "anon read" on public.actors   for select to anon using (true);
 create policy "anon read published" on public.analyses for select to anon using (record->>'status' = 'Publicado');
 

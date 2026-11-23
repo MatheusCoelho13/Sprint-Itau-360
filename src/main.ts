@@ -57,7 +57,7 @@ function applySession(email: string | undefined): void {
 $('loginForm').addEventListener('submit', async e => {
   e.preventDefault()
   loginError('')
-  if (!configured) return loginError('Defina VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY no .env.')
+  if (!configured) return loginError('Defina VITE_SUPABASE_URL e VITE_SUPABASE_PUBLISHABLE_KEY no .env.')
   const { error } = await supabase.auth.signInWithPassword({
     email: $<HTMLInputElement>('loginEmail').value.trim(),
     password: $<HTMLInputElement>('loginPassword').value,

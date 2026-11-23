@@ -4,7 +4,10 @@ SETUP
 1. Supabase: crie um projeto e rode supabase/schema.sql no SQL Editor.
 2. Authentication > Providers > Email: desative "Allow new users to sign up".
    Crie os usuários em Authentication > Users (e-mail + senha).
-3. cp .env.example .env  e preencha VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY.
+3. cp .env.example .env  e preencha VITE_SUPABASE_URL e VITE_SUPABASE_PUBLISHABLE_KEY
+   (Project Settings > API Keys > Publishable key, formato sb_publishable_...).
+   A chave anon (JWT) é legada: ainda funciona como reserva, mas gera aviso no console.
+   Nunca ponha a secret key (sb_secret_..., antiga service_role) no front-end.
 4. npm install
 5. npm run dev      (desenvolvimento)
    npm run build    (typecheck + build em dist/)
