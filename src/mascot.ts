@@ -5,7 +5,7 @@ type Mood = 'apresentando' | 'feliz' | 'triste' | 'dormindo' | 'analisando' | 'e
 
 // Pose e dicas por tela, mostradas na janela de Ajuda.
 const VIEWS: Record<ViewId, { mood: Mood; tips: string[] }> = {
-  home: { mood: 'apresentando', tips: ['Comece pelos temas ou clique num eixo do radar.', 'Use a busca para achar atores e temas.', 'A régua mostra quantos dias faltam para a posse (5/1/2027).'] },
+  home: { mood: 'apresentando', tips: ['Comece pelos cinco eixos ao lado do título.', 'Use a busca para achar atores e temas.', 'A régua mostra quantos dias faltam para a posse (5/1/2027).'] },
   themes: { mood: 'feliz', tips: ['São 5 eixos de análise. Abra um para ver o dossiê.', 'Cada dossiê mostra como o tema chega até o Itaú.'] },
   scenarios: { mood: 'analisando', tips: ['Três cenários possíveis. Eles podem se combinar.', 'Não há porcentagem: sem evidência suficiente, o grupo não atribui número.'] },
   actors: { mood: 'apresentando', tips: ['Clique num perfil para ver trajetória e fontes.', 'Caixa tracejada com hachura é nome cotado ou hipótese; caixa cheia é documentado.'] },

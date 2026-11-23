@@ -232,7 +232,6 @@ button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
 }
 @media(max-width:760px){
   .app{display:block}
-  .hero-dial{max-width:420px;margin:0 auto}
   .sidebar{position:relative;height:auto;padding:16px 0;gap:12px}.brand{padding:0 16px}.brand-sub{display:none}
   .nav-wrap{flex-direction:row;overflow:auto;gap:0;padding:0 8px}
   .nav-group{display:flex;align-items:center;white-space:nowrap}.nav-label{display:none}
@@ -251,21 +250,6 @@ button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
 
 
 
-/* ---------- radar dos 5 eixos (assinatura visual) ---------- */
-.hero-dial{width:100%}
-.dial{display:block;width:100%;height:auto;overflow:visible}
-.dial .ring{stroke:rgba(255,255,255,.16);stroke-width:1}
-.dial .ticks{stroke:rgba(255,255,255,.4);stroke-width:1}
-.dial .shape{fill:rgba(236,112,0,.14);stroke:var(--orange);stroke-width:1.5;stroke-linejoin:round}
-.dial-center{font:300 34px var(--serif);fill:#fff;letter-spacing:-.5px}
-.axis{cursor:pointer;outline:none}
-.axis-halo{fill:rgba(236,112,0,.001);pointer-events:all;stroke:rgba(255,255,255,.0);stroke-width:1.5;transition:stroke .15s,r .15s}
-.axis-dot{fill:var(--orange);transition:fill .15s}
-.axis-n{font:600 13px var(--mono);fill:#1a1000;pointer-events:none}
-.axis-name{font:600 15.5px var(--mono);letter-spacing:.2px;fill:#d6dff3;text-transform:uppercase;transition:fill .15s}
-.axis:hover .axis-halo,.axis:focus-visible .axis-halo{stroke:#fff;r:22}
-.axis:hover .axis-name,.axis:focus-visible .axis-name{fill:#fff}
-.axis:hover .axis-dot{fill:#ff8a24}
 
 .page-head{position:relative;margin-bottom:44px}
 
@@ -367,7 +351,6 @@ button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
   .nav-btn{min-height:44px;display:flex;align-items:center}
   .nav-wrap{scrollbar-width:none}.nav-wrap::-webkit-scrollbar{display:none}
   .source-line a,.data-table td a,.link{display:inline-flex;align-items:center;min-height:44px}
-  .axis-halo{r:36px}
   .table-wrap{overflow:visible}
   .data-table thead{display:none}
   .data-table,.data-table tbody,.data-table tr,.data-table td{display:block}
@@ -466,9 +449,6 @@ a{color:inherit}
 .hero h1{font:700 clamp(46px,5.4vw,82px)/.92 var(--serif);letter-spacing:-1.2px;max-width:660px;margin:0 0 22px}
 .hero p{font:400 19px/1.5 var(--text);color:#d9e1f4;max-width:560px}
 .hero-clock{font:500 14px/1.5 var(--mono)!important;letter-spacing:0!important}
-.axis-name{font:700 19px var(--sans);letter-spacing:0;text-transform:none}
-.dial-center{font:700 46px var(--serif);letter-spacing:-1px}
-.axis-n{font-family:var(--mono)}
 
 /* faixa de números */
 .grid-4{border-top:3px solid var(--ink);border-bottom:1px solid var(--line)}
@@ -652,7 +632,7 @@ a{color:inherit}
 .mascot-name{display:block;font:700 13px var(--sans);letter-spacing:.8px;text-transform:uppercase;color:var(--blue);margin-bottom:2px}
 @keyframes uly-pop{from{transform:scale(.94)}to{transform:none}}
 .content{padding-bottom:150px}
-@media(min-width:1560px){.mascot{right:calc(330px + 20px)}}
+@media(min-width:1560px){.mascot{right:20px}}
 @media(max-width:760px){.mascot{right:6px;bottom:4px}.mascot-btn img{height:84px;max-width:120px}.mascot-bubble{max-width:200px;font-size:15px}.content{padding-bottom:110px}}
 
 /* papel do usuário (editor / observador) ao lado do e-mail */
@@ -676,3 +656,25 @@ a{color:inherit}
 .import-errors{margin:0 0 10px;padding-left:18px;font:400 15px/1.4 var(--text);color:var(--ink)}
 .import-errors li{margin:4px 0;border-left:3px solid var(--orange);padding-left:8px;list-style:none;margin-left:-18px}
 p.import-errors{border-left:3px solid var(--orange);padding-left:10px}
+
+/* v4: abertura como primeira página de briefing. Sem bloco azul, sem radar decorativo (o polígono não tinha dado)
+   e sem faixa de números que só contavam o próprio site. O que sobra carrega informação: título, eixos, régua dos 100 dias. */
+.hero.front{background:none;color:var(--ink);border-top:6px solid var(--ink);padding:24px 0 0;display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,1fr);gap:0 56px;align-items:start;overflow:visible;margin-bottom:var(--s-4)}
+.hero.front :focus-visible{outline-color:var(--blue)}
+.front .kicker{font:700 15px var(--sans);letter-spacing:.9px;text-transform:uppercase;color:var(--blue);margin:0 0 16px}
+.hero.front h1{font:700 clamp(38px,4.1vw,62px)/.96 var(--serif);letter-spacing:-1px;max-width:15em;margin:0 0 20px;color:var(--ink)}
+.hero.front p.lede{font:400 20px/1.5 var(--text);color:var(--muted);max-width:34em;margin:0}
+.hero.front .hero-clock{font:600 15px/1.4 var(--sans)!important;color:var(--blue)!important;border-top:0;padding-top:0;margin-top:20px!important;max-width:none!important}
+.front-axes{border-left:2px solid var(--ink);padding-left:28px;align-self:stretch}
+.front-axes h2{font:700 15px var(--sans)!important;letter-spacing:.9px;text-transform:uppercase;color:var(--muted);margin:0 0 6px!important}
+.front-axes ol{list-style:none;margin:0;padding:0}
+.axrow{display:grid;grid-template-columns:44px 1fr;align-items:baseline;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:none;padding:11px 0;cursor:pointer;color:var(--ink)}
+.axrow b{font:700 30px/1 var(--serif);color:var(--blue)}
+.axrow span{font:700 20px/1.15 var(--serif)}
+.axrow:hover span,.axrow:focus-visible span{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+.front-axes li:last-child .axrow{border-bottom:0}
+.front-rule{grid-column:1/-1;margin-top:32px;padding-top:22px;border-top:1px solid var(--line)}
+.front-rule .dayrule.compact{--dr-ink:var(--ink);--dr-muted:var(--muted);--dr-line:var(--ink);--dr-100:var(--orange);--dr-faint:var(--line);--dr-bg:#fff;max-width:none;margin:0}
+.search input{height:38px;padding-top:0;padding-bottom:0}
+@media(max-width:1100px){.hero.front{grid-template-columns:1fr;gap:28px}.front-axes{border-left:0;border-top:2px solid var(--ink);padding:16px 0 0}.front-rule{margin-top:6px}}
+@media(max-width:760px){.hero.front{padding-top:18px}.hero.front p.lede{font-size:18px}.axrow span{font-size:19px}}

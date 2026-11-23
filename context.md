@@ -11,7 +11,7 @@ Trabalho de sprint (faculdade, IDP). Site de inteligência política: o que o go
 ## Mapa dos arquivos
 | Arquivo | Papel |
 |---|---|
-| `index.html` | casca, login, sidebar, as 9 telas (`#view-*`), radar SVG do hero |
+| `index.html` | casca, login, sidebar, as 9 telas (`#view-*`), abertura (título, índice dos 5 eixos, régua) |
 | `src/main.ts` | auth, navegação, eventos, relógio da posse (`heroClock`) |
 | `src/ui.ts` | renderização de temas, cenários, atores, riscos, modal de dossiê |
 | `src/data.ts` | todo o conteúdo estático: `SRC` (fontes), temas, cenários, atores, riscos |
@@ -33,7 +33,7 @@ Sem probabilidade numérica inventada: os cenários usam "plausibilidade qualita
 - **Paleta (v3, 23/11/2026):** página branca `#fff`, tinta `#0b1220`, azul Itaú `#0a2a6e`, laranja `#ec7000` só como sinal (nº do menu, posse, topo do hero, logo). O papel creme `#f4f0e8` foi abandonado: creme + serifa + mono em caixa-alta é a cara mais comum de interface gerada. Estrutura vem de réguas de tinta (3px nas seções, 8px no topo de cada página), não de caixas de borda fina.
 - **Tipos (v3):** Archivo Narrow nos títulos e na interface (sans estreita, de jornal econômico); Source Serif 4 no texto corrido; IBM Plex Mono só para dado (datas, D0/D100, página citada). Nada de rótulo pequeno em caixa-alta com tracking. Cada título de página leva o folio grande (02–09) igual ao número do menu, via `data-n` em `.page-head`. Sem sombras, cantos retos (2px em botões/campos).
 - **O selo diz o grau de certeza:** quadrado cheio = fato; quadrado vazado = hipótese ou a verificar. Cartões de ator com hipótese têm borda tracejada. É a decisão visual mais específica do produto; não trocar por cor decorativa.
-- **Radar dos 5 eixos** no hero é navegação (cada eixo abre um tema). O polígono é regular de propósito, não representa dado. Sem animação de varredura.
+- **Abertura como briefing (v4):** título + índice numerado dos 5 eixos (navegação) + régua dos 100 dias, sobre fundo branco. Saíram o bloco azul, o radar (polígono regular que não representava dado) e a faixa 05/03/09/06 (contava só o próprio site).
 - **Ritmo variado de propósito:** eixos como índice numerado (`#themeGrid`), indicadores e instrumentos como lista nome | explicação, cenários e atores como cartões. Não voltar tudo para grade de cartões iguais.
 - **Uly:** arte própria do grupo, fixa no canto inferior direito (no desktop largo, ao lado da coluna lateral), fora da navegação. Balão de borda reta abre sozinho só na 1ª visita de cada tela; depois só ao clique (próxima dica). Também aparece na Ajuda. `.content` mantém 150px de folga.
 - Cabeçalhos de página sem "eyebrow": o breadcrumb do topo já diz onde o leitor está.

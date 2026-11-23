@@ -79,7 +79,6 @@ export function renderActors(): void {
   // só reage enquanto a pessoa digita (recarregar dados também chama renderActors)
   if (!list.length && q && document.activeElement?.id === 'actorSearch') react('triste', 'Não achei ninguém com esse nome.')
   $('actorResults').textContent = `${list.length} perfis`
-  $('actorCount').textContent = String(list.length).padStart(2, '0')
   const hip = list.filter(a => isHyp(a.status)).length
   $('certStrip').innerHTML = list.length ? `<div class="cert"><span class="cert-sq" role="img" aria-label="${list.length - hip} perfis documentados e ${hip} ainda sem confirmação">${list.map(a => `<i class="${isHyp(a.status) ? 'hyp' : 'fact'}"></i>`).join('')}</span><span><b>${list.length - hip}</b> com cargo ou resultado documentado · <b>${hip}</b> nome cotado ou hipótese, com borda tracejada</span></div>` : ''
   $('actorGrid').innerHTML = list.map(a => {
@@ -148,6 +147,7 @@ function dayRule(compact: boolean): string {
 export function renderMonitor(): void {
   $('dayRule').innerHTML = dayRule(false)
   $('heroRule').innerHTML = dayRule(true)
+  $('axisIndex').innerHTML = themes.map(t => `<li><button type="button" class="axrow" data-axis="${t.id}"><b>${t.n}</b><span>${t.title}</span></button></li>`).join('')
   $('variablesList').innerHTML = variables.map(v => `<div class="item-row"><div><h3>${v[0]}</h3><p>${v[1]}</p></div></div>`).join('')
   $('timeline').innerHTML = timeline.map(t => `<div class="timeline-item"><strong>${t[0]}</strong><p>${t[1]}</p></div>`).join('')
   $('indicatorGrid').innerHTML = indicators.map(i => `<div class="panel axis-card"><h3>${i[0]}</h3><p>${i[1]}</p></div>`).join('')
