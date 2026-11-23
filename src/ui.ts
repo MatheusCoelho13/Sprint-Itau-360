@@ -179,6 +179,18 @@ export function showCustomAnalysis(id: string): void {
   openModal('Dossiê analítico', `<div class="eyebrow">${esc(d.theme)} · ${esc(d.status)}</div><h2>${esc(d.title)}</h2><p><b>Pergunta analítica</b><br>${esc(d.question)}</p>${customSourcesHtml(d, 'contexto')}<h3>Contexto e evidências</h3><p>${esc(d.evidence)}</p>${customSourcesHtml(d, 'evidências')}<h3>Viabilidade institucional e atores</h3><p>${esc(d.actors)}</p>${customSourcesHtml(d, 'atores')}<h3>Transmissão dos impactos</h3><p>${esc(d.transmission)}</p>${customSourcesHtml(d, 'impactos')}<h3>Impactos diretos e indiretos para o Itaú</h3><p>${esc(d.impact)}</p>${customSourcesHtml(d, 'impacto')}<h3>Cenários, riscos e oportunidades</h3><p>${esc(d.scenarios)}</p>${customSourcesHtml(d, 'cenários')}<h3>Sinais e indicadores</h3><p>${esc(d.signals)}</p>${customSourcesHtml(d, 'sinais')}<h3>Avaliação e justificativa</h3><p>${esc(d.assessment)}</p>${customSourcesHtml(d, 'avaliação')}<p class="small muted">Responsável: ${esc(d.author || 'Não informado')} · Revisão: ${esc(d.review || 'Não definida')} · Atualizado: ${esc(d.updated)}</p>`)
 }
 
+// coluna lateral das telas largas: o que olhar agora (dados já existentes em data.ts)
+export function renderRail(): void {
+  const d = Math.round((POSSE - Date.now()) / 864e5)
+  const prox = timeline.slice(0, 3).map(t => `<li><span class="r-d">${t[0]}</span>${t[1].split(/[;—]/)[0].replace(/\.$/, '')}</li>`).join('')
+  $('rail').innerHTML = `<h2>Sinais a monitorar</h2>
+    ${d > 0 ? `<div class="r-big"><b>${d}</b><span>dias para a posse<br>5 de janeiro de 2027</span></div>` : ''}
+    <h3>Próximos marcos</h3><ul>${prox}</ul>
+    <p class="r-note">Calendário preliminar, exceto a posse.</p>
+    <h3>A verificar</h3><p><b>${pending.length}</b> pontos sem confirmação.</p>
+    <button class="card-action" data-go="monitor">Ver sinais e indicadores →</button>`
+}
+
 export function renderAll(): void {
-  renderThemes(); renderScenarios(); renderActors(); renderRisks(); renderMonitor(); renderMethod(); renderSources()
+  renderRail(); renderThemes(); renderScenarios(); renderActors(); renderRisks(); renderMonitor(); renderMethod(); renderSources()
 }

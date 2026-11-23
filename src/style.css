@@ -595,3 +595,41 @@ a{color:inherit}
 /* v3.3: um tom só nas tags (azul da marca); a diferença vem do rótulo. Texto cinza mais firme. */
 :root{--muted:#374151}
 .tag,.tag.red,.tag.green,.tag.blue,.tag.gold{--c:var(--blue)}
+
+/* v3.4: prioridades por marco do calendário; transmissão em etapas com exemplo real */
+.item-row .rowside{display:flex;flex-direction:column;align-items:flex-end;gap:8px;text-align:right}
+.item-row.first h3{font-size:34px!important;line-height:1}
+.item-row.first{padding-top:18px}
+.transmit{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.transmit li{position:relative;padding:30px 22px 6px 0;display:flex;flex-direction:column;gap:6px}
+.transmit li::before{content:'';position:absolute;top:6px;left:0;right:0;height:3px;background:var(--ink)}
+.transmit li:last-child::before{right:22px}
+.transmit li::after{content:'';position:absolute;top:0;left:0;width:15px;height:15px;border:3px solid var(--ink);background:#fff;box-sizing:border-box}
+.transmit li:last-child::after{content:'';left:auto;right:22px;top:0;width:15px;height:15px;transform:none;background:var(--ink)}
+.transmit .t-n{font:700 15px var(--sans);color:var(--blue)}
+.transmit b{font:700 23px/1.1 var(--serif)}
+.transmit em{font:italic 400 15.5px/1.4 var(--text);color:var(--muted)}
+@media(max-width:760px){
+  .transmit{grid-template-columns:1fr;border-left:3px solid var(--ink);margin-left:6px}
+  .transmit li{padding:0 0 20px 22px}.transmit li::before{display:none}
+  .transmit li::after,.transmit li:last-child::after{left:-9px;right:auto;top:2px}
+  .item-row .rowside{align-items:flex-start;text-align:left}
+}
+
+/* v3.5: em telas largas, coluna lateral com o que olhar agora, em vez de área vazia */
+.rail{display:none}
+@media(min-width:1560px){
+  .main{display:grid;grid-template-columns:minmax(0,1fr) 330px;align-content:start}
+  .topbar{grid-column:1/-1}
+  .content{grid-column:1;max-width:none;margin:0;padding-left:64px;padding-right:56px}
+  .rail{display:block;grid-column:2;position:sticky;top:54px;align-self:start;height:calc(100vh - 54px);overflow:auto;padding:28px 28px 40px 28px;border-left:2px solid var(--ink)}
+  .rail h2{font:700 30px/1.05 var(--serif);margin:0 0 18px}
+  .rail h3{font:700 19px var(--serif);margin:26px 0 8px;border-top:1px solid var(--line);padding-top:14px}
+  .rail ul{list-style:none;margin:0;padding:0}.rail li{font:400 15.5px/1.4 var(--text);margin:0 0 12px}
+  .rail .r-d{display:block;font:500 13px var(--mono);color:var(--blue);margin-bottom:2px}
+  .rail p{font:400 15.5px/1.45 var(--text);color:var(--muted);margin:0 0 10px}
+  .rail .r-note{font-style:italic}
+  .rail .r-big{display:flex;align-items:flex-end;gap:12px;margin-bottom:6px}
+  .rail .r-big b{font:700 84px/.8 var(--serif);color:var(--blue);letter-spacing:-2px}
+  .rail .r-big span{font:600 15px/1.25 var(--sans);padding-bottom:4px}
+}
