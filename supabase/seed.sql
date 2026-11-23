@@ -1,18 +1,20 @@
 -- Dados de desenvolvimento LOCAL. Rodam em `npx supabase db reset` (pilha local no Docker), depois das migrations.
 -- NUNCA aplique em produção: as senhas abaixo são de teste e estão neste arquivo. `db push --remote` não executa o seed.
 --
---   admin       admin@itau360.test         senha: Itau360-Admin-local   papel: editor (escreve)
+--   admin       admin@itau360.test         senha: Itau360-Admin-local   papel: admin (gerencia usuários e conteúdo)
+--   editor      editor@itau360.test        senha: Itau360-Editor-local  papel: editor (escreve conteúdo)
 --   observador  observador@itau360.test    senha: Itau360-Observa-local papel: observador (só lê)
 --
 -- Também entram dois dossiês de exemplo (um Publicado e um rascunho) para ver a diferença entre
--- visitante (só o publicado), observador e editor (ambos veem o rascunho). Texto de exemplo, sem fato real.
+-- visitante (só o publicado), observador, editor e admin (veem o rascunho). Texto de exemplo, sem fato real.
 
 do $$
 declare
   u record;
 begin
   for u in select * from (values
-    ('00000000-0000-4000-8000-0000000000a1'::uuid, 'admin@itau360.test',      'Itau360-Admin-local',   'editor'),
+    ('00000000-0000-4000-8000-0000000000a1'::uuid, 'admin@itau360.test',      'Itau360-Admin-local',   'admin'),
+    ('00000000-0000-4000-8000-0000000000c3'::uuid, 'editor@itau360.test',     'Itau360-Editor-local',  'editor'),
     ('00000000-0000-4000-8000-0000000000b2'::uuid, 'observador@itau360.test', 'Itau360-Observa-local', 'observador')
   ) as t(id, email, senha, papel)
   loop
