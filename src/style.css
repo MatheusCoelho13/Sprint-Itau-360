@@ -91,6 +91,9 @@ button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
 .badge::before{content:'';width:7px;height:7px;background:var(--c);flex:none}
 .badge.orange,.badge.gold{--c:var(--gold)}.badge.green{--c:var(--green)}.badge.red{--c:var(--red)}.badge.blue{--c:var(--blue-2)}
 .badge.status{font-size:10px;white-space:normal}
+/* categoria (tipo de efeito, área): texto, sem quadrado. O quadrado é só do grau de certeza. */
+.tag{--c:var(--muted);font:500 11px/1.3 var(--mono);letter-spacing:.4px;text-transform:uppercase;color:var(--c);align-self:start}
+.tag.red{--c:var(--red)}.tag.green{--c:var(--green)}.tag.blue{--c:var(--blue-2)}.tag.gold{--c:var(--gold)}
 
 /* ---------- listas ---------- */
 .item-list{display:flex;flex-direction:column}
@@ -281,7 +284,7 @@ button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
 
 /* letra do cenário */
 .scn-letter{font:300 92px/.8 var(--serif);margin-bottom:4px;opacity:.28}
-.scn-A{color:var(--green)}.scn-B{color:var(--red)}.scn-C{color:var(--gold)}
+.scn-A,.scn-B,.scn-C{color:var(--blue)} /* A, B e C são hipóteses: diferem pela letra, não pela cor */
 
 /* ---------- decisões próprias do produto ---------- */
 /* o quadrado do selo é a legenda de certeza: cheio = fato documentado, vazado = hipótese ou a verificar */
