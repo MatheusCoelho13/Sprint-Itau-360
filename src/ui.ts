@@ -34,6 +34,7 @@ export function go(view: ViewId): void {
   document.querySelectorAll<HTMLElement>('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.view === view))
   $('crumbName').textContent = CRUMBS[view] ?? view
   window.scrollTo({ top: 0, behavior: motion() })
+  document.body.dataset.view = view // a coluna lateral só aparece na home
   sayView(view)
 }
 
@@ -46,7 +47,7 @@ const publishedAnalyses = () => getAnalyses().filter(d => d.status === 'Publicad
 
 // ---------- temas ----------
 export function renderThemes(): void {
-  $('themeGrid').innerHTML = themes.map(t => `<div class="panel axis-card"><div class="axis-num">${t.n}</div><h3>${t.title}</h3><p>${t.desc}</p><button data-theme="${t.id}">Abrir dossiê temático →</button></div>`).join('')
+  $('themeGrid').innerHTML = themes.map(t => `<div class="panel axis-card"><div class="axis-num">${t.n}</div><h3>${t.title}</h3><p>${t.desc}</p><p class="q"><b>Pergunta central:</b> ${t.questions[0]}</p><button data-theme="${t.id}">Abrir dossiê temático →</button></div>`).join('')
   $('crossThemes').innerHTML = cross.map(t => `<div class="panel axis-card"><span class="tag ${t.type.includes('Oportunidade') ? 'green' : t.type === 'Risco' ? 'red' : 'blue'}">${t.type}</span><h3>${t.title}</h3><p>${t.desc}</p>${sourceLine(t.src)}</div>`).join('')
   $('customDossierGrid').innerHTML = publishedAnalyses().map(d => `<div class="panel axis-card"><span class="tag green">Publicado · ${esc(d.theme)}</span><h3>${esc(d.title)}</h3><p>${esc(d.question)}</p><button data-custom-analysis="${d.id}">Abrir dossiê →</button></div>`).join('')
     || '<div class="panel empty">Nenhum dossiê novo publicado pela equipe até o momento.</div>'
@@ -164,7 +165,7 @@ export function renderMethod(): void {
 
 export function renderSources(): void {
   $('internalSources').innerHTML = internalDocs.map(d => `<div class="item-row"><div><h3>${d[0]}</h3><p>${d[1]}</p></div><a class="link" href="${d[2]}" target="_blank">Abrir documento ↗</a></div>`).join('')
-  $('publicSources').innerHTML = publicDocs.map(k => `<div class="item-row"><div><h3>${SRC[k].label}</h3><p class="small muted">Fonte pública vinculada a perfis, decisões ou pontos de verificação.</p></div><a class="link" href="${SRC[k].url}" target="_blank" rel="noopener">Abrir fonte ↗</a></div>`).join('')
+  $('publicSources').innerHTML = publicDocs.map(k => `<div class="item-row"><div><h3>${SRC[k].label}</h3></div><a class="link" href="${SRC[k].url}" target="_blank" rel="noopener">Abrir fonte ↗</a></div>`).join('')
 }
 
 // ---------- dossiê criado no editor ----------

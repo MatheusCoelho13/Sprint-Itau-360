@@ -682,3 +682,36 @@ p.import-errors{border-left:3px solid var(--orange);padding-left:10px}
 /* v4.1: foto que não carrega não deixa coluna vazia (antes o texto caía na coluna de 84px e o nome quebrava letra por letra) */
 .actor-card.nophoto,.actor-hero.nophoto{grid-template-columns:1fr}
 .actor-card.nophoto img,.actor-hero.nophoto img{display:none}
+
+/* v4.2: cada tela com uma forma própria; número grande só onde a ordem importa */
+/* títulos de página sem o numeral gigante (o menu já numera); texto de apoio maior */
+.page-head{grid-template-columns:minmax(0,1fr)}
+.page-head::before{display:none}
+.page-head .badge{grid-column:1}
+.page-head p{font-size:21px;line-height:1.5;max-width:46em}
+@media(max-width:760px){.page-head p{font-size:18px}}
+/* metodologia: seis etapas em sequência, lado a lado */
+#methodSteps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 36px}
+#methodSteps .method-step{display:block;border:0;border-top:3px solid var(--ink);padding:14px 0 28px}
+#methodSteps .step-number{font:700 18px/1 var(--sans);color:var(--blue);margin-bottom:8px}
+#methodSteps .step-number::after{content:' de 6';font-weight:500;color:var(--muted)}
+@media(max-width:900px){#methodSteps{grid-template-columns:1fr}}
+/* fontes: lista compacta; as públicas em duas colunas */
+#internalSources .item-row,#publicSources .item-row{padding:10px 0}
+#internalSources .item-row h3,#publicSources .item-row h3{font-size:20px!important}
+#internalSources .item-row p{font-size:15px}
+#publicSources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:40px}
+@media(max-width:900px){#publicSources{grid-template-columns:1fr}}
+/* temas: número pequeno e a pergunta central de cada eixo */
+#themeGrid .axis-num{font:700 30px/1 var(--serif);align-self:start;margin-top:4px}
+#themeGrid .axis-card .q{margin:6px 0 0;font:400 16px/1.45 var(--text);color:var(--ink)}
+#themeGrid .axis-card .q b{font:700 14px var(--sans);letter-spacing:.6px;text-transform:uppercase;color:var(--blue);margin-right:6px}
+/* coluna lateral só na home; nas outras telas o texto ganha a largura */
+@media(min-width:1560px){
+  body:not([data-view=home]) .main{grid-template-columns:minmax(0,1fr)}
+  body:not([data-view=home]) .rail{display:none}
+  body:not([data-view=home]) .content{max-width:1280px;margin-inline:auto}
+}
+#themeGrid .axis-card{grid-template-areas:"n t b" "n d b" "n q b"}
+#themeGrid .axis-card .q{grid-area:q}
+@media(max-width:760px){#themeGrid .axis-card{grid-template-areas:"n t" "n d" "n q" "n b"}}
