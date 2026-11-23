@@ -110,7 +110,40 @@ export function renderRisks(): void {
 }
 
 // ---------- monitoramento / método / fontes (conteúdo estático) ----------
+// ---------- régua dos 100 dias, ancorada na posse (5/1/2027) ----------
+// Datas dos itens de `timeline` (data.ts). Só a posse é fato; o resto é calendário preliminar.
+const POSSE = Date.UTC(2027, 0, 5)
+const dia = (y: number, m: number, d: number) => Math.round((Date.UTC(y, m, d) - POSSE) / 864e5)
+const R0 = dia(2026, 10, 1) - 1, R1 = 106 // intervalo mostrado: 1/11/2026 .. ~D+106
+const pos = (d: number) => `${(Math.max(R0, Math.min(R1, d)) - R0) / (R1 - R0) * 100}%`
+const SPANS: [string, number, number][] = [
+  ['nov–dez', dia(2026, 10, 1), dia(2026, 11, 31)],
+  ['jan', dia(2027, 0, 1), dia(2027, 0, 31)],
+  ['fev–mar', dia(2027, 1, 1), dia(2027, 2, 31)],
+]
+const MESES: [string, number][] = [['nov', dia(2026, 10, 1)], ['dez', dia(2026, 11, 1)], ['jan', dia(2027, 0, 1)], ['fev', dia(2027, 1, 1)], ['mar', dia(2027, 2, 1)], ['abr', dia(2027, 3, 1)]]
+
+function dayRule(compact: boolean): string {
+  const hoje = Math.round((Date.now() - POSSE) / 864e5)
+  const aviso = hoje < R0 ? '' : hoje > R1 ? '' : `<i class="dr-now" style="left:${pos(hoje)}"><b>hoje · D${hoje < 0 ? '−' + -hoje : '+' + hoje}</b></i>`
+  const desc = 'Régua do calendário: posse em 5 de janeiro de 2027 (dia 0), balanço dos 100 dias por volta de 15 de abril de 2027. Novembro e dezembro de 2026 antes da posse; fevereiro e março de 2027 com tramitação das medidas.'
+  return `<figure class="dayrule${compact ? ' compact' : ''}" role="img" aria-label="${desc}">
+    <div class="dr-track">
+      <span class="dr-100" style="left:${pos(0)};width:calc(${pos(100)} - ${pos(0)})"></span>
+      ${compact ? '' : SPANS.map(([l, a, b]) => `<span class="dr-span" style="left:${pos(a)};width:calc(${pos(b)} - ${pos(a)})"><em>${l}</em></span>`).join('')}
+      ${MESES.map(([, d]) => `<u style="left:${pos(d)}"></u>`).join('')}
+      <i class="dr-mark dr-posse" style="left:${pos(0)}"><b>D0 · posse<br>5 jan 2027</b></i>
+      <i class="dr-mark dr-d100" style="left:${pos(100)}"><b>D100 · balanço<br>~15 abr</b></i>
+      ${aviso}
+    </div>
+    <div class="dr-months" aria-hidden="true">${MESES.map(([l, d]) => `<span style="left:${pos(d)}">${l}</span>`).join('')}</div>
+    ${compact ? '' : '<figcaption><span class="badge">Posse: fato documentado</span> <span class="badge gold">Demais marcos: calendário preliminar, a confirmar</span></figcaption>'}
+  </figure>`
+}
+
 export function renderMonitor(): void {
+  $('dayRule').innerHTML = dayRule(false)
+  $('heroRule').innerHTML = dayRule(true)
   $('variablesList').innerHTML = variables.map(v => `<div class="item-row"><div><h3>${v[0]}</h3><p>${v[1]}</p></div></div>`).join('')
   $('timeline').innerHTML = timeline.map(t => `<div class="timeline-item"><strong>${t[0]}</strong><p>${t[1]}</p></div>`).join('')
   $('indicatorGrid').innerHTML = indicators.map(i => `<div class="panel axis-card"><h3>${i[0]}</h3><p>${i[1]}</p></div>`).join('')

@@ -278,9 +278,7 @@ button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
 .axis:hover .axis-name,.axis:focus-visible .axis-name{fill:#fff}
 .axis:hover .axis-dot{fill:#ff8a24}
 
-/* régua de graduação sob os títulos (ecoa os graus do radar) */
 .page-head{position:relative;margin-bottom:44px}
-.page-head::after{content:'';position:absolute;left:0;right:0;bottom:-11px;height:9px;background:repeating-linear-gradient(90deg,var(--rule) 0 1px,transparent 1px 10px),repeating-linear-gradient(90deg,var(--rule) 0 1px,transparent 1px 50px);background-size:100% 5px,100% 9px;background-repeat:no-repeat;background-position:0 0,0 0;opacity:.55}
 
 /* letra do cenário */
 .scn-letter{font:300 92px/.8 var(--serif);margin-bottom:4px;opacity:.28}
@@ -329,3 +327,27 @@ button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
 .rows .panel{display:grid;grid-template-columns:240px minmax(0,1fr);gap:24px;padding:16px 24px;align-items:baseline}
 .rows h3{font:500 19px var(--serif)!important}.rows p{margin:0!important}
 @media(max-width:760px){.combo{grid-template-columns:1fr;gap:8px}.rows .panel{grid-template-columns:1fr;gap:4px}}
+
+/* ---------- régua dos 100 dias: ancorada na posse de 5/1/2027 ----------
+   Sólido = fato documentado; tracejado/vazado = calendário preliminar. Posições em % vêm de datas reais (ui.ts). */
+.dayrule{--ay:56px;--h:124px;--dr-ink:var(--ink);--dr-muted:var(--muted);--dr-line:var(--rule);--dr-100:var(--blue);--dr-faint:var(--line);--dr-bg:var(--paper);margin:0 0 56px;padding:0 6px 0 0}
+.dr-track{position:relative;height:var(--h)}
+.dr-track::before{content:'';position:absolute;left:0;right:0;top:var(--ay);height:2px;background:var(--dr-line)}
+.dr-100{position:absolute;top:calc(var(--ay) - 3px);height:8px;background:var(--dr-100)}
+.dr-span{position:absolute;top:calc(var(--ay) + 26px);height:32px;border:1.5px dashed var(--dr-muted);display:flex;align-items:center;justify-content:center;margin-left:1px}
+.dr-span em{font:500 11.5px var(--mono);font-style:normal;color:var(--dr-ink)}
+.dr-track u{position:absolute;top:calc(var(--ay) - 8px);bottom:0;width:1px;background:var(--dr-faint);text-decoration:none}
+.dr-mark,.dr-now{position:absolute;top:0;width:0;height:var(--h)}
+.dr-mark b,.dr-now b{position:absolute;top:0;left:-1px;height:calc(var(--ay) - 5px);padding-left:8px;border-left:2px solid var(--dr-ink);font:500 11.5px/1.35 var(--mono);color:var(--dr-ink);white-space:nowrap}
+.dr-now b{color:var(--dr-muted);border-color:var(--dr-muted)}
+.dr-mark::after{content:'';position:absolute;top:calc(var(--ay) - 5px);left:-6px;width:12px;height:12px}
+.dr-posse::after{background:var(--orange)}
+.dr-d100::after{background:var(--dr-bg);border:2px solid var(--dr-ink)}
+.dr-d100 b{left:auto;right:-1px;padding:0 8px 0 0;border-left:0;border-right:2px solid var(--dr-ink);text-align:right}
+.dr-months{position:relative;height:18px;margin-top:6px}
+.dr-months span{position:absolute;transform:translateX(5px);font:500 11px var(--mono);color:var(--dr-muted);text-transform:uppercase;letter-spacing:.6px}
+.dayrule figcaption{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:18px;padding-top:12px;border-top:1px dashed var(--line)}
+.dayrule.compact{--ay:44px;--h:56px;--dr-ink:#fff;--dr-muted:#b9c5e3;--dr-line:rgba(255,255,255,.45);--dr-100:var(--orange);--dr-faint:rgba(255,255,255,.28);--dr-bg:var(--blue);margin:18px 0 0;max-width:460px;padding:0 4px 0 0}
+.dayrule.compact .dr-track u{bottom:auto;height:16px}
+.dayrule.compact .dr-months{height:16px}
+@media(max-width:760px){.dr-mark b,.dr-now b{font-size:11px}}
