@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 
-const url = import.meta.env.VITE_SUPABASE_URL
+// aceita a URL colada com sufixo (ex.: .../rest/v1/): o cliente quer só a raiz do projeto
+const url = import.meta.env.VITE_SUPABASE_URL?.replace(/^(https?:\/\/[^/]+).*$/, '$1')
 // Chave nova do Supabase: publishable (sb_publishable_...). A anon (JWT) é legada e só entra como reserva.
 const publishable = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
 const key = publishable || import.meta.env.VITE_SUPABASE_ANON_KEY
