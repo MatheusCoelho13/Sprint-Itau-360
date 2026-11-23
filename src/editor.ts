@@ -4,7 +4,8 @@ import {
   exportData, importData,
 } from './store'
 import { $, esc, go, renderActors, renderRisks, renderThemes } from './ui'
-import type { Actor, Analysis, CustomSource, ExportFile, Source } from './types'
+import { parseFile, templates, type Parsed } from './importer'
+import type { Actor, Analysis, CustomSource, Source } from './types'
 
 type Field = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
 const f = (id: string) => $<Field>(id)
@@ -129,19 +130,49 @@ function exportJson(): void {
   msg('Arquivo JSON exportado.')
 }
 
-async function importJson(e: Event): Promise<void> {
+const opts = (id: string) => Array.from(document.querySelectorAll<HTMLOptionElement>(`#${id} option`)).map(o => o.value || o.text)
+let pending: Parsed | null = null
+
+/** Lê o arquivo, mostra o que será gravado (e o que foi recusado) e espera confirmação. */
+async function importFile(e: Event): Promise<void> {
   const input = e.target as HTMLInputElement
   const file = input.files?.[0]
   if (!file) return
-  try {
-    const d = JSON.parse(await file.text()) as ExportFile
-    await importData(d)
-    renderActors(); renderThemes(); renderRisks(); renderEditorRecords()
-    msg('Conteúdo importado.')
-  } catch (err) {
-    alert(err instanceof SyntaxError ? 'Arquivo JSON inválido.' : 'Erro: ' + (err as Error).message)
-  }
+  pending = parseFile(file.name, await file.text(), {
+    group: opts('aGroup'), astatus: opts('aStatus'), theme: opts('dTheme'), dstatus: opts('dStatus'), dtype: opts('dType'),
+  })
   input.value = ''
+  const { actors, analyses, errors } = pending
+  const n = actors.length + analyses.length
+  $('importReport').innerHTML =
+    `<p><strong>${actors.length}</strong> perfil(is) e <strong>${analyses.length}</strong> dossiê(s) prontos para gravar.</p>` +
+    (errors.length ? `<ul class="import-errors">${errors.map(x => `<li>${esc(x)}</li>`).join('')}</ul><p class="small">Linhas com erro não serão importadas.</p>` : '') +
+    (n ? `<div class="btn-row"><button class="btn orange" id="importGo" type="button">Gravar ${n} no banco</button><button class="btn secondary" id="importCancel" type="button">Cancelar</button></div>` : '')
+  $('importGo')?.addEventListener('click', () => void commitImport())
+  $('importCancel')?.addEventListener('click', () => { pending = null; $('importReport').innerHTML = '' })
+}
+
+async function commitImport(): Promise<void> {
+  if (!pending) return
+  const { actors, analyses } = pending
+  const btn = $<HTMLButtonElement>('importGo'); btn.disabled = true; btn.textContent = 'Gravando…'
+  try {
+    await importData({ actors, analyses })
+    renderActors(); renderThemes(); renderRisks(); renderEditorRecords()
+    $('importReport').innerHTML = `<p><strong>Gravado no banco:</strong> ${actors.length} perfil(is) e ${analyses.length} dossiê(s).</p>`
+  } catch (err) {
+    $('importReport').innerHTML = `<p class="import-errors">Erro ao gravar: ${esc((err as Error).message)}. Se a mensagem citar "row-level security", sua conta é de observador.</p>`
+  }
+  pending = null
+}
+
+function downloadTemplate(key: string): void {
+  const t = templates[key]
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(new Blob([t.body], { type: t.mime }))
+  a.download = t.file
+  a.click()
+  URL.revokeObjectURL(a.href)
 }
 
 export function initEditor(): void {
@@ -150,5 +181,9 @@ export function initEditor(): void {
   $('actorReset').onclick = actorReset
   $('analysisReset').onclick = analysisReset
   $('exportJson').onclick = exportJson
-  $('importJson').onchange = e => void importJson(e)
+  $('importFile').onchange = e => void importFile(e)
+  document.addEventListener('click', e => {
+    const t = (e.target as HTMLElement).closest<HTMLElement>('[data-tpl]')
+    if (t) { e.preventDefault(); downloadTemplate(t.dataset.tpl!) }
+  })
 }

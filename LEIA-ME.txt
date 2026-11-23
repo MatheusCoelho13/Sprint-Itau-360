@@ -14,6 +14,7 @@ SETUP
    npm run build    (typecheck + build em dist/)
 
 ESTRUTURA
+- src/importer.ts    lê .json/.csv/.xml na Área editorial (Conteúdos cadastrados > Importar); modelos para baixar na própria tela
 - index.html        shell do app + painel de login (abre ao clicar em Área editorial/Entrar)
 - src/main.ts       auth (Supabase), navegação, eventos
 - src/ui.ts         renderização das telas

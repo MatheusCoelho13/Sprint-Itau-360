@@ -16,6 +16,7 @@ Trabalho de sprint (faculdade, IDP). Site de inteligência política: o que o go
 | `src/ui.ts` | renderização de temas, cenários, atores, riscos, modal de dossiê |
 | `src/data.ts` | todo o conteúdo estático: `SRC` (fontes), temas, cenários, atores, riscos |
 | `src/editor.ts` / `store.ts` | área editorial e acesso ao Supabase com cache |
+| `src/importer.ts` | importação por arquivo (.json, .csv, .xml): valida, converte e gera os modelos; a gravação no banco passa por `importData` (store) |
 | `src/mascot.ts` | Uly, a mascote-guia (poses em `public/uly/`) |
 | `src/style.css` | todo o CSS, tokens em `:root` |
 | `legacy/index.html` | versão original em arquivo único (localStorage), só referência |
