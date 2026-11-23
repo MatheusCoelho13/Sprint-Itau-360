@@ -633,3 +633,9 @@ a{color:inherit}
   .rail .r-big b{font:700 84px/.8 var(--serif);color:var(--blue);letter-spacing:-2px}
   .rail .r-big span{font:600 15px/1.25 var(--sans);padding-bottom:4px}
 }
+@media(max-width:760px){
+  .item-row{grid-template-columns:1fr;gap:10px}
+  .item-row .rowside{order:-1;flex-direction:row;flex-wrap:wrap;align-items:center;gap:4px 16px}
+  .item-row.first h3{font-size:30px!important}
+  .section-title{flex-wrap:wrap}
+}
