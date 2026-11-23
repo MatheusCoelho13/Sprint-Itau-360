@@ -699,7 +699,6 @@ p.import-errors{border-left:3px solid var(--orange);padding-left:10px}
 /* fontes: lista compacta; as públicas em duas colunas */
 #internalSources .item-row,#publicSources .item-row{padding:10px 0}
 #internalSources .item-row h3,#publicSources .item-row h3{font-size:20px!important}
-#internalSources .item-row p{font-size:15px}
 #publicSources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:40px}
 @media(max-width:900px){#publicSources{grid-template-columns:1fr}}
 /* temas: número pequeno e a pergunta central de cada eixo */
