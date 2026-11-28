@@ -1,58 +1,49 @@
 import type { ViewId } from './types'
-import { risks, internalDocs, publicDocs } from './data'
-import { getActors } from './store'
+import type { Mood } from './ulyData'
+import type { Rec } from './content'
+import { diasAtePosse, faltam } from './data'
+import { getActors, getContent } from './store'
 
 /** Poses disponíveis em public/uly/<pose>.png. A Uly fica no canto da tela (balão com dica ao entrar numa tela nova) e também na Ajuda. */
-type Mood = 'apresentando' | 'feliz' | 'triste' | 'dormindo' | 'analisando' | 'entediada' | 'raiva' | 'medo'
 
-// Pose e dicas por tela, mostradas na janela de Ajuda.
-const VIEWS: Record<ViewId, { mood: Mood; tips: string[] }> = {
-  home: { mood: 'apresentando', tips: ['Comece pelos cinco eixos ao lado do título.', 'Use a busca para achar atores e temas.', 'A régua mostra quantos dias faltam para a posse (5/1/2027).'] },
-  themes: { mood: 'feliz', tips: ['São 5 eixos de análise. Abra um para ver o dossiê.', 'Cada dossiê mostra como o tema chega até o Itaú.'] },
-  scenarios: { mood: 'analisando', tips: ['Três cenários possíveis. Eles podem se combinar.', 'Não há porcentagem: sem evidência suficiente, o grupo não atribui número.'] },
-  actors: { mood: 'apresentando', tips: ['Clique num perfil para ver trajetória e fontes.', 'Caixa tracejada com hachura é nome cotado ou hipótese; caixa cheia é documentado.'] },
-  risks: { mood: 'medo', tips: ['Use o filtro para separar riscos de oportunidades.', 'Nota alta não é prejuízo certo: serve só para priorizar.'] },
-  monitor: { mood: 'analisando', tips: ['A régua marca a posse (fato) e os demais marcos (preliminares).', 'Os pontos a verificar estão no fim da página.'] },
-  method: { mood: 'feliz', tips: ['Seis etapas: do histórico ao monitoramento.'] },
-  sources: { mood: 'analisando', tips: ['Toda informação tem fonte.', 'Ter fonte não é prova: confira o trecho citado.'] },
-  users: { mood: 'analisando', tips: ['Aqui o admin define quem lê, quem edita e quem administra.', 'Desativar não apaga: a pessoa só passa a ver o conteúdo público.', 'Toda mudança fica registrada no fim da página.'] },
-  editor: { mood: 'feliz', tips: ['Aqui você cria e edita perfis e dossiês.', 'Tudo fica salvo no Supabase para a equipe ver.'] },
+
+// ---- falas editáveis (Área editorial > Uly): dicas, roteiro e curiosidades por tela ----
+const POSES: Mood[] = ['apresentando', 'feliz', 'triste', 'dormindo', 'analisando', 'entediada', 'raiva', 'medo']
+const pose = (p: unknown): Mood => (POSES.includes(p as Mood) ? (p as Mood) : 'apresentando')
+const fala = (l: Rec): string | null => {
+  const d = diasAtePosse()
+  if (String(l.text).includes('{dias}')) return d > 0 ? String(l.text).replace(/Faltam \{dias\} dias/, faltam(d).replace(/^f/, 'F')).replace(/\{dias\}/g, String(d)) : null
+  return String(l.text)
 }
+const doView = (v: string) => getContent<Rec>('uly').filter(l => l.view === v).sort((a, b) => Number(a.order ?? 0) - Number(b.order ?? 0))
+const VIEWS = {
+  get(v: string): { mood: Mood; tips: string[] } {
+    const dicas = doView(v).filter(l => l.kind !== 'curiosidade')
+    return { mood: pose(dicas[0]?.pose), tips: dicas.map(fala).filter((t): t is string => !!t) }
+  },
+}
+/** Fala da tela de entrada (antes do login só existe o conteúdo-base). */
+export const falaLogin = (): string => String(doView('login')[0]?.text ?? '')
 
 // ---- o que a Uly diz além das dicas ----
 // "Dado": calculado na hora a partir do que o site mostra. "Curiosidade": fato verificável fora do acervo, com a base legal na frase.
 type Line = { kind: 'dica' | 'dado' | 'curiosidade'; mood: Mood; text: string }
-const posseDias = () => Math.round((Date.UTC(2027, 0, 5) - Date.now()) / 864e5)
 const hypRe = /não confirm|hipótese|cotado/i
 
-const DATA: Record<ViewId, () => string[]> = {
-  home: () => { const d = posseDias(); return [d > 0 ? `Faltam ${d} dias para a posse, em 5 de janeiro de 2027.` : `Estamos no dia ${1 - d} do mandato; o balanço dos 100 dias é por volta de 15 de abril.`] },
+const DATA: Partial<Record<ViewId, () => string[]>> = {
+  home: () => { const d = diasAtePosse(); return [d > 0 ? `Hoje ${faltam(d)} para a posse, em 5 de janeiro de 2027.` : d === 0 ? 'Hoje é o dia da posse.' : `Estamos no dia ${1 - d} do mandato; o balanço dos 100 dias é por volta de 15 de abril.`] },
   themes: () => ['Na ordem do calendário, a reforma tributária (CBS/IBS) é o primeiro marco: janeiro de 2027.'],
-  scenarios: () => ['Os três cenários partem de uma pergunta só: o pacote fiscal sai nas primeiras semanas ou não?'],
+  scenarios: () => ['Os três caminhos partem de uma pergunta só: o pacote fiscal sai nas primeiras semanas ou não?', `Há ${getContent('cenario').length} cenários temáticos para filtrar por tema e subtema.`],
   actors: () => { const l = getActors(); const h = l.filter(a => hypRe.test(a.status)).length; return [`${h} de ${l.length} perfis ainda são nome cotado ou hipótese, e não cargo confirmado.`] },
-  risks: () => { const n = (t: string) => risks.filter(r => r.type === t).length; return [`A matriz tem ${n('Risco')} riscos, ${n('Oportunidade')} oportunidades e ${n('Misto')} itens mistos. Sem nota justificada, o item fica em análise.`] },
+  risks: () => { const n = (t: string) => getContent<Rec>('risco').filter(r => r.type === t).length; return [`A matriz tem ${n('Risco')} riscos, ${n('Oportunidade')} oportunidades e ${n('Misto')} itens mistos. Sem nota justificada, o item fica em análise.`] },
   monitor: () => ['Só a posse é fato documentado na régua; os outros marcos são calendário preliminar.'],
   method: () => ['Regra do grupo: histórico dá contexto, não previsão.'],
-  sources: () => [`Há ${internalDocs.length} documentos internos e ${publicDocs.length} fontes públicas no acervo.`],
-  editor: () => ['Dá para importar perfis e dossiês por JSON, CSV ou XML. Os modelos estão em Conteúdos cadastrados.'],
+  sources: () => [`Há ${getContent('docinterno').length} documentos internos e ${getContent('docpublico').length} fontes públicas no acervo.`],
+  guide: () => ['O tour tem 6 etapas e pode ser refeito quando quiser.'],
+  editor: () => ['Dá para importar um documento Word, PDF ou texto como dossiê, ou perfis por CSV e XML. Os modelos estão em Conteúdos cadastrados.'],
   users: () => ['Desativar uma conta não apaga nada: a pessoa só passa a ver o conteúdo público.'],
 }
 
-const CURIOS: Record<ViewId, string[]> = {
-  home: [
-    'Curiosidade: a posse em 5 de janeiro vale a partir de 2027. Até 2023 era 1º de janeiro; a Emenda 111/2021 mudou a data (Constituição, art. 82).',
-    'Curiosidade: a expressão "100 primeiros dias" vem do início do governo de Franklin Roosevelt, nos EUA, em 1933.',
-  ],
-  themes: ['Curiosidade: o IBS substitui o ICMS e o ISS, e a CBS substitui o PIS e a Cofins (Emenda 132/2023).'],
-  scenarios: ['Curiosidade: uma medida provisória vale por 60 dias, prorrogáveis por mais 60, e precisa ser votada pelo Congresso para virar lei (art. 62).'],
-  actors: ['Curiosidade: o STF tem 11 ministros. O presidente indica, e o Senado aprova por maioria absoluta: 41 dos 81 senadores (art. 101).'],
-  risks: ['Curiosidade: emenda constitucional exige 3/5 dos votos, em dois turnos, em cada Casa: 308 deputados e 49 senadores (art. 60).'],
-  monitor: ['Curiosidade: o Copom, do Banco Central, decide a Selic em 8 reuniões por ano.'],
-  method: ['Curiosidade: a Câmara tem 513 deputados e o Senado tem 81 senadores, 3 por estado e pelo DF (arts. 45 e 46).'],
-  sources: ['Curiosidade: a Constituição é a fonte primária de todas as regras citadas nas curiosidades; o texto está no site do Planalto.'],
-  editor: [],
-  users: [],
-}
 
 const BUBBLE_MS = 7_500
 const IDLE_MS = 35_000
@@ -69,9 +60,9 @@ const src = (m: Mood) => `${import.meta.env.BASE_URL}uly/${m}.png`
 
 function buildPool(v: ViewId): Line[] {
   return [
-    ...VIEWS[v].tips.map((t): Line => ({ kind: 'dica', mood: VIEWS[v].mood, text: t })),
-    ...DATA[v]().map((t): Line => ({ kind: 'dado', mood: 'analisando', text: t })),
-    ...CURIOS[v].map((t): Line => ({ kind: 'curiosidade', mood: 'apresentando', text: t.replace(/^Curiosidade: (.)/, (_, c: string) => c.toUpperCase()) })),
+    ...VIEWS.get(v).tips.map((t): Line => ({ kind: 'dica', mood: VIEWS.get(v).mood, text: t })),
+    ...(DATA[v]?.() ?? []).map((t): Line => ({ kind: 'dado', mood: 'analisando', text: t })),
+    ...doView(v).filter(l => l.kind === 'curiosidade').map((l): Line => ({ kind: 'curiosidade', mood: pose(l.pose), text: String(l.text).replace(/^Curiosidade: (.)/, (_, c: string) => c.toUpperCase()) })),
   ]
 }
 
@@ -97,7 +88,7 @@ export function sayView(v: ViewId): void {
   view = v
   if (!started) return
   pool = buildPool(v); idx = -1
-  img.src = src(VIEWS[v].mood)
+  img.src = src(VIEWS.get(v).mood)
   bubble.classList.remove('show')
   clearTimeout(idleTimer)
   if (!greeted.has(v)) { greeted.add(v); say(0) }
@@ -136,7 +127,7 @@ export function startMascot(): void {
 
 /** Conteúdo da janela de Ajuda da tela atual. */
 export function helpContent(): { title: string; body: string } {
-  const { mood, tips } = VIEWS[view]
+  const { mood, tips } = VIEWS.get(view)
   const img = `${import.meta.env.BASE_URL}uly/${mood}.png`
   return {
     title: 'Ajuda',

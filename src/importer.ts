@@ -1,6 +1,7 @@
+import { isDocument } from './documents'
 import type { Actor, Analysis, CustomSource, Source } from './types'
 
-/** Leitura de arquivos JSON, CSV e XML para perfis e dossiês. Só valida e converte; quem grava no banco é o store. */
+/** Leitura de arquivos CSV, XML e documentos (.txt, .docx, .pdf) para perfis e dossiês. Só valida e converte; quem grava no banco é o store. */
 export interface Allowed { group: string[]; astatus: string[]; theme: string[]; dstatus: string[]; dtype: string[] }
 export interface Parsed { actors: Actor[]; analyses: Analysis[]; errors: string[] }
 
@@ -45,6 +46,33 @@ function xml(text: string): Item[] {
   return out
 }
 
+// Rótulos reconhecidos no começo de uma linha ("Pergunta: ..."), na ordem do formulário de dossiê.
+const LABELS: Record<string, string> = {
+  título: 'title', titulo: 'title', tema: 'theme', tipo: 'type', status: 'status', pergunta: 'question', evidência: 'evidence', evidencia: 'evidence',
+  atores: 'actors', transmissão: 'transmission', transmissao: 'transmission', impacto: 'impact', cenários: 'scenarios', cenarios: 'scenarios',
+  sinais: 'signals', avaliação: 'assessment', avaliacao: 'assessment', autor: 'author', revisão: 'review', revisao: 'review',
+}
+/** Documento vira um dossiê. Com linhas "Campo: valor" preenche cada campo; sem elas, a 1ª linha é o título e o resto é a evidência. */
+function fromDocument(filename: string, text: string): Rec {
+  const rec: Rec = {}
+  let cur = ''
+  for (const line of text.split('\n')) {
+    const m = line.match(/^\s*([A-Za-zÀ-ú]+)\s*:\s*(.*)$/)
+    const key = m ? LABELS[m[1].toLowerCase()] : undefined
+    if (key) { cur = key; rec[key] = m![2] }
+    else if (cur) rec[cur] = str(rec[cur]) + '\n' + line
+  }
+  const base = filename.replace(/\.[^.]+$/, '')
+  if (!rec.title && !rec.evidence) {
+    const [first, ...rest] = text.split('\n').filter(l => l.trim())
+    return { title: first.length <= 140 ? first : base, evidence: first.length <= 140 ? rest.join('\n') || first : text, question: `A definir (importado de ${filename}).` }
+  }
+  rec.title = str(rec.title) || base
+  rec.question = str(rec.question) || `A definir (importado de ${filename}).`
+  rec.evidence = str(rec.evidence) || text
+  return rec
+}
+
 const classify = (rec: Rec): Item | null => 'name' in rec ? { kind: 'actor', rec } : 'title' in rec ? { kind: 'analysis', rec } : null
 
 /** Lê o arquivo (pela extensão) e devolve só registros válidos, mais a lista de erros por linha. */
@@ -53,18 +81,14 @@ export function parseFile(filename: string, text: string, allow: Allowed): Parse
   const ext = filename.split('.').pop()?.toLowerCase()
   let items: Item[] = []
   try {
-    if (ext === 'json') {
-      const d = JSON.parse(text) as unknown
-      const arr = Array.isArray(d) ? d : [...((d as Rec).actors as Rec[] ?? []), ...((d as Rec).analyses as Rec[] ?? [])]
-      items = arr.flatMap(r => { const it = classify(r as Rec); return it ? [it] : [] })
-      if (arr.length !== items.length) out.errors.push(`${arr.length - items.length} registro(s) sem "name" nem "title" foram ignorados.`)
-    } else if (ext === 'csv') {
+    if (ext === 'csv') {
       items = csv(text).flatMap(r => { const it = classify(r); return it ? [it] : [] })
       if (!items.length) out.errors.push('CSV sem linhas válidas: a primeira linha precisa ter a coluna "name" (perfis) ou "title" (dossiês).')
     } else if (ext === 'xml') items = xml(text)
-    else throw new Error('Use um arquivo .json, .csv ou .xml.')
+    else if (isDocument(filename)) items = [{ kind: 'analysis', rec: fromDocument(filename, text) }]
+    else throw new Error('Use um arquivo .docx, .pdf, .txt, .csv ou .xml.')
   } catch (e) {
-    out.errors.push(e instanceof SyntaxError ? 'JSON inválido.' : (e as Error).message)
+    out.errors.push((e as Error).message)
     return out
   }
   let na = 0, nd = 0
@@ -151,8 +175,4 @@ export const templates: Record<string, { file: string; mime: string; body: strin
   </analysis>
 </conteudo>
 ` },
-  json: { file: 'modelo-conteudo.json', mime: 'application/json', body: JSON.stringify({
-    actors: [{ name: 'Nome do ator', role: 'Cargo ou posição', group: 'Executivo', status: 'Em verificação', bio: 'Resumo biográfico com fatos verificáveis.', sourceDetails: [{ label: 'Título da fonte', url: 'https://exemplo.com' }] }],
-    analyses: [{ title: 'Título do dossiê', theme: 'Transversal', status: 'Em elaboração', type: 'Monitoramento', question: 'Qual pergunta esta análise responde?', evidence: 'Fatos e documentos.', sources: [{ section: 'fiscal', label: 'Título da fonte', url: 'https://exemplo.com' }] }],
-  }, null, 2) },
 }

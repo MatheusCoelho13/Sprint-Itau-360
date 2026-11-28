@@ -74,3 +74,11 @@ Terceira rodada (honest-eye, 23/11/2026): badges dos cenários A/B/C viraram hip
 - Log de auditoria não existe.
 - Importar JSON faz upsert e não apaga registros.
 - O dev server (`npm run dev`) não aplicou o CSS na aba controlada pela automação do Chrome; o build de produção renderiza normal. Se acontecer no seu navegador, testar com `npx vite preview`.
+
+
+## Conteúdo editável, papéis e documentos (nov/2026)
+- **Tudo é editável na Área editorial.** Atores, dossiês e temas têm formulário próprio (tabelas `actors`, `analyses`, `topics`). O resto passa pelo registro genérico `src/content.ts` (`KINDS`: campos de cada tipo + conteúdo-base) e pela tabela `content_items` (`kind`,`id`,`record`,`is_override`). Aba "Todo o conteúdo": o formulário é gerado dos campos. Item da base: edita (override), oculta, restaura; item novo: cria, exclui. Para tornar um dado novo editável, crie um `KindDef` e leia com `getContent('<tipo>')` (store.ts), nunca direto de `data.ts`. Tudo que vem do banco é escapado com `esc()`.
+- **Textos fixos das telas** (títulos, introduções, avisos de texto puro) são lidos da página por `src/texts.ts` (`data-ed`) e editados como tipo `texto`.
+- **Papéis** (`profiles.role`): admin (Administração), editor (Edição), revisor (Revisão), observador (Leitura). Quem edita não publica: gatilho `analyses_guard` devolve para "Em revisão". Histórico em `content_history` (gatilhos `log_change`), aba "Histórico". E-mails da equipe: `supabase/papeis_equipe.sql`.
+- **Login obrigatório** (sem leitura `anon` no banco). Documentos internos estão em `docs-privados/` (fora de `public/`), enviados ao bucket privado `docs` por `scripts/subir-docs.mjs`; o site abre por link temporário (`data-doc` em `main.ts`). O conteúdo-base (`data.ts`, `topics.ts`, `content.ts`) continua no JavaScript do site: só o conteúdo editado no banco é protegido de verdade.
+- Migrations pendentes: `20261127000000`, `20261127010000`, `20261127020000` (`npx supabase db push --remote`).

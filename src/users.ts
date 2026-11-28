@@ -2,12 +2,12 @@ import { supabase } from './supabase'
 import { $, esc } from './ui'
 
 /** Tela "Usuários e acesso" (só admin). Lê e altera a tabela profiles; as regras de negócio valem no banco (RLS + gatilhos). */
-export type Role = 'admin' | 'editor' | 'observador'
+export type Role = 'admin' | 'editor' | 'revisor' | 'observador'
 interface Profile { user_id: string; email: string; role: Role; active: boolean; created_at: string }
 interface Audit { at: string; actor_email: string | null; target_email: string; field: 'role' | 'active'; old_value: string; new_value: string }
 
-export const ROLE_LABEL: Record<Role, string> = { admin: 'Admin', editor: 'Editor', observador: 'Observador' }
-const PLURAL: Record<Role, [string, string]> = { admin: ['Admin', 'Admins'], editor: ['Editor', 'Editores'], observador: ['Observador', 'Observadores'] }
+export const ROLE_LABEL: Record<Role, string> = { admin: 'Administração', editor: 'Edição', revisor: 'Revisão', observador: 'Leitura' }
+const PLURAL: Record<Role, [string, string]> = { admin: ['Administração', 'Administração'], editor: ['Edição', 'Edição'], revisor: ['Revisão', 'Revisão'], observador: ['Leitura', 'Leitura'] }
 const fmt = (d: string) => new Date(d).toLocaleDateString('pt-BR')
 const fmtTime = (d: string) => new Date(d).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })
 
@@ -41,13 +41,13 @@ function draw(): void {
     (fs === 'all' || (fs === 'on') === u.active))
   const n = (r: Role) => rows.filter(u => u.role === r && u.active).length
   $('usersSummary').innerHTML =
-    (['admin', 'editor', 'observador'] as Role[]).map(r => `<div><b>${n(r)}</b><span>${PLURAL[r][n(r) === 1 ? 0 : 1]}</span></div>`).join('') +
+    (['admin', 'editor', 'revisor', 'observador'] as Role[]).map(r => `<div><b>${n(r)}</b><span>${PLURAL[r][n(r) === 1 ? 0 : 1]}</span></div>`).join('') +
     `<div class="off"><b>${rows.filter(u => !u.active).length}</b><span>Inativo(s)</span></div>`
   $('userCount').textContent = `${list.length} de ${rows.length}`
   $('userRows').innerHTML = list.map(u => {
     const self = u.user_id === me
     return `<tr class="${u.active ? '' : 'off'}"><td data-l="Usuário"><strong>${esc(u.email)}</strong>${self ? ' <span class="you">você</span>' : ''}</td>
-      <td data-l="Papel"><select data-uid="${u.user_id}" aria-label="Papel de ${esc(u.email)}" ${self ? 'disabled title="Você não pode alterar o próprio papel."' : ''}>${(['admin', 'editor', 'observador'] as Role[]).map(r => `<option value="${r}"${r === u.role ? ' selected' : ''}>${ROLE_LABEL[r]}</option>`).join('')}</select></td>
+      <td data-l="Papel"><select data-uid="${u.user_id}" aria-label="Papel de ${esc(u.email)}" ${self ? 'disabled title="Você não pode alterar o próprio papel."' : ''}>${(['admin', 'editor', 'revisor', 'observador'] as Role[]).map(r => `<option value="${r}"${r === u.role ? ' selected' : ''}>${ROLE_LABEL[r]}</option>`).join('')}</select></td>
       <td data-l="Situação"><button type="button" class="pill-btn state ${u.active ? 'on' : ''}" data-ustate="${u.user_id}" ${self ? 'disabled title="Você não pode se desativar."' : ''}>${u.active ? 'Ativo' : 'Inativo'}</button></td>
       <td data-l="Desde">${fmt(u.created_at)}</td></tr>`
   }).join('') || '<tr><td colspan="4" class="muted">Nenhum usuário com esse filtro.</td></tr>'

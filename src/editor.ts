@@ -1,11 +1,13 @@
 import { SRC } from './data'
 import {
-  getActors, getAnalyses, saveActor, saveAnalysis, deleteActor, deleteAnalysis,
-  exportData, importData,
+  allActors, allTopics, getAnalyses, saveActor, saveAnalysis, saveTopic, deleteActor, deleteAnalysis, deleteTopic,
+  importData, allContent, saveContent, deleteContent, loadHistory,
 } from './store'
-import { $, esc, go, renderActors, renderRisks, renderThemes } from './ui'
+import { KINDS, kindOf, type Field as FieldDef, type Rec } from './content'
+import { $, esc, go, renderActors, renderRisks, renderThemes, renderAll } from './ui'
 import { parseFile, templates, type Parsed } from './importer'
-import type { Actor, Analysis, CustomSource, Source } from './types'
+import { isDocument, readDocument } from './documents'
+import type { Actor, Analysis, CustomSource, Level, Source, Sub, Topic } from './types'
 
 type Field = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
 const f = (id: string) => $<Field>(id)
@@ -31,36 +33,51 @@ export function editorTab(tab: string): void {
   document.querySelectorAll<HTMLElement>('.editor-tab').forEach(b => b.classList.toggle('active', b.dataset.etab === tab))
   $('editorActor').classList.toggle('hide', tab !== 'actor')
   $('editorAnalysis').classList.toggle('hide', tab !== 'analysis')
+  $('editorTopic').classList.toggle('hide', tab !== 'topic')
+  $('editorAll').classList.toggle('hide', tab !== 'all')
+  $('editorHistory').classList.toggle('hide', tab !== 'history')
+  if (tab === 'all') renderKindList()
+  if (tab === 'history') void renderHistory()
   $('editorContent').classList.toggle('hide', tab !== 'content')
   if (tab === 'content') renderEditorRecords()
 }
 
 // ---------- lista de registros ----------
 export function renderEditorRecords(): void {
-  const actors = getActors().map(a => `<div class="editor-record"><div><strong>${esc(a.name)}</strong><small>Perfil de ator · ${esc(a.status)} · ${a._base ? 'Base do projeto' : 'Criado pela equipe'}</small></div><div><button class="pill-btn" data-edit-actor="${a.id}">Editar</button>${a._base ? `<button class="pill-btn" data-reset-actor="${a.id}">Restaurar</button>` : `<button class="pill-btn" data-delete="actor" data-id="${a.id}">Excluir</button>`}</div></div>`)
+  const actors = allActors().map(a => `<div class="editor-record${a._hidden ? ' off' : ''}"><div><strong>${esc(a.name)}</strong><small>Perfil de ator · ${esc(a.status)} · ${a._base ? 'Base do projeto' : 'Criado pela equipe'}${a._hidden ? ' · oculto' : ''}</small></div><div><button class="pill-btn" data-edit-actor="${a.id}">Editar</button>${a._base ? `<button class="pill-btn" data-hide="actor" data-id="${a.id}">${a._hidden ? 'Mostrar' : 'Ocultar'}</button><button class="pill-btn" data-reset-actor="${a.id}">Restaurar</button>` : `<button class="pill-btn" data-delete="actor" data-id="${a.id}">Excluir</button>`}</div></div>`)
   const analyses = getAnalyses().map(d => `<div class="editor-record"><div><strong>${esc(d.title)}</strong><small>Dossiê · ${esc(d.status)} · ${esc(d.theme)}</small></div><div><button class="pill-btn" data-edit-analysis="${d.id}">Editar</button><button class="pill-btn" data-delete="analysis" data-id="${d.id}">Excluir</button></div></div>`)
-  $('editorRecords').innerHTML = [...actors, ...analyses].join('') || '<div class="empty">Ainda não há conteúdo criado pela área editorial.</div>'
+  const topics = allTopics().map(t => `<div class="editor-record${t._hidden ? ' off' : ''}"><div><strong>${esc(t.title)}</strong><small>${t.kind === 'eixo' ? 'Tema · eixo ' + esc(t.n) : 'Tema transversal'} · ${t._base ? 'Base do projeto' : 'Criado pela equipe'}${t._hidden ? ' · oculto' : ''}</small></div><div><button class="pill-btn" data-edit-topic="${t.id}">Editar</button>${t._base ? `<button class="pill-btn" data-hide="topic" data-id="${t.id}">${t._hidden ? 'Mostrar' : 'Ocultar'}</button><button class="pill-btn" data-reset-topic="${t.id}">Restaurar</button>` : `<button class="pill-btn" data-delete="topic" data-id="${t.id}">Excluir</button>`}</div></div>`)
+  $('editorRecords').innerHTML = [...topics, ...actors, ...analyses].join('') || '<div class="empty">Ainda não há conteúdo criado pela área editorial.</div>'
 }
 
 // ---------- formulários ----------
-const ACTOR_FIELDS = { aName: 'name', aRole: 'role', aBio: 'bio', aRelevance: 'relevance', aPhoto: 'photo', aPhotoCredit: 'photoCredit', aDate: 'date' } as const
+const ACTOR_FIELDS = { aName: 'name', aRole: 'role', aBio: 'bio', aRelevance: 'relevance', aPhoto: 'photo', aPhotoCredit: 'photoCredit', aDate: 'date', aWhy: 'why' } as const
+/** Avaliação qualitativa do ator: select 1–3, vazio = não se aplica. */
+const ACTOR_LEVELS = { aEntra: 'entra', aSai: 'sai', aGrav: 'grav', aHz: 'hz' } as const
 const ANALYSIS_FIELDS = {
   dTitle: 'title', dTheme: 'theme', dStatus: 'status', dType: 'type', dQuestion: 'question',
   dEvidence: 'evidence', dActors: 'actors', dTransmission: 'transmission', dImpact: 'impact',
-  dScenarios: 'scenarios', dSignals: 'signals', dAssessment: 'assessment', dAuthor: 'author', dReview: 'review',
+  dScenarios: 'scenarios', dSignals: 'signals', dAssessment: 'assessment', dAuthor: 'author', dReview: 'review', dReturn: 'returnReason',
 } as const
 
-const actorReset = () => { $<HTMLFormElement>('actorForm').reset(); f('editActorId').value = '' }
+const dropExtraOptions = () => document.querySelectorAll('#actorForm option[data-extra]').forEach(o => o.remove())
+const actorReset = () => { dropExtraOptions(); $<HTMLFormElement>('actorForm').reset(); f('editActorId').value = '' }
 const analysisReset = () => { $<HTMLFormElement>('analysisForm').reset(); f('editAnalysisId').value = '' }
 
 export function loadActorToForm(id: string): void {
-  const a = getActors().find(x => x.id === id)
+  const a = allActors().find(x => x.id === id)
   if (!a) return
   editorTab('actor')
   f('editActorId').value = a.id
   for (const [el, k] of Object.entries(ACTOR_FIELDS)) f(el).value = a[k] ?? ''
-  f('aGroup').value = a.group
-  f('aStatus').value = a.status
+  for (const [el, k] of Object.entries(ACTOR_LEVELS)) f(el).value = String(a[k] ?? '')
+  // valor que não está na lista (ex.: status de ator da base) entra como opção, para não ser apagado ao salvar
+  dropExtraOptions()
+  for (const [el, v] of [['aGroup', a.group], ['aStatus', a.status]] as const) {
+    const sel = f(el) as HTMLSelectElement
+    if (v && ![...sel.options].some(o => o.value === v || o.text === v)) { const o = new Option(v); o.dataset.extra = '1'; sel.add(o) }
+    sel.value = v
+  }
   f('aSources').value = a.sourceDetails
     ? a.sourceDetails.map(s => s.label + ' | ' + s.url).join('\n')
     : (a.sources ?? []).filter(k => SRC[k]).map(k => SRC[k].label + ' | ' + SRC[k].url).join('\n')
@@ -80,7 +97,21 @@ export function loadAnalysisToForm(id: string): void {
 export async function deleteRecord(type: string, id: string): Promise<void> {
   if (!confirm('Excluir este registro da base compartilhada?')) return
   try {
-    await (type === 'actor' ? deleteActor(id) : deleteAnalysis(id))
+    await (type === 'actor' ? deleteActor(id) : type === 'topic' ? deleteTopic(id) : deleteAnalysis(id))
+  } catch (e) { return fail(e) }
+  renderEditorRecords(); renderActors(); renderThemes(); renderRisks()
+}
+
+/** Itens da base não saem do código: "apagar" vira ocultar (volta com Mostrar ou Restaurar). */
+export async function hideRecord(type: string, id: string): Promise<void> {
+  try {
+    if (type === 'actor') {
+      const { _base, ...a } = allActors().find(x => x.id === id)!; void _base
+      await saveActor({ ...a, _hidden: !a._hidden })
+    } else {
+      const { _base, ...t } = allTopics().find(x => x.id === id)!; void _base
+      await saveTopic({ ...t, _hidden: !t._hidden })
+    }
   } catch (e) { return fail(e) }
   renderEditorRecords(); renderActors(); renderThemes(); renderRisks()
 }
@@ -99,8 +130,11 @@ async function submitActor(e: SubmitEvent): Promise<void> {
     id, name: f('aName').value.trim(), role: f('aRole').value.trim(), group: f('aGroup').value,
     status: f('aStatus').value, photo: f('aPhoto').value.trim(), photoCredit: f('aPhotoCredit').value.trim(),
     bio: f('aBio').value.trim(), relevance: f('aRelevance').value.trim(), date: f('aDate').value.trim(),
+    why: f('aWhy').value.trim(),
     ...(sourceDetails.length ? { sourceDetails } : {}),
+    ...(allActors().find(x => x.id === id)?._hidden ? { _hidden: true } : {}),
   }
+  for (const [el, k] of Object.entries(ACTOR_LEVELS)) { const n = Number(f(el).value); if (n) rec[k] = n as Level }
   try { await saveActor(rec) } catch (err) { return fail(err) }
   actorReset(); renderActors(); msg('Perfil salvo.')
   alert('Perfil salvo. Ele já aparece no Mapa de atores.')
@@ -119,17 +153,136 @@ async function submitAnalysis(e: SubmitEvent): Promise<void> {
   alert('Dossiê salvo.')
 }
 
-// ---------- exportar / importar ----------
-function exportJson(): void {
-  const blob = new Blob([JSON.stringify(exportData(), null, 2)], { type: 'application/json' })
-  const a = document.createElement('a')
-  a.href = URL.createObjectURL(blob)
-  a.download = 'itau360-conteudo-editorial.json'
-  a.click()
-  URL.revokeObjectURL(a.href)
-  msg('Arquivo JSON exportado.')
+
+// ---------- temas e subtemas ----------
+const lines = (txt: string) => txt.split('\n').map(x => x.trim()).filter(Boolean)
+const parseSubs = (txt: string): Sub[] => lines(txt).map(l => { const [t, how, ...care] = l.split('|'); return { t: t.trim(), how: (how ?? '').trim(), care: care.join('|').trim() } }).filter(x => x.t)
+const topicReset = () => { $<HTMLFormElement>('topicForm').reset(); f('editTopicId').value = '' }
+const T_LINES = { tQuestions: 'questions', tChannels: 'channels', tDeepen: 'deepen' } as const
+const T_TEXT = { tTitle: 'title', tShort: 'short', tType: 'type', tDesc: 'desc', tAbout: 'about', tItau: 'itau' } as const
+
+export function newTopic(): void { editorTab('topic'); topicReset(); go('editor') }
+export function loadTopicToForm(id: string): void {
+  const t = allTopics().find(x => x.id === id)
+  if (!t) return
+  editorTab('topic')
+  f('editTopicId').value = t.id
+  for (const [el, k] of Object.entries(T_TEXT)) f(el).value = t[k] ?? ''
+  for (const [el, k] of Object.entries(T_LINES)) f(el).value = t[k].join('\n')
+  f('tSubs').value = t.subs.map(x => `${x.t} | ${x.how} | ${x.care}`).join('\n')
+  f('tSources').value = t.sourceDetails
+    ? t.sourceDetails.map(s => s.label + ' | ' + s.url).join('\n')
+    : t.sources.filter(k => SRC[k]).map(k => SRC[k].label + ' | ' + SRC[k].url).join('\n')
+  go('editor')
+}
+export async function resetTopicOverride(id: string): Promise<void> {
+  if (!confirm('Restaurar o tema original do projeto?')) return
+  try { await deleteTopic(id) } catch (e) { return fail(e) }
+  renderEditorRecords(); renderThemes()
+}
+async function submitTopic(e: SubmitEvent): Promise<void> {
+  e.preventDefault()
+  const old = allTopics().find(x => x.id === f('editTopicId').value)
+  const sourceDetails = parseSources(f('tSources').value)
+  const title = f('tTitle').value.trim()
+  const rec = {
+    id: old?.id ?? crypto.randomUUID(), kind: old?.kind ?? 'transversal', n: old?.n,
+    short: f('tShort').value.trim() || title, title, type: f('tType').value.trim(),
+    desc: f('tDesc').value.trim(), about: f('tAbout').value.trim(), itau: f('tItau').value.trim(),
+    subs: parseSubs(f('tSubs').value), sources: old?.sources ?? [],
+    ...(sourceDetails.length ? { sourceDetails } : {}),
+    ...(old?._hidden ? { _hidden: true } : {}),
+  } as Topic
+  for (const [el, k] of Object.entries(T_LINES)) rec[k] = lines(f(el).value)
+  try { await saveTopic(rec) } catch (err) { return fail(err) }
+  topicReset(); renderThemes(); editorTab('content')
+  alert('Tema salvo.')
 }
 
+// ---------- todo o conteúdo: formulário gerado a partir dos campos de cada tipo ----------
+let curKind = KINDS[0].id
+let curId: string | null = null // null = item novo; undefined-like '' = formulário fechado
+let formOpen = false
+
+const optPair = (o: string): [string, string] => { const [v, l] = o.split('|'); return [v, l ?? v] }
+function fieldHtml(fd: FieldDef, v: unknown): string {
+  const id = 'kf_' + fd.k
+  const hint = fd.hint ? `<small class="muted">${esc(fd.hint)}</small>` : ''
+  const lab = `<label for="${id}">${esc(fd.label)}</label>`
+  const val = v == null ? '' : v
+  if (fd.type === 'area') return `<div class="field full">${lab}<textarea id="${id}" rows="4">${esc(val)}</textarea>${hint}</div>`
+  if (fd.type === 'lines') return `<div class="field full">${lab}<textarea id="${id}" rows="5">${esc(Array.isArray(val) ? val.join('\n') : val)}</textarea>${hint}</div>`
+  if (fd.type === 'num') return `<div class="field">${lab}<input id="${id}" type="number" value="${esc(val)}"></div>`
+  if (fd.type === 'level') return `<div class="field">${lab}<select id="${id}"><option value="">Não avaliada</option>${[['1', 'Baixa'], ['2', 'Média'], ['3', 'Alta']].map(([a, b]) => `<option value="${a}"${String(val) === a ? ' selected' : ''}>${b}</option>`).join('')}</select></div>`
+  if (fd.type === 'select') return `<div class="field">${lab}<select id="${id}">${(fd.opts ?? []).map(optPair).map(([a, b]) => `<option value="${esc(a)}"${String(val) === a ? ' selected' : ''}>${esc(b || '(nenhuma)')}</option>`).join('')}</select></div>`
+  if (fd.type === 'src') return `<div class="field">${lab}<select id="${id}">${Object.entries(SRC).map(([k, s]) => `<option value="${esc(k)}"${val === k ? ' selected' : ''}>${esc(s.label)}</option>`).join('')}</select></div>`
+  if (fd.type === 'srcs') { const cur = Array.isArray(val) ? val : []; return `<div class="field full">${lab}<select id="${id}" multiple size="6">${Object.entries(SRC).map(([k, s]) => `<option value="${esc(k)}"${cur.includes(k) ? ' selected' : ''}>${esc(s.label)}</option>`).join('')}</select>${hint}</div>` }
+  return `<div class="field">${lab}<input id="${id}" value="${esc(val)}">${hint}</div>`
+}
+function readField(fd: FieldDef): unknown {
+  const el = f('kf_' + fd.k)
+  if (fd.type === 'lines') return el.value.split('\n').map(x => x.trim()).filter(Boolean)
+  if (fd.type === 'srcs') return [...(el as unknown as HTMLSelectElement).selectedOptions].map(o => o.value)
+  if (fd.type === 'num' || fd.type === 'level') return el.value === '' ? undefined : Number(el.value)
+  if (fd.type === 'select' && (fd.opts ?? []).length && (fd.opts ?? []).every(o => /^\d+\|/.test(o))) return Number(el.value)
+  return el.value.trim()
+}
+
+export function renderKindList(): void {
+  const sel = $<HTMLSelectElement>('kindSel')
+  if (!sel.options.length) sel.innerHTML = KINDS.map(k => `<option value="${k.id}">${esc(k.label)}</option>`).join('')
+  sel.value = curKind
+  const k = kindOf(curKind)
+  const rows = allContent(curKind).map(r => `<div class="editor-record${r._hidden ? ' off' : ''}"><div><strong>${esc(k.title(r))}</strong><small>${r._base ? 'Base do projeto' + (r._over ? ' · editado' : '') : 'Criado pela equipe'}${r._hidden ? ' · oculto' : ''}</small></div><div><button class="pill-btn" data-kedit="${esc(r.id)}">Editar</button>${r._base ? `<button class="pill-btn" data-khide="${esc(r.id)}">${r._hidden ? 'Mostrar' : 'Ocultar'}</button>${r._over ? `<button class="pill-btn" data-kreset="${esc(r.id)}">Restaurar</button>` : ''}` : `<button class="pill-btn" data-kdel="${esc(r.id)}">Excluir</button>`}</div></div>`)
+  $('kindList').innerHTML = (curKind === 'texto' ? '' : '<div class="btn-row" style="margin:0 0 12px"><button class="btn orange" data-knew>+ Novo item</button></div>') + (rows.join('') || '<div class="empty">Nada cadastrado neste tipo.</div>')
+  $('kindForm').classList.toggle('hide', !formOpen)
+}
+function openKindForm(id: string | null): void {
+  const k = kindOf(curKind)
+  const cur = id ? allContent(curKind).find(x => x.id === id) : undefined
+  curId = id
+  formOpen = true
+  const fresh = id ? '' : `<div class="field"><label for="kf_id">Código</label><input id="kf_id" required value="${esc(k.prefix + (allContent(curKind).length + 1))}"></div>`
+  $('kindForm').innerHTML = `<h3 style="margin:18px 0 10px">${id ? 'Editar' : 'Novo item'}: ${esc(k.label)}</h3><div class="form-grid">${fresh}${k.fields.map(fd => fieldHtml(fd, cur?.[fd.k])).join('')}</div><div class="btn-row"><button class="btn orange" type="submit">Salvar</button><button class="btn secondary" type="button" data-kcancel>Cancelar</button></div>`
+  renderKindList()
+  $('kindForm').scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+}
+async function submitKind(e: SubmitEvent): Promise<void> {
+  e.preventDefault()
+  const k = kindOf(curKind)
+  const old = curId ? allContent(curKind).find(x => x.id === curId) : undefined
+  const id = curId ?? f('kf_id').value.trim()
+  if (!id) return
+  if (!curId && allContent(curKind).some(x => x.id === id)) return fail(new Error('Já existe um item com este código.'))
+  const rec: Rec = { ...(old ? stripMeta(old) : {}), id }
+  for (const fd of k.fields) rec[fd.k] = readField(fd)
+  try { await saveContent(curKind, rec) } catch (err) { return fail(err) }
+  formOpen = false; curId = null
+  $('kindForm').innerHTML = ''
+  renderKindList(); renderAll(); msg('Salvo.')
+}
+const stripMeta = (r: Rec): Rec => { const { _base, _over, ...rest } = r as Rec & { _base?: boolean; _over?: boolean }; void _base; void _over; return rest as Rec }
+
+async function kindAction(a: 'hide' | 'reset' | 'del', id: string): Promise<void> {
+  const cur = allContent(curKind).find(x => x.id === id)
+  try {
+    if (a === 'hide' && cur) await saveContent(curKind, { ...stripMeta(cur), _hidden: !cur._hidden })
+    else if (a === 'reset') { if (!confirm('Voltar este item ao original do projeto?')) return; await deleteContent(curKind, id) }
+    else if (a === 'del') { if (!confirm('Excluir este item da base compartilhada?')) return; await deleteContent(curKind, id) }
+  } catch (err) { return fail(err) }
+  renderKindList(); renderAll()
+}
+
+// ---------- histórico (quem mudou o quê) ----------
+async function renderHistory(): Promise<void> {
+  $('historyList').innerHTML = '<p class="muted">Carregando…</p>'
+  try {
+    const rows = await loadHistory()
+    $('historyList').innerHTML = rows.map(h => `<div class="editor-record"><div><strong>${esc(h.title || h.row_id)}</strong><small>${esc(h.action)} · ${esc(h.tbl)} · ${esc(h.by_email || 'sistema')} · ${new Date(h.at).toLocaleString('pt-BR')}</small></div></div>`).join('') || '<div class="empty">Ainda sem alterações registradas.</div>'
+  } catch (err) { $('historyList').innerHTML = `<p class="import-errors">Não foi possível carregar o histórico: ${esc((err as Error).message)}. Aplique a migration de histórico.</p>` }
+}
+
+// ---------- exportar / importar ----------
 const opts = (id: string) => Array.from(document.querySelectorAll<HTMLOptionElement>(`#${id} option`)).map(o => o.value || o.text)
 let pending: Parsed | null = null
 
@@ -138,9 +291,10 @@ async function importFile(e: Event): Promise<void> {
   const input = e.target as HTMLInputElement
   const file = input.files?.[0]
   if (!file) return
-  pending = parseFile(file.name, await file.text(), {
-    group: opts('aGroup'), astatus: opts('aStatus'), theme: opts('dTheme'), dstatus: opts('dStatus'), dtype: opts('dType'),
-  })
+  $('importReport').innerHTML = '<p class="muted">Lendo o arquivo…</p>'
+  const allow = { group: opts('aGroup'), astatus: opts('aStatus'), theme: opts('dTheme'), dstatus: opts('dStatus'), dtype: opts('dType') }
+  try { pending = parseFile(file.name, isDocument(file.name) ? await readDocument(file) : await file.text(), allow) }
+  catch (err) { input.value = ''; pending = null; $('importReport').innerHTML = `<p class="import-errors">${esc((err as Error).message)}</p>`; return }
   input.value = ''
   const { actors, analyses, errors } = pending
   const n = actors.length + analyses.length
@@ -178,9 +332,22 @@ function downloadTemplate(key: string): void {
 export function initEditor(): void {
   $('actorForm').addEventListener('submit', e => void submitActor(e as SubmitEvent))
   $('analysisForm').addEventListener('submit', e => void submitAnalysis(e as SubmitEvent))
+  $('topicForm').addEventListener('submit', e => void submitTopic(e as SubmitEvent))
+  $('topicReset').onclick = topicReset
+  $('kindSel').addEventListener('change', e => { curKind = (e.target as HTMLSelectElement).value; formOpen = false; $('kindForm').innerHTML = ''; renderKindList() })
+  $('kindForm').addEventListener('submit', e => void submitKind(e as SubmitEvent))
+  $('editorAll').addEventListener('click', e => {
+    const t = (e.target as HTMLElement).closest<HTMLElement>('button')
+    if (!t) return
+    if (t.dataset.knew !== undefined) openKindForm(null)
+    else if (t.dataset.kedit) openKindForm(t.dataset.kedit)
+    else if (t.dataset.khide) void kindAction('hide', t.dataset.khide)
+    else if (t.dataset.kreset) void kindAction('reset', t.dataset.kreset)
+    else if (t.dataset.kdel) void kindAction('del', t.dataset.kdel)
+    else if (t.dataset.kcancel !== undefined) { formOpen = false; $('kindForm').innerHTML = ''; renderKindList() }
+  })
   $('actorReset').onclick = actorReset
   $('analysisReset').onclick = analysisReset
-  $('exportJson').onclick = exportJson
   $('importFile').onchange = e => void importFile(e)
   document.addEventListener('click', e => {
     const t = (e.target as HTMLElement).closest<HTMLElement>('[data-tpl]')
