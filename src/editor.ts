@@ -1,7 +1,7 @@
 import { SRC } from './data'
 import {
   allActors, allTopics, getAnalyses, saveActor, saveAnalysis, saveTopic, deleteActor, deleteAnalysis, deleteTopic,
-  importData, allContent, saveContent, deleteContent, loadHistory,
+  importData, allContent, saveContent, deleteContent, removeContent, loadHistory,
 } from './store'
 import { KINDS, kindOf, type Field as FieldDef, type Rec } from './content'
 import { $, esc, go, renderActors, renderRisks, renderThemes, renderAll } from './ui'
@@ -44,9 +44,9 @@ export function editorTab(tab: string): void {
 
 // ---------- lista de registros ----------
 export function renderEditorRecords(): void {
-  const actors = allActors().map(a => `<div class="editor-record${a._hidden ? ' off' : ''}"><div><strong>${esc(a.name)}</strong><small>Perfil de ator · ${esc(a.status)} · ${a._base ? 'Base do projeto' : 'Criado pela equipe'}${a._hidden ? ' · oculto' : ''}</small></div><div><button class="pill-btn" data-edit-actor="${a.id}">Editar</button>${a._base ? `<button class="pill-btn" data-hide="actor" data-id="${a.id}">${a._hidden ? 'Mostrar' : 'Ocultar'}</button><button class="pill-btn" data-reset-actor="${a.id}">Restaurar</button>` : `<button class="pill-btn" data-delete="actor" data-id="${a.id}">Excluir</button>`}</div></div>`)
+  const actors = allActors().map(a => `<div class="editor-record${a._hidden ? ' off' : ''}"><div><strong>${esc(a.name)}</strong><small>Perfil de ator · ${esc(a.status)} · ${a._base ? 'Base do projeto' : 'Criado pela equipe'}${a._hidden ? ' · oculto' : ''}</small></div><div><button class="pill-btn" data-edit-actor="${a.id}">Editar</button>${a._base ? `<button class="pill-btn" data-hide="actor" data-id="${a.id}">${a._hidden ? 'Mostrar' : 'Ocultar'}</button><button class="pill-btn" data-reset-actor="${a.id}">Restaurar</button>` : ''}<button class="pill-btn" data-delete="actor" data-id="${a.id}">Excluir</button></div></div>`)
   const analyses = getAnalyses().map(d => `<div class="editor-record"><div><strong>${esc(d.title)}</strong><small>Dossiê · ${esc(d.status)} · ${esc(d.theme)}</small></div><div><button class="pill-btn" data-edit-analysis="${d.id}">Editar</button><button class="pill-btn" data-delete="analysis" data-id="${d.id}">Excluir</button></div></div>`)
-  const topics = allTopics().map(t => `<div class="editor-record${t._hidden ? ' off' : ''}"><div><strong>${esc(t.title)}</strong><small>${t.kind === 'eixo' ? 'Tema · eixo ' + esc(t.n) : 'Tema transversal'} · ${t._base ? 'Base do projeto' : 'Criado pela equipe'}${t._hidden ? ' · oculto' : ''}</small></div><div><button class="pill-btn" data-edit-topic="${t.id}">Editar</button>${t._base ? `<button class="pill-btn" data-hide="topic" data-id="${t.id}">${t._hidden ? 'Mostrar' : 'Ocultar'}</button><button class="pill-btn" data-reset-topic="${t.id}">Restaurar</button>` : `<button class="pill-btn" data-delete="topic" data-id="${t.id}">Excluir</button>`}</div></div>`)
+  const topics = allTopics().map(t => `<div class="editor-record${t._hidden ? ' off' : ''}"><div><strong>${esc(t.title)}</strong><small>${t.kind === 'eixo' ? 'Tema · eixo ' + esc(t.n) : 'Tema transversal'} · ${t._base ? 'Base do projeto' : 'Criado pela equipe'}${t._hidden ? ' · oculto' : ''}</small></div><div><button class="pill-btn" data-edit-topic="${t.id}">Editar</button>${t._base ? `<button class="pill-btn" data-hide="topic" data-id="${t.id}">${t._hidden ? 'Mostrar' : 'Ocultar'}</button><button class="pill-btn" data-reset-topic="${t.id}">Restaurar</button>` : ''}<button class="pill-btn" data-delete="topic" data-id="${t.id}">Excluir</button></div></div>`)
   $('editorRecords').innerHTML = [...topics, ...actors, ...analyses].join('') || '<div class="empty">Ainda não há conteúdo criado pela área editorial.</div>'
 }
 
@@ -97,7 +97,13 @@ export function loadAnalysisToForm(id: string): void {
 export async function deleteRecord(type: string, id: string): Promise<void> {
   if (!confirm('Excluir este registro da base compartilhada?')) return
   try {
-    await (type === 'actor' ? deleteActor(id) : type === 'topic' ? deleteTopic(id) : deleteAnalysis(id))
+    if (type === 'actor') {
+      const a = allActors().find(x => x.id === id)
+      if (a?._base) { const { _base, ...r } = a; void _base; await saveActor({ ...r, _deleted: true }) } else await deleteActor(id)
+    } else if (type === 'topic') {
+      const t = allTopics().find(x => x.id === id)
+      if (t?._base) { const { _base, ...r } = t; void _base; await saveTopic({ ...r, _deleted: true }) } else await deleteTopic(id)
+    } else await deleteAnalysis(id)
   } catch (e) { return fail(e) }
   renderEditorRecords(); renderActors(); renderThemes(); renderRisks()
 }
@@ -233,7 +239,7 @@ export function renderKindList(): void {
   if (!sel.options.length) sel.innerHTML = KINDS.map(k => `<option value="${k.id}">${esc(k.label)}</option>`).join('')
   sel.value = curKind
   const k = kindOf(curKind)
-  const rows = allContent(curKind).map(r => `<div class="editor-record${r._hidden ? ' off' : ''}"><div><strong>${esc(k.title(r))}</strong><small>${r._base ? 'Base do projeto' + (r._over ? ' · editado' : '') : 'Criado pela equipe'}${r._hidden ? ' · oculto' : ''}</small></div><div><button class="pill-btn" data-kedit="${esc(r.id)}">Editar</button>${r._base ? `<button class="pill-btn" data-khide="${esc(r.id)}">${r._hidden ? 'Mostrar' : 'Ocultar'}</button>${r._over ? `<button class="pill-btn" data-kreset="${esc(r.id)}">Restaurar</button>` : ''}` : `<button class="pill-btn" data-kdel="${esc(r.id)}">Excluir</button>`}</div></div>`)
+  const rows = allContent(curKind).map(r => `<div class="editor-record${r._hidden ? ' off' : ''}"><div><strong>${esc(k.title(r))}</strong><small>${r._base ? 'Base do projeto' + (r._over ? ' · editado' : '') : 'Criado pela equipe'}${r._hidden ? ' · oculto' : ''}</small></div><div><button class="pill-btn" data-kedit="${esc(r.id)}">Editar</button>${r._base ? `<button class="pill-btn" data-khide="${esc(r.id)}">${r._hidden ? 'Mostrar' : 'Ocultar'}</button>${r._over ? `<button class="pill-btn" data-kreset="${esc(r.id)}">Restaurar</button>` : ''}` : ''}<button class="pill-btn" data-kdel="${esc(r.id)}">Excluir</button></div></div>`)
   $('kindList').innerHTML = (curKind === 'texto' ? '' : '<div class="btn-row" style="margin:0 0 12px"><button class="btn orange" data-knew>+ Novo item</button></div>') + (rows.join('') || '<div class="empty">Nada cadastrado neste tipo.</div>')
   $('kindForm').classList.toggle('hide', !formOpen)
 }
@@ -268,7 +274,7 @@ async function kindAction(a: 'hide' | 'reset' | 'del', id: string): Promise<void
   try {
     if (a === 'hide' && cur) await saveContent(curKind, { ...stripMeta(cur), _hidden: !cur._hidden })
     else if (a === 'reset') { if (!confirm('Voltar este item ao original do projeto?')) return; await deleteContent(curKind, id) }
-    else if (a === 'del') { if (!confirm('Excluir este item da base compartilhada?')) return; await deleteContent(curKind, id) }
+    else if (a === 'del') { if (!confirm('Excluir este item de vez? Não dá para desfazer.')) return; await removeContent(curKind, id) }
   } catch (err) { return fail(err) }
   renderKindList(); renderAll()
 }

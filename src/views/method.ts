@@ -47,7 +47,7 @@ export const method = /* html */ `
         <p>Risco/oportunidade, cenários, probabilidade, impacto, confiança, justificativa, indicadores, sinais e próxima revisão.</p>
       </div>
     </div>
-    <div class="source-line">Fontes: <a href="#" data-doc="Roteiro_de_pesquisa_com_metodos.pdf">Roteiro de métodos, pp. 1–3</a> · <a href="#" data-doc="Cenarios.pdf">Construção de cenários, pp. 1–2</a> · <a href="#" data-doc="Apresentacao_intermediaria.pdf">Apresentação, p. 4</a>.</div>
+    <div class="source-line">Fontes: <a href="#" data-doc="Relatorio_Sprint_Itau_Tom_Academico_Natural.pdf">Relatório final</a> · <a href="#" data-doc="Cenarios_att_24_nov.zip">Cenários (último pacote)</a> · <a href="#" data-doc="Relatorio_Sprint_Itau_Tom_Academico_Natural.pdf">Relatório final</a>.</div>
   </div>
   <div class="section-title">
     <div>

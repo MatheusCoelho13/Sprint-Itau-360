@@ -11,6 +11,8 @@ export interface Sub { t: string; how: string; care: string }
 /** Tema de análise: os 5 eixos principais e os temas transversais. Editável (tabela `topics`). */
 export interface Topic {
   _hidden?: boolean
+  /** excluído de vez (itens da base não somem do código: ficam marcados aqui) */
+  _deleted?: boolean
   id: string; kind: 'eixo' | 'transversal'
   n?: string
   /** rótulo curto: é o que os cenários citam em `tm` e o que aparece nos filtros */
@@ -45,6 +47,8 @@ export interface Risk { title: string; type: RiskType; channel: string; state: s
 export interface Actor {
   /** oculto do site (itens da base não somem do código: ficam marcados aqui) */
   _hidden?: boolean
+  /** excluído de vez */
+  _deleted?: boolean
   id: string; name: string; role: string; group: string; status: string
   photo?: string
   /** chave em SRC (base) ou texto livre (editor) */

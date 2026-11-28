@@ -1,10 +1,11 @@
 import { SRC } from './data'
-import { allContent, saveContent, deleteContent, type Item } from './store'
+import { allContent, saveContent, removeContent, type Item } from './store'
+import { supabase } from './supabase'
 import { $, esc, openModal, closeModal, renderAll } from './ui'
 
 // Adicionar/editar/remover fontes direto na tela "Fontes e documentos".
 // Documento interno = kind 'docinterno'. Fonte pública = 'fonte' (rótulo+URL) + 'docpublico' (entrada na lista).
-// Item da base é ocultado (volta pela Área editorial); item criado pela equipe é excluído.
+// Remover = excluir de vez (item da base fica marcado _deleted; item da equipe sai do banco).
 
 const strip = (r: Item) => { const { _base, _over, ...rest } = r; void _base; void _over; return rest }
 export const validUrl = (u: string) => /^https?:\/\//i.test(u) || /^docs\/[^\s]+$/.test(u) // bloqueia javascript:, data: etc.
@@ -22,11 +23,22 @@ function openForm(kind: 'i' | 'p', id?: string): void {
   openModal(isNew ? 'Adicionar fonte' : 'Editar fonte', `<form id="srcForm" data-id="${esc(id ?? '')}"><div class="form-grid">${type}
     <div class="field full"><label for="sfTitle">Título</label><input id="sfTitle" required value="${esc(doc?.title ?? s?.label ?? '')}"></div>
     <div class="field full" id="sfDescBox"><label for="sfDesc">Descrição</label><textarea id="sfDesc" rows="3">${esc(doc?.desc ?? '')}</textarea></div>
-    <div class="field full"><label for="sfUrl">URL ou arquivo</label><input id="sfUrl" required value="${esc(doc?.url ?? s?.url ?? '')}"><small class="muted">https://… ou docs/nome.pdf (arquivo privado).</small></div></div>
+    <div class="field full"><label for="sfUrl">URL ou arquivo</label><input id="sfUrl" required value="${esc(doc?.url ?? s?.url ?? '')}"><small class="muted">https://… ou docs/nome.pdf (arquivo privado).</small></div>
+    <div class="field full"><label for="sfFile">Ou envie um arquivo (pdf, zip, docx, xlsx…)</label><input id="sfFile" type="file"><small class="muted" id="sfFileMsg"></small></div></div>
     <p class="import-errors" id="sfErr"></p>
     <div class="btn-row"><button class="btn orange" type="submit">Salvar</button><button class="btn secondary" type="button" data-src-cancel>Cancelar</button></div></form>`)
   const sync = () => $('sfDescBox').classList.toggle('hide', val('sfType') !== 'i')
   $('sfType').addEventListener('change', sync); sync()
+  $('sfFile').addEventListener('change', async ev => {
+    const file = (ev.target as HTMLInputElement).files?.[0]; if (!file) return
+    const name = file.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^\w.-]+/g, '_') // sem acento nem espaço (ver openDoc em main.ts)
+    $('sfFileMsg').textContent = 'Enviando…'
+    const { error } = await supabase.storage.from('docs').upload(name, file, { upsert: true })
+    if (error) { $('sfFileMsg').textContent = 'Erro no envio: ' + error.message; return }
+    ;($('sfUrl') as HTMLInputElement).value = 'docs/' + name
+    if (!val('sfTitle')) ($('sfTitle') as HTMLInputElement).value = name.replace(/\.[^.]+$/, '').replace(/_/g, ' ')
+    $('sfFileMsg').textContent = 'Enviado: ' + name
+  })
 }
 
 async function submit(form: HTMLElement): Promise<void> {
@@ -50,10 +62,10 @@ async function submit(form: HTMLElement): Promise<void> {
 async function remove(kind: string, id: string): Promise<void> {
   const k = kind === 'i' ? 'docinterno' : 'docpublico'
   const cur = allContent(k).find(x => x.id === id)
-  if (!cur || !confirm(cur._base ? 'Ocultar esta fonte do site? (dá para restaurar na Área editorial)' : 'Excluir esta fonte?')) return
+  if (!cur || !confirm('Excluir esta fonte de vez? Não dá para desfazer.')) return
   try {
-    if (cur._base) await saveContent(k, { ...strip(cur), _hidden: true })
-    else { await deleteContent(k, id); if (k === 'docpublico') await deleteContent('fonte', String(cur.ref)) }
+    await removeContent(k, id)
+    if (k === 'docpublico') await removeContent('fonte', String(cur.ref))
   } catch (e) { return void alert('Erro: ' + (e instanceof Error ? e.message : String(e))) }
   renderAll()
 }

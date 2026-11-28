@@ -2,11 +2,11 @@ import type { Source, Scenario, Actor, Risk, ThemeScenario, Level } from './type
 
 export const SRC: Record<string, Source> = {
  report:{label:'Relatório Sprint IDP, pp. 3–6',url:'docs/Relatorio_Sprint_Itau_Tom_Academico_Natural.pdf'},
- method:{label:'Roteiro de pesquisa com métodos, pp. 1–3',url:'docs/Roteiro_de_pesquisa_com_metodos.pdf'},
- scenarios:{label:'Cenários para o Itaú: 100 primeiros dias, versão 11/11/2026',url:'docs/Cenarios_Itau_100_dias_Lula4.docx'},
- scenarioNotes:{label:'Construção de cenários, pp. 1–2',url:'docs/Cenarios.pdf'},
- electionPlan:{label:'Roteiro de pesquisa eleitoral, pp. 1–3',url:'docs/roteiro_pesquisa_itau_eleicoes.docx'},
- presentation:{label:'Apresentação intermediária, p. 4',url:'docs/Apresentacao_intermediaria.pdf'},
+ method:{label:'Relatório final do projeto',url:'docs/Relatorio_Sprint_Itau_Tom_Academico_Natural.pdf'},
+ scenarios:{label:'Cenários (pacote atualizado em 24/11)',url:'docs/Cenarios_att_24_nov.zip'},
+ scenarioNotes:{label:'Cenários (pacote atualizado em 24/11)',url:'docs/Cenarios_att_24_nov.zip'},
+ electionPlan:{label:'Relatório final do projeto',url:'docs/Relatorio_Sprint_Itau_Tom_Academico_Natural.pdf'},
+ presentation:{label:'Relatório final do projeto',url:'docs/Relatorio_Sprint_Itau_Tom_Academico_Natural.pdf'},
  tse:{label:'TSE · resultado do 2º turno, 26/10/2026',url:'https://www.tse.jus.br/comunicacao/noticias/2026/Outubro/presidente-do-tse-anuncia-reeleicao-de-lula-e-faz-balanco-do-2o-turno-das-eleicoes-2026'},
  dario:{label:'Ministério da Fazenda · perfil de Dario Durigan',url:'https://www.gov.br/fazenda/pt-br/composicao/ministro/dario-carnevalli-durigan'},
  rafael:{label:'Governo do Piauí · perfil de Rafael Fonteles',url:'https://www.pi.gov.br/governador2/'},
@@ -131,7 +131,7 @@ export const methodTools: [string, string][] = [
 ['Benchmarking','Compara práticas, estruturas e abordagens de referência para orientar a forma de organizar a análise, sem copiar conclusões.'],
 ['Cenários e matrizes','Transforma incertezas em trajetórias plausíveis e prioriza eventos por probabilidade e impacto, com justificativa e confiança separada.']
 ];
-export const internalDocs: [string, string, string][] = [['Relatório Sprint IDP — versão acadêmica natural','Metodologia em seis etapas, cinco eixos, atores, monitoramento, impactos diretos e indiretos.','docs/Relatorio_Sprint_Itau_Tom_Academico_Natural.pdf'],['Roteiro de pesquisa com métodos','Pergunta de pesquisa, recorte de 100 dias, temas, ficha documental, matriz P×I e indicadores.','docs/Roteiro_de_pesquisa_com_metodos.pdf'],['Cenários para o Itaú — 100 primeiros dias','Cenários A/B/C, variáveis determinantes, sinais, impactos e pontos pendentes de verificação.','docs/Cenarios_Itau_100_dias_Lula4.docx'],['Construção de cenários','Cinco perguntas orientadoras e temas de investigação.','docs/Cenarios.pdf'],['Roteiro de pesquisa eleitoral','Pergunta, temas, ficha documental, cenários, indicadores e estrutura de entrega.','docs/roteiro_pesquisa_itau_eleicoes.docx'],['Apresentação intermediária','Lógica de transmissão entre decisão política, setores, clientes e impacto direto/indireto.','docs/Apresentacao_intermediaria.pdf'],['Protótipo Itaú 360° original','Referência de filtros, navegação, cenários, atores, decisões e matriz.','docs/Prototipo_Itaú360.html'],['Protótipo Vetor','Referência editorial de cenários e nomes mencionados em negociações.','docs/Prototipo_Vetor.html'],['Protótipo Radar','Referência complementar de filtragem e fichas de cenário.','docs/Prototipo_Radar.html']];
+export const internalDocs: [string, string, string][] = [['Relatório final','Metodologia, cinco eixos, atores, monitoramento, impactos diretos e indiretos.','docs/Relatorio_Sprint_Itau_Tom_Academico_Natural.pdf'],['Cenários (último pacote)','Pacote zip com panorama político-macroeconômico, dossiês e matriz de probabilidade e monitoramento.','docs/Cenarios_att_24_nov.zip'],['Atores (último pacote)','Pacote zip com matriz de stakeholders, dossiês em PDF e PPTX e base consolidada de fontes.','docs/Itau360_Planalto_Itau_Stakeholders_2026-11-27.zip']];
 export const publicDocs: string[] = ['tse','dario','rafael','rafaelNews','camilo','haddad','haddadNews','boulos','messias','messiasReject','pacheco','pachecoNews','pachecoPhoto','folhavagas'];
 
 // ---------- avaliação qualitativa, temas e subtemas ----------

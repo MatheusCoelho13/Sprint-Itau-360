@@ -34,7 +34,7 @@ export const home = /* html */ `
         </div>
       </div>
       <ol class="transmit" id="transmitList"></ol>
-      <div class="source-line">Fonte: <a href="#" data-doc="Cenarios_Itau_100_dias_Lula4.docx">Cenários 100 dias, p. 1</a> · <a href="#" data-doc="Apresentacao_intermediaria.pdf">Apresentação intermediária, p. 4</a> (modelo). Os efeitos são hipóteses de transmissão, não resultados medidos.</div>
+      <div class="source-line">Fonte: <a href="#" data-doc="Cenarios_att_24_nov.zip">Cenários (último pacote)</a> · <a href="#" data-doc="Relatorio_Sprint_Itau_Tom_Academico_Natural.pdf">Relatório final</a> (modelo). Os efeitos são hipóteses de transmissão, não resultados medidos.</div>
     </div>
   </div>
   <div class="notice blue">Nota de integridade: este ambiente organiza materiais e fontes consultados até 17/11/2026. Estimativas e hipóteses dos documentos de 11/11 permanecem identificadas como preliminares; não são apresentadas como fatos consumados.</div>

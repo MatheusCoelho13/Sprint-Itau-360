@@ -56,7 +56,7 @@ export async function loadTopics(): Promise<void> {
 export const allTopics = (): (Topic & { _base: boolean })[] => [
   ...baseTopics.map(t => ({ ...t, ...(topicOverrides[t.id] ?? {}), _base: true })),
   ...extraTopics.map(t => ({ ...t, _base: false })),
-]
+].filter(t => !t._deleted)
 /** O que o site mostra: sem os ocultos. */
 export const getTopics = () => allTopics().filter(t => !t._hidden)
 export async function saveTopic(rec: Topic): Promise<void> {
@@ -81,7 +81,7 @@ export type Item = Rec & { _base: boolean; _over: boolean }
 export const allContent = (kind: string): Item[] => {
   const b = bucket(kind)
   const base = kindOf(kind).base().map(x => ({ ...x, ...(b.ov[x.id] ?? {}), _base: true, _over: x.id in b.ov }))
-  return [...base, ...b.extra.map(x => ({ ...x, _base: false, _over: false }))]
+  return [...base, ...b.extra.map(x => ({ ...x, _base: false, _over: false }))].filter(x => !x._deleted)
 }
 /** O que o site mostra: sem os ocultos. */
 export const getContent = <T = Rec>(kind: string): T[] => allContent(kind).filter(x => !x._hidden) as unknown as T[]
@@ -116,6 +116,15 @@ export async function deleteContent(kind: string, id: string): Promise<void> {
   applyContent()
 }
 
+/** Excluir de vez: item novo some do banco; item da base fica marcado `_deleted` (o código não muda). */
+export async function removeContent(kind: string, id: string): Promise<void> {
+  const cur = allContent(kind).find(x => x.id === id)
+  if (!cur) return
+  if (!cur._base) return deleteContent(kind, id)
+  const { _base, _over, ...rest } = cur; void _base; void _over
+  await saveContent(kind, { ...rest, _deleted: true })
+}
+
 export interface HistoryRow { id: number; at: string; tbl: string; row_id: string; action: string; title: string; by_email: string }
 /** Últimas mudanças (tabela content_history, preenchida por gatilhos no banco). */
 export async function loadHistory(): Promise<HistoryRow[]> {
@@ -127,7 +136,7 @@ export function clearCache(): void { buckets = {}; applyContent(); extraActors =
 export const allActors = (): ActorView[] => [
   ...baseActors.map(a => ({ ...a, ...(overrides[a.id] ?? {}), _base: true })),
   ...extraActors.map(a => ({ ...a, _base: false })),
-]
+].filter(a => !a._deleted)
 export const getActors = () => allActors().filter(a => !a._hidden)
 export const getAnalyses = (): Analysis[] => analyses
 

@@ -13,12 +13,12 @@ export const monitor = /* html */ `
     <div class="panel">
       <h2 style="margin:0 0 12px">Variáveis que definem os cenários</h2>
       <div class="item-list" id="variablesList"></div>
-      <div class="source-line">Fonte: <a href="#" data-doc="Cenarios_Itau_100_dias_Lula4.docx">Cenários 100 dias, p. 1</a></div>
+      <div class="source-line">Fonte: <a href="#" data-doc="Cenarios_att_24_nov.zip">Cenários (último pacote)</a></div>
     </div>
     <div class="panel">
       <h2 style="margin:0 0 12px">Calendário de referência</h2>
       <div class="timeline" id="timeline"></div>
-      <div class="source-line">Fonte: <a href="#" data-doc="Cenarios_Itau_100_dias_Lula4.docx">Cenários 100 dias, p. 2</a></div>
+      <div class="source-line">Fonte: <a href="#" data-doc="Cenarios_att_24_nov.zip">Cenários (último pacote)</a></div>
     </div>
   </div>
   <div class="section-title">

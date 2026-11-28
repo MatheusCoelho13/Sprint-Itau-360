@@ -57,6 +57,6 @@ export const risks = /* html */ `
     </div>
   </div>
   <div class="notice">A posição na matriz serve para ordenar prioridades. Não é probabilidade estatística nem estimativa de perda financeira. Eventos pouco prováveis e de impacto elevado devem continuar visíveis.</div>
-  <div class="source-line">Fonte metodológica: <a href="#" data-doc="Roteiro_de_pesquisa_com_metodos.pdf">Roteiro de pesquisa com métodos, p. 2</a>.</div>
+  <div class="source-line">Fonte metodológica: <a href="#" data-doc="Relatorio_Sprint_Itau_Tom_Academico_Natural.pdf">Relatório final</a>.</div>
 </section>
 `
