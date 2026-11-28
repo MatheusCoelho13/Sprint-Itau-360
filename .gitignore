@@ -3,3 +3,6 @@ dist
 .env
 .env.local
 .gstack/
+perfis.csv
+perfis-senhas.txt
+.env.admin

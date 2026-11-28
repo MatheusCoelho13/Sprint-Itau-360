@@ -10,7 +10,7 @@ export const users = /* html */ `
   </div>
   <div class="u-summary" id="usersSummary"></div>
   <div class="notice hide" id="userMsg" role="alert"></div>
-  <div class="filterbar"><input id="userSearch" placeholder="Buscar por e-mail…" autocomplete="off"><select id="userRoleFilter"><option value="all">Todos os papéis</option><option value="admin">Admin</option><option value="editor">Editor</option><option value="observador">Observador</option></select><select id="userStateFilter"><option value="all">Ativos e inativos</option><option value="on">Só ativos</option><option value="off">Só inativos</option></select><span class="small muted" id="userCount"></span></div>
+  <div class="filterbar"><input id="userSearch" placeholder="Buscar por e-mail…" autocomplete="off"><select id="userRoleFilter"><option value="all">Todos os papéis</option><option value="admin">Admin</option><option value="editor">Editor</option><option value="revisor">Revisor</option><option value="observador">Observador</option><option value="visitante">Visitante</option></select><select id="userStateFilter"><option value="all">Ativos e inativos</option><option value="on">Só ativos</option><option value="off">Só inativos</option></select><span class="small muted" id="userCount"></span></div>
   <div class="panel table-wrap">
     <table class="data-table u-table">
       <thead>

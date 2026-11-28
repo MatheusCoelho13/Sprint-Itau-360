@@ -63,7 +63,7 @@ const showEditorNav = () => { document.body.classList.toggle('can-edit', canEdit
 async function loadRole(): Promise<void> {
   const { data } = await supabase.from('profiles').select('user_id,role,active').eq('user_id', myId).maybeSingle()
   // sem linha ou inativo = trata como observador (o banco bloqueia a escrita de qualquer jeito)
-  const r: Role = data?.active !== false && (data?.role === 'admin' || data?.role === 'editor' || data?.role === 'revisor') ? data.role : 'observador'
+  const r: Role = data?.active !== false && (data?.role === 'admin' || data?.role === 'editor' || data?.role === 'revisor' || data?.role === 'visitante') ? data.role : 'observador'
   role = r
   $('userRole').textContent = data?.active === false ? 'Inativo' : ROLE_LABEL[r]
   $('userRole').className = 'role-chip ' + r
@@ -121,6 +121,16 @@ supabase.auth.onAuthStateChange((_event, session) => {
   // setTimeout: supabase-js pede para não chamar a API dentro deste callback (deadlock).
   setTimeout(() => applySession(session?.user.email, session?.user.id), 0)
 })
+
+// QR code / link ?acesso=aberto: entra sozinho na conta "visitante" (só leitura do público), sem sobrescrever uma sessão que já exista.
+// A senha dessa conta vai no bundle de propósito: o papel visitante não lê rascunhos nem grava nada (RLS).
+if (new URLSearchParams(location.search).get('acesso') === 'aberto') {
+  history.replaceState(null, '', location.pathname)
+  const { VITE_VISITOR_EMAIL: email, VITE_VISITOR_PASSWORD: password } = import.meta.env
+  void supabase.auth.getSession().then(({ data }) => {
+    if (!data.session && email && password) void supabase.auth.signInWithPassword({ email, password })
+  })
+}
 
 // ---------- documentos privados (bucket "docs" do Supabase; só conta ativa lê) ----------
 const safeName = (n: string) => n.normalize('NFD').replace(/[\u0300-\u036f]/g, '')

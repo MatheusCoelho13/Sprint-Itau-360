@@ -8,7 +8,7 @@ const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = process.env
 const [email, password, role = 'observador'] = process.argv.slice(2)
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) { console.error('Defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY.'); process.exit(1) }
 if (!email || !password) { console.error('Uso: node scripts/criar-usuario.mjs <email> <senha> [papel]'); process.exit(1) }
-if (!['admin', 'editor', 'revisor', 'observador'].includes(role)) { console.error('Papel inválido: ' + role); process.exit(1) }
+if (!['admin', 'editor', 'revisor', 'observador', 'visitante'].includes(role)) { console.error('Papel inválido: ' + role); process.exit(1) }
 
 const sb = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false } })
 const { data, error } = await sb.auth.admin.createUser({ email, password, email_confirm: true })
